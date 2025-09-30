@@ -1,9 +1,17 @@
 package se233.notcontra;
 
 import javafx.application.Application;
+import javafx.stage.Stage;
 
-public class Launcher {
+public class Launcher extends Application {
+	
+
+    @Override
+    public void start(Stage stage) {
+
+    }
+
     public static void main(String[] args) {
-        Application.launch(HelloApplication.class, args);
+    	launch(args);
     }
 }
