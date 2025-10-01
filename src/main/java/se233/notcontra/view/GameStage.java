@@ -8,7 +8,7 @@ import se233.notcontra.model.Player;
 public abstract class GameStage extends Pane {
 	public static final int WIDTH = 640;
 	public static final int HEIGHT = 480;
-	public static final int GROUND = 480;
+	public static final int GROUND = 360;
 	
 	protected Image backgroundIMG;
 	protected Player player;

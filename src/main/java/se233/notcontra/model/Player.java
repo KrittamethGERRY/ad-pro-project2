@@ -103,17 +103,17 @@ public class Player extends Pane {
 		};
 		
 		int yBulletPos = switch(direction) {
-			case RIGHT, LEFT -> yPosition - height;
-			case UP, UP_RIGHT, UP_LEFT -> yPosition + height;
-			case DOWN_RIGHT, DOWN_LEFT -> yPosition;
+			case RIGHT, LEFT -> yPosition;
+			case UP, UP_RIGHT, UP_LEFT -> yPosition - height;
+			case DOWN_RIGHT, DOWN_LEFT -> yPosition + height;
 		};
 		
     	long now = System.currentTimeMillis();
     	if (now - lastShotTime >= fireDelay) {
     		lastShotTime = now;
     		
-            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition - height/2), 15, 0)
-            		: new Bullet(xBulletPos, yBulletPos, 15, 0);
+            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition - height/2), 10, 10, direction)
+            		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction);
                 GameLoop.bullets.add(bullet);
 
                 javafx.application.Platform.runLater(() -> {

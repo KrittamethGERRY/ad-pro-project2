@@ -9,12 +9,12 @@ import se233.notcontra.model.ShootingDirection;
 import se233.notcontra.view.GameStage;
 
 public class GameLoop implements Runnable{
+	public static ShootingDirection shootingDir;
 
 	private GameStage gameStage;
 	private int frameRate;
 	private float interval;
 	private boolean running;
-	private ShootingDirection shootingDir;
 
 	public static ArrayList<Bullet> bullets = new ArrayList<>();
 
@@ -64,15 +64,15 @@ public class GameLoop implements Runnable{
 		} else if (downPressed && leftPressed) {
 			shootingDir = ShootingDirection.DOWN_LEFT;
 		}
-		
+		if (shootPressed) {
+			player.shoot(gameStage, shootingDir);
+		}
 		
 		if (jumpPressed && !downPressed) {
 			player.jump();
 		}
 
-		if (shootPressed) {
-			player.shoot(gameStage, shootingDir);
-		}
+
 	}
 
 	@Override

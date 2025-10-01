@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javafx.application.Platform;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Player;
+import se233.notcontra.model.ShootingDirection;
 import se233.notcontra.view.GameStage;
 
 public class DrawingLoop implements Runnable {
@@ -30,10 +31,10 @@ public class DrawingLoop implements Runnable {
 		player.repaint();
 	}
 	
-	public void paintBullet(ArrayList<Bullet> bullets) {
+	public void paintBullet(ArrayList<Bullet> bullets, ShootingDirection direction) {
 		bullets.forEach(bullet -> {
 			bullet.move();
-			if (bullet.getXPosition() >= GameStage.WIDTH) {
+			if (bullet.getXPosition() >= GameStage.WIDTH || bullet.getXPosition() <= 0) {
 				javafx.application.Platform.runLater(() -> {
 					gameStage.getChildren().remove(bullet);
 					bullets.remove(bullet);
@@ -48,7 +49,7 @@ public class DrawingLoop implements Runnable {
 			float time = System.currentTimeMillis();
 			checkAllCollisions(gameStage.getPlayer());
 			paint(gameStage.getPlayer());
-			paintBullet(GameLoop.bullets);
+			paintBullet(GameLoop.bullets, GameLoop.shootingDir);
 			time = System.currentTimeMillis() - time;
 			if (time < interval) {
 				try {
