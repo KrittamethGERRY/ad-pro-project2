@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import se233.notcontra.Launcher;
+import se233.notcontra.controller.GameLoop;
 import se233.notcontra.view.GameStage;
 
 public class Player extends Pane {
@@ -14,6 +15,7 @@ public class Player extends Pane {
 	private KeyCode upKey;
 	private KeyCode downKey;
 	private KeyCode shootKey;
+	private KeyCode jumpKey;
 	
 	private int xPosition;
 	private int yPosition;
@@ -30,17 +32,22 @@ public class Player extends Pane {
 	private boolean isJumping = false;
 	private boolean isFalling = true;
 	private boolean canJump = false;
+	private boolean isProning = false;
 	
 	public static int height;
 	public static int width;
 	private ImageView sprite;
+	
+	private long lastShotTime = 0;
+	private int fireDelay = 1000;
 	
 	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
 		this.leftKey = leftKey;
 		this.rightKey = rightKey;
 		this.upKey = upKey;
 		this.downKey = downKey;
-		this.shootKey = KeyCode.SPACE;
+		this.shootKey = KeyCode.L;
+		this.jumpKey = KeyCode.K;
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
 		this.height = 32;
@@ -79,8 +86,40 @@ public class Player extends Pane {
 		}
 	}
 	
+	public void setProning(boolean isProning) {
+		this.isProning = isProning;
+	}
+
 	public void prone() {
-		if (!isJumping && !isFalling && canJump) stop();
+		isProning = true;
+		stop();
+	}
+	
+	public void shoot(GameStage gameStage, ShootingDirection direction) {
+		int xBulletPos = switch (direction) {
+			case UP -> xPosition + (width/2);
+			case RIGHT, UP_RIGHT, DOWN_RIGHT -> xPosition + width;
+			case LEFT, UP_LEFT, DOWN_LEFT -> xPosition;
+		};
+		
+		int yBulletPos = switch(direction) {
+			case RIGHT, LEFT -> yPosition - height;
+			case UP, UP_RIGHT, UP_LEFT -> yPosition + height;
+			case DOWN_RIGHT, DOWN_LEFT -> yPosition;
+		};
+		
+    	long now = System.currentTimeMillis();
+    	if (now - lastShotTime >= fireDelay) {
+    		lastShotTime = now;
+    		
+            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition - height/2), 15, 0)
+            		: new Bullet(xBulletPos, yBulletPos, 15, 0);
+                GameLoop.bullets.add(bullet);
+
+                javafx.application.Platform.runLater(() -> {
+                    gameStage.getChildren().add(bullet);
+                });
+    	}
 	}
 	
 	public void stop() {
@@ -165,6 +204,9 @@ public class Player extends Pane {
 		return shootKey;
 	}
 
+	public KeyCode getJumpKey() {
+		return jumpKey;
+	}
 
 	public int getXPosition() {
 		return xPosition;
