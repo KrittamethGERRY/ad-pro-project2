@@ -2,11 +2,13 @@ package se233.notcontra.controller;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.ShootingDirection;
 import se233.notcontra.view.GameStage;
+import se233.notcontra.view.Platform;
 
 public class GameLoop implements Runnable{
 	public static ShootingDirection shootingDir;
@@ -16,13 +18,13 @@ public class GameLoop implements Runnable{
 	private float interval;
 	private boolean running;
 
-	public static ArrayList<Bullet> bullets = new ArrayList<>();
+	public static List<Bullet> bullets = new ArrayList<>();
 
 	public GameLoop(GameStage gameStage) {
 		this.gameStage = gameStage;
 		this.frameRate = 10;
 		this.interval = 1000 / frameRate;
-		this.shootingDir = ShootingDirection.RIGHT;
+		GameLoop.shootingDir = ShootingDirection.RIGHT;
 		this.running = true;
 	}
 
@@ -64,15 +66,19 @@ public class GameLoop implements Runnable{
 		} else if (downPressed && leftPressed) {
 			shootingDir = ShootingDirection.DOWN_LEFT;
 		} else {
+			// Set default direction while not pressing any key
 			shootingDir = shootingDir.toString().matches(".*RIGHT") ? ShootingDirection.RIGHT : ShootingDirection.LEFT;
 		}
 		if (shootPressed) {
 			player.shoot(gameStage, shootingDir);
 		}
 		
-		if (jumpPressed && !downPressed) {
+		if (jumpPressed && downPressed) {
+			player.dropDown();
+		} else if (jumpPressed) {
 			player.jump();
-		}
+		} 
+		
 
 
 	}

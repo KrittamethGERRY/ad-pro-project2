@@ -1,6 +1,7 @@
 package se233.notcontra.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.application.Platform;
 import se233.notcontra.model.Bullet;
@@ -8,7 +9,7 @@ import se233.notcontra.model.Player;
 import se233.notcontra.model.ShootingDirection;
 import se233.notcontra.view.GameStage;
 
-public class DrawingLoop implements Runnable {
+public class DrawingLoop implements Runnable {	
 	private GameStage gameStage;
 	private int frameRate;
 	private float interval;
@@ -25,13 +26,14 @@ public class DrawingLoop implements Runnable {
 		player.checkGroundCollision();
 		player.checkHighestJump();
 		player.checkStageBoundaryCollision();
+		player.checkPlatformCollision(gameStage.getPlatforms());
 	}
 	
 	public void paint(Player player) {
 		player.repaint();
 	}
 	
-	public void paintBullet(ArrayList<Bullet> bullets, ShootingDirection direction) {
+	public void paintBullet(List<Bullet> bullets, ShootingDirection direction) {
 		bullets.forEach(bullet -> {
 			bullet.move();
 			if ((bullet.getXPosition() >= GameStage.WIDTH || bullet.getXPosition() <= 0) /* or collided with enemy/boss*/) {

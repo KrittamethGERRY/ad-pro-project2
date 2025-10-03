@@ -1,5 +1,7 @@
 package se233.notcontra.model;
 
+import java.util.List;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -7,6 +9,7 @@ import javafx.scene.layout.Pane;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.view.GameStage;
+import se233.notcontra.view.Platform;
 
 public class Player extends Pane {
 	
@@ -33,6 +36,8 @@ public class Player extends Pane {
 	private boolean isFalling = true;
 	private boolean canJump = false;
 	private boolean isProning = false;
+	private boolean isOnPlatform = false;
+	private boolean isDropping = false;
 	
 	public static int height;
 	public static int width;
@@ -40,6 +45,7 @@ public class Player extends Pane {
 	
 	private long lastShotTime = 0;
 	private int fireDelay = 1000;
+	private int dropDownTimer = 0;
 	
 	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
 		this.leftKey = leftKey;
@@ -92,6 +98,18 @@ public class Player extends Pane {
 	public void prone() {
 		isProning = true;
 		stop();
+	}
+	
+	public void dropDown() {
+		if (isOnPlatform) {
+			isDropping = true;
+			yVelocity = 4;
+			dropDownTimer = 10;
+			isOnPlatform = false;
+			canJump = false;
+			isFalling = true;
+			System.out.println("Drop down platform");
+		}
 	}
 	
 	public void shoot(GameStage gameStage, ShootingDirection direction) {
@@ -180,6 +198,29 @@ public class Player extends Pane {
 		}
 	}
 	
+	public void checkPlatformCollision(List<Platform> platforms) {
+		if (dropDownTimer > 0) {
+			dropDownTimer--;
+			return;
+		}
+		
+		for (Platform platform : platforms) {
+			boolean isCollidedXAxis = (xPosition + width) >= platform.getXPosition() && xPosition <= platform.getXPosition() + platform.getPaneWidth();
+			boolean isAbovePlatform = yPosition < platform.getYPosition() && (yPosition + height + yVelocity) >= platform.getYPosition();
+			if (isFalling && isCollidedXAxis && isAbovePlatform) {
+				yPosition = platform.getYPosition() - height;
+				isOnPlatform = true;
+				isFalling = false;
+				canJump = true;
+			} else if (isOnPlatform && !isCollidedXAxis && !isJumping) {
+				isOnPlatform = false;
+				isFalling = true;
+				canJump = false;
+				yVelocity = 4;
+			}
+		}
+	}
+	
 	// 				End of Movement Behaviors
 	
 	// GETTERS SETTERS
@@ -214,6 +255,13 @@ public class Player extends Pane {
 
 	public int getYPosition() {
 		return yPosition;
+	}
+	
+	public void setFalling(boolean isFalling) {
+		this.isFalling = isFalling;
+	}
+	public boolean getFalling() {
+		return this.isFalling;
 	}
 
 }
