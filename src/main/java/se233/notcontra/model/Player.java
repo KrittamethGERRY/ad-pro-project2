@@ -59,8 +59,7 @@ public class Player extends Pane {
 		this.sprite.setImage(new Image(Launcher.class.getResource("assets/FD.png").toString()));
 		this.sprite.setFitWidth(width);
 		this.sprite.setFitHeight(height);
-		getChildren().add(sprite);		
-		System.out.println("The player is created");
+		getChildren().add(sprite);
 	}
 	
 	//					Starting of Movement Behaviors
@@ -112,7 +111,7 @@ public class Player extends Pane {
     	if (now - lastShotTime >= fireDelay) {
     		lastShotTime = now;
     		
-            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition - height/2), 10, 10, direction)
+            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction)
             		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction);
                 GameLoop.bullets.add(bullet);
 
@@ -161,7 +160,6 @@ public class Player extends Pane {
 			isFalling = false;
 			canJump = true;
 			yVelocity = 0;
-			System.out.println("Floor reached");
 		}
 	}
 	
@@ -184,6 +182,7 @@ public class Player extends Pane {
 	
 	// 				End of Movement Behaviors
 	
+	// GETTERS SETTERS
 	public KeyCode getLeftKey() {
 		return this.leftKey;
 	}

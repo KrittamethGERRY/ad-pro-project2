@@ -34,7 +34,7 @@ public class DrawingLoop implements Runnable {
 	public void paintBullet(ArrayList<Bullet> bullets, ShootingDirection direction) {
 		bullets.forEach(bullet -> {
 			bullet.move();
-			if (bullet.getXPosition() >= GameStage.WIDTH || bullet.getXPosition() <= 0) {
+			if ((bullet.getXPosition() >= GameStage.WIDTH || bullet.getXPosition() <= 0) /* or collided with enemy/boss*/) {
 				javafx.application.Platform.runLater(() -> {
 					gameStage.getChildren().remove(bullet);
 					bullets.remove(bullet);

@@ -63,6 +63,8 @@ public class GameLoop implements Runnable{
 			shootingDir = ShootingDirection.UP_LEFT;
 		} else if (downPressed && leftPressed) {
 			shootingDir = ShootingDirection.DOWN_LEFT;
+		} else {
+			shootingDir = shootingDir.toString().matches(".*RIGHT") ? ShootingDirection.RIGHT : ShootingDirection.LEFT;
 		}
 		if (shootPressed) {
 			player.shoot(gameStage, shootingDir);
