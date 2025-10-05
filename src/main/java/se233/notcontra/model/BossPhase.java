@@ -1,4 +1,7 @@
 package se233.notcontra.model;
 
-public class BossPhase {
+public enum BossPhase {
+    PHASE_ONE,
+    PHASE_TWO,
+    DEFEATED
 }

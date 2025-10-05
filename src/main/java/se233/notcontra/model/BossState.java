@@ -1,4 +1,9 @@
 package se233.notcontra.model;
 
-public class BossState {
+public enum BossState {
+    ENTERING,
+    IDLE,
+    ATTACKING,
+    VULNERABLE,
+    DEFEATED
 }
