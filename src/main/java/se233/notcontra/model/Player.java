@@ -38,14 +38,16 @@ public class Player extends Pane {
 	private boolean isProning = false;
 	private boolean isOnPlatform = false;
 	private boolean isDropping = false;
+	private boolean isBuffed = false;
 	
 	public static int height;
 	public static int width;
 	private ImageView sprite;
 	
 	private long lastShotTime = 0;
-	private int fireDelay = 1000;
+	private int fireDelay = 700;
 	private int dropDownTimer = 0;
+	private int buffTimer = 0;
 	
 	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
 		this.leftKey = leftKey;
@@ -56,8 +58,8 @@ public class Player extends Pane {
 		this.jumpKey = KeyCode.K;
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		this.height = 32;
-		this.width = 32;
+		Player.height = 32;
+		Player.width = 32;
 		this.setTranslateX(xPosition);
 		this.setTranslateY(yPosition);
 		this.sprite = new ImageView();
@@ -108,6 +110,7 @@ public class Player extends Pane {
 			isOnPlatform = false;
 			canJump = false;
 			isFalling = true;
+			isJumping = false;
 			System.out.println("Drop down platform");
 		}
 	}
@@ -198,6 +201,36 @@ public class Player extends Pane {
 		}
 	}
 	
+	public void checkItemCollision(GameStage gameStage) {
+		if (buffTimer > 0) {
+			buffTimer--;
+			fireDelay = 100;
+			return;
+		} else {
+			isBuffed = false;
+			fireDelay = 700;
+		}
+		
+		if (gameStage.getItem() != null) {
+			double itemXPos = gameStage.getItem().getXPos();
+			double itemYPos = gameStage.getItem().getYPos();
+			double itemWidth = gameStage.getItem().getPaneWidth();
+			double itemHeight = gameStage.getItem().getPaneHeight();
+			
+			boolean collidedXAxis = ((xPosition + width) >= itemXPos && xPosition <= itemXPos) ||
+					(xPosition <= (itemXPos + itemWidth) && (xPosition + width) >= itemXPos +itemWidth);
+			boolean collidedYAxis = (yPosition + height >= itemYPos) && (yPosition <= itemYPos+itemHeight);
+			if (collidedXAxis && collidedYAxis) {
+				isBuffed = true;
+				buffTimer = 200;
+				javafx.application.Platform.runLater(() -> {
+					gameStage.removeItem();
+				});
+			}
+		}
+
+	}
+	
 	public void checkPlatformCollision(List<Platform> platforms) {
 		if (dropDownTimer > 0) {
 			dropDownTimer--;
@@ -216,6 +249,7 @@ public class Player extends Pane {
 				isOnPlatform = false;
 				isFalling = true;
 				canJump = false;
+				isJumping = false;
 				yVelocity = 4;
 			}
 		}
@@ -256,12 +290,4 @@ public class Player extends Pane {
 	public int getYPosition() {
 		return yPosition;
 	}
-	
-	public void setFalling(boolean isFalling) {
-		this.isFalling = isFalling;
-	}
-	public boolean getFalling() {
-		return this.isFalling;
-	}
-
 }

@@ -27,6 +27,7 @@ public class DrawingLoop implements Runnable {
 		player.checkHighestJump();
 		player.checkStageBoundaryCollision();
 		player.checkPlatformCollision(gameStage.getPlatforms());
+		player.checkItemCollision(gameStage);
 	}
 	
 	public void paint(Player player) {
