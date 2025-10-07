@@ -6,6 +6,7 @@ import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
+import se233.notcontra.model.Wallboss;
 
 public class FirstStage extends GameStage {
 	
@@ -15,7 +16,8 @@ public class FirstStage extends GameStage {
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
 		player = new Player(30, 250 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
-		getChildren().addAll(background, player);
+		this.wallboss = new Wallboss(500, 100, this);
+		getChildren().addAll(background, player, this.wallboss);
 	}
 
 	public Keys getKeys() {
@@ -24,4 +26,5 @@ public class FirstStage extends GameStage {
 	public Player getPlayer() {
 		return this.player;
 	}
+	public Wallboss getWallboss() {return this.wallboss; }
 }

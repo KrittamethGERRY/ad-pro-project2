@@ -1,11 +1,14 @@
 package se233.notcontra.controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javafx.application.Platform;
+import javafx.scene.shape.Rectangle;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.ShootingDirection;
+import se233.notcontra.model.Wallboss;
 import se233.notcontra.view.GameStage;
 
 public class DrawingLoop implements Runnable {
@@ -21,12 +24,38 @@ public class DrawingLoop implements Runnable {
 		running = true;
 	}
 	
-	public void checkAllCollisions(Player player) {
+	public void checkAllCollisions(Player player , Wallboss wallboss) {
 		player.checkGroundCollision();
 		player.checkHighestJump();
 		player.checkStageBoundaryCollision();
+
+		if (wallboss != null && wallboss.isAlive()) {
+			checkBulletBossCollisions(GameLoop.bullets, wallboss);
+			// TODO: Add player vs. boss collision logic here
+		}
 	}
-	
+
+
+	private void checkBulletBossCollisions(ArrayList<Bullet> bullets, Wallboss wallboss) {
+		Iterator<Bullet> bulletIterator = bullets.iterator();
+		while (bulletIterator.hasNext()) {
+			Bullet bullet = bulletIterator.next();
+			boolean hit = false;
+			for (Rectangle hitbox : wallboss.getWeakPoints()) {
+				if (bullet.getBoundsInParent().intersects(hitbox.getBoundsInParent())) {
+					wallboss.takeDamage(50);
+
+					Platform.runLater(() -> gameStage.getChildren().remove(bullet));
+					bulletIterator.remove();
+
+					hit = true;
+					break;
+				}
+			}
+			if (hit) continue;
+		}
+	}
+
 	public void paint(Player player) {
 		player.repaint();
 	}
@@ -47,9 +76,14 @@ public class DrawingLoop implements Runnable {
 	public void run() {
 		while (running) {
 			float time = System.currentTimeMillis();
-			checkAllCollisions(gameStage.getPlayer());
+			checkAllCollisions(gameStage.getPlayer() , gameStage.getWallboss());
 			paint(gameStage.getPlayer());
 			paintBullet(GameLoop.bullets, GameLoop.shootingDir);
+
+			if (gameStage.getWallboss() != null && gameStage.getWallboss().isAlive()) {
+				gameStage.getWallboss().update();
+			}
+
 			time = System.currentTimeMillis() - time;
 			if (time < interval) {
 				try {

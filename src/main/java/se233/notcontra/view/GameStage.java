@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
+import se233.notcontra.model.Wallboss;
 
 public abstract class GameStage extends Pane {
 	public static final int WIDTH = 640;
@@ -13,6 +14,7 @@ public abstract class GameStage extends Pane {
 	protected Image backgroundIMG;
 	protected Player player;
 	protected Keys keys;
+	protected Wallboss wallboss;
 	
 	public GameStage() {
 		this.keys = new Keys();
@@ -20,4 +22,5 @@ public abstract class GameStage extends Pane {
 	
 	public abstract Keys getKeys();
 	public abstract Player getPlayer();
+	public abstract Wallboss getWallboss();
 }
