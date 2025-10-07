@@ -45,9 +45,11 @@ public class Player extends Pane {
 	private ImageView sprite;
 	
 	private long lastShotTime = 0;
-	private int fireDelay = 700;
+	private int fireDelay = 30;
+	private int bulletPerClip = 3;
 	private int dropDownTimer = 0;
 	private int buffTimer = 0;
+	private int reloadTimer = 0;
 	
 	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
 		this.leftKey = leftKey;
@@ -116,6 +118,11 @@ public class Player extends Pane {
 	}
 	
 	public void shoot(GameStage gameStage, ShootingDirection direction) {
+		if (reloadTimer > 0) {
+			reloadTimer--;
+			return;
+		}
+
 		int xBulletPos = switch (direction) {
 			case UP -> xPosition + (width/2);
 			case RIGHT, UP_RIGHT, DOWN_RIGHT -> xPosition + width;
@@ -131,6 +138,13 @@ public class Player extends Pane {
     	long now = System.currentTimeMillis();
     	if (now - lastShotTime >= fireDelay) {
     		lastShotTime = now;
+    		if (bulletPerClip > 0) {
+    			reloadTimer = 0;
+    			bulletPerClip--;
+    		} else {
+    			reloadTimer = 5;
+    			bulletPerClip = 3;
+    		}
     		
             Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction)
             		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction);
@@ -204,11 +218,11 @@ public class Player extends Pane {
 	public void checkItemCollision(GameStage gameStage) {
 		if (buffTimer > 0) {
 			buffTimer--;
-			fireDelay = 100;
 			return;
-		} else {
+		} else if (isBuffed) {
 			isBuffed = false;
-			fireDelay = 700;
+			fireDelay = 30;
+			bulletPerClip = 3;
 		}
 		
 		if (gameStage.getItem() != null) {
@@ -223,6 +237,7 @@ public class Player extends Pane {
 			if (collidedXAxis && collidedYAxis) {
 				isBuffed = true;
 				buffTimer = 200;
+				bulletPerClip = Integer.MAX_VALUE;
 				javafx.application.Platform.runLater(() -> {
 					gameStage.removeItem();
 				});

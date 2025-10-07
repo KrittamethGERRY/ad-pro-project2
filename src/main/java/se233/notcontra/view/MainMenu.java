@@ -1,12 +1,17 @@
 package se233.notcontra.view;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import se233.notcontra.Launcher;
 
-public class MainMenu extends BorderPane {
+public class MainMenu extends Pane {
 	
 	public static String buttonStyle = "-fx-background-color: Blue;" + "-fx-text-fill: white;"
 			+ "-fx-font-size: 2em;"
@@ -14,7 +19,7 @@ public class MainMenu extends BorderPane {
 			+ "-fx-background-radious: 0;";
 	
 	public MainMenu() {
-		VBox buttonBox = new VBox();
+		VBox buttonBox = new VBox(5);
 		ImageView background = new ImageView();
 		background.setFitHeight(GameStage.HEIGHT);
 		background.setFitWidth(GameStage.WIDTH);
@@ -26,6 +31,19 @@ public class MainMenu extends BorderPane {
 		VBox.setMargin(selectStageButton, margin);
 		VBox.setMargin(exitButton, margin);
 		buttonBox.getChildren().addAll(startButton, selectStageButton, exitButton);
+		startButton.setOnAction(e -> {
+			Launcher.changeStage(0);
+		});
+		exitButton.setOnAction(e -> {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Are you sure?");
+			alert.setHeaderText("Exit?");
+			alert.setContentText("Are you sure you want to exit?");
+			alert.showAndWait();
+			if (alert.getResult() == ButtonType.OK) {
+				Launcher.primaryStage.close();
+			}
+		});
 		getChildren().addAll(background, buttonBox);
 	}
 	
@@ -37,8 +55,8 @@ public class MainMenu extends BorderPane {
 	}
 	
 	public Button drawStageButton() {
-		Button selectStageButton = new Button("Select Stage");
-		selectStageButton.setPrefSize(150, 50);
+		Button selectStageButton = new Button("Select Level");
+		selectStageButton.setPrefSize(200, 50);
 		selectStageButton.setStyle(buttonStyle);
 		return selectStageButton;
 	}

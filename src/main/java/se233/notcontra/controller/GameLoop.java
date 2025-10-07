@@ -69,7 +69,7 @@ public class GameLoop implements Runnable{
 			// Set default direction while not pressing any key
 			shootingDir = shootingDir.toString().matches(".*RIGHT") ? ShootingDirection.RIGHT : ShootingDirection.LEFT;
 		}
-		if (shootPressed) {
+		if (gameStage.getKeys().isJustPressed(player.getShootKey())) {
 			player.shoot(gameStage, shootingDir);
 		}
 		
@@ -78,9 +78,8 @@ public class GameLoop implements Runnable{
 		} else if (jumpPressed) {
 			player.jump();
 		} 
-		
 
-
+		gameStage.getKeys().clear();
 	}
 
 	@Override
