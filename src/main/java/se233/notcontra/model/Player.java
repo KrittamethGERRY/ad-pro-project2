@@ -29,6 +29,8 @@ public class Player extends Pane {
 	private double xMaxVelocity = 5;
 	private double yMaxVelocity = 10;
 	
+	private int lives = 3;
+	
 	// Movement booleans
 	private boolean isMoveRight = true;
 	private boolean isMoveLeft = false;
@@ -93,6 +95,20 @@ public class Player extends Pane {
 			isJumping = true;
 			isFalling = false;
 		}
+	}
+	
+	public void respawn() {
+		yPosition -= 100;
+		isFalling = true;
+		canJump = false;
+		isJumping = false;
+		this.setTranslateX(xPosition);
+		this.setTranslateY(yPosition);
+
+	}
+	
+	public void die() {
+		lives--;
 	}
 	
 	public void setProning(boolean isProning) {
@@ -305,4 +321,6 @@ public class Player extends Pane {
 	public int getYPosition() {
 		return yPosition;
 	}
+	
+	
 }

@@ -17,10 +17,12 @@ public class GameLoop implements Runnable{
 	private int frameRate;
 	private float interval;
 	private boolean running;
+	private int score;
 
 	public static List<Bullet> bullets = new ArrayList<>();
 
 	public GameLoop(GameStage gameStage) {
+		this.score = 0;
 		this.gameStage = gameStage;
 		this.frameRate = 10;
 		this.interval = 1000 / frameRate;

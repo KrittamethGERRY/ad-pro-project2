@@ -3,6 +3,7 @@ package se233.notcontra.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -19,13 +20,18 @@ public class FirstStage extends GameStage {
 		ImageView background = new ImageView(backgroundIMG);
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
-		player = new Player(30, 250 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
+		player = new Player(30, 520 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
 		Platform platform1 = new Platform(100, 300, 300);
-		Platform platform2 = new Platform(250, 300, 200);
+		Platform platform2 = new Platform(250, 300, 400);
 		item = new Item(64, 64, 100, 280);
 		platforms.add(platform1);
 		platforms.add(platform2);
-		getChildren().addAll(background, platform1, platform2, item, player);
+		Button respawnBtn = new Button("Respawn");
+		respawnBtn.setOnAction(e -> {
+			player.respawn();
+		});
+		getChildren().addAll(background, platform1, platform2, item, player, respawnBtn);
+		player.respawn();
 	}
 	
 	@Override

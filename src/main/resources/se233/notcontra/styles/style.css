@@ -1,0 +1,30 @@
+
+.root {
+	-fx-background-color: DARKGRAY;
+}
+
+#title {
+	-fx-font-size: 3em;
+	-fx-font-weight: bold;
+}
+
+.button {
+	-fx-background-color: LIGHTGRAY;
+	-fx-background-radius: 2em;
+	-fx-font-weight: normal;
+	-fx-font-size: 2em;
+}
+
+#stageButton {
+	-fx-font-size: 1em;
+}
+
+.button:hover {
+	-fx-background-color: GRAY;
+	-fx-font-weight: bold;
+}
+
+.dialog-pane {
+ -fx-border-color:black;
+ -fx-border-width:2.0px;
+}
