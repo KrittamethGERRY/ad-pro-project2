@@ -5,7 +5,7 @@ import java.util.List;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import se233.notcontra.model.Item;
+import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 
@@ -15,7 +15,6 @@ public abstract class GameStage extends Pane {
 	protected Item item;
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 720;
-	public static final int GROUND = HEIGHT - 200;
 	
 	protected Image backgroundIMG;
 	protected Player player;

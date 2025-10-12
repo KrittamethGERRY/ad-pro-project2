@@ -2,7 +2,7 @@ package se233.notcontra.view;
 
 import java.util.List;
 
-import se233.notcontra.model.Item;
+import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 

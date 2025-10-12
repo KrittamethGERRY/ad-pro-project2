@@ -2,16 +2,20 @@ package se233.notcontra.model;
 
 import java.util.List;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.model.Items.HellfireMagazine;
 import se233.notcontra.view.GameStage;
 import se233.notcontra.view.Platform;
 
-public class Player extends Pane {
+public class Player extends Rectangle {
 	
 	private KeyCode leftKey;
 	private KeyCode rightKey;
@@ -40,6 +44,7 @@ public class Player extends Pane {
 	private boolean isProning = false;
 	private boolean isOnPlatform = false;
 	private boolean isDropping = false;
+	private boolean canDropDown = false;
 	private boolean isBuffed = false;
 	
 	public static int height;
@@ -62,8 +67,8 @@ public class Player extends Pane {
 		this.jumpKey = KeyCode.K;
 		this.xPosition = xPosition;
 		this.yPosition = yPosition;
-		Player.height = 32;
-		Player.width = 32;
+		Player.height = 64;
+		Player.width = 64;
 		this.setTranslateX(xPosition);
 		this.setTranslateY(yPosition);
 		this.sprite = new ImageView();
@@ -71,7 +76,9 @@ public class Player extends Pane {
 		this.sprite.setImage(new Image(Launcher.class.getResource("assets/FD.png").toString()));
 		this.sprite.setFitWidth(width);
 		this.sprite.setFitHeight(height);
-		getChildren().add(sprite);
+		this.setWidth(width);
+		this.setHeight(height);
+		this.setFill(Color.AZURE);
 	}
 	
 	//					Starting of Movement Behaviors
@@ -121,14 +128,15 @@ public class Player extends Pane {
 	}
 	
 	public void dropDown() {
-		if (isOnPlatform) {
+		if (isOnPlatform && canDropDown) {
 			isDropping = true;
 			yVelocity = 4;
-			dropDownTimer = 10;
+			dropDownTimer = 12;
 			isOnPlatform = false;
 			canJump = false;
 			isFalling = true;
 			isJumping = false;
+			canDropDown = false;
 			System.out.println("Drop down platform");
 		}
 	}
@@ -158,7 +166,7 @@ public class Player extends Pane {
     			reloadTimer = 0;
     			bulletPerClip--;
     		} else {
-    			reloadTimer = 5;
+    			reloadTimer = 2;
     			bulletPerClip = 3;
     		}
     		
@@ -206,14 +214,6 @@ public class Player extends Pane {
 		}
 	}
 	
-	public void checkGroundCollision() {
-		if (isFalling & yPosition >= GameStage.GROUND - height) {
-			isFalling = false;
-			canJump = true;
-			yVelocity = 0;
-		}
-	}
-	
 	public void checkHighestJump() {
 		if (isJumping && yVelocity <= 0) {
 			isJumping = false;
@@ -231,6 +231,42 @@ public class Player extends Pane {
 		}
 	}
 	
+//	public void checkItemCollision(GameStage gameStage) {
+//		if (buffTimer > 0) {
+//			buffTimer--;
+//			return;
+//		} else if (isBuffed) {
+//			isBuffed = false;
+//			fireDelay = 30;
+//			bulletPerClip = 3;
+//		}
+//		
+//		if (gameStage.getItem() != null) {
+//			double itemXPos = gameStage.getItem().getXPos();
+//			double itemYPos = gameStage.getItem().getYPos();
+//			double itemWidth = gameStage.getItem().getPaneWidth();
+//			double itemHeight = gameStage.getItem().getPaneHeight();
+//			
+//			boolean isHellfireMag = gameStage.getItem() instanceof HellfireMagazine;
+//			
+//			boolean collidedXAxis = ((xPosition + width) >= itemXPos && xPosition <= itemXPos) ||
+//					(xPosition <= (itemXPos + itemWidth) && (xPosition + width) >= itemXPos +itemWidth);
+//			boolean collidedYAxis = (yPosition + height >= itemYPos) && (yPosition <= itemYPos+itemHeight);
+//			if (collidedXAxis && collidedYAxis) {
+//				isBuffed = true;
+//				buffTimer = 200;
+//				
+//				bulletPerClip = Integer.MAX_VALUE;
+//				System.out.print(isHellfireMag);
+//				javafx.application.Platform.runLater(() -> {
+//					gameStage.removeItem();
+//					return;
+//				});
+//			}
+//		}
+//
+//	}
+	
 	public void checkItemCollision(GameStage gameStage) {
 		if (buffTimer > 0) {
 			buffTimer--;
@@ -240,20 +276,16 @@ public class Player extends Pane {
 			fireDelay = 30;
 			bulletPerClip = 3;
 		}
-		
 		if (gameStage.getItem() != null) {
-			double itemXPos = gameStage.getItem().getXPos();
-			double itemYPos = gameStage.getItem().getYPos();
-			double itemWidth = gameStage.getItem().getPaneWidth();
-			double itemHeight = gameStage.getItem().getPaneHeight();
-			
-			boolean collidedXAxis = ((xPosition + width) >= itemXPos && xPosition <= itemXPos) ||
-					(xPosition <= (itemXPos + itemWidth) && (xPosition + width) >= itemXPos +itemWidth);
-			boolean collidedYAxis = (yPosition + height >= itemYPos) && (yPosition <= itemYPos+itemHeight);
-			if (collidedXAxis && collidedYAxis) {
+			if (gameStage.getItem().getBoundsInParent().intersects(this.getBoundsInParent())) {
+				boolean isHellfireMag = gameStage.getItem() instanceof HellfireMagazine;
 				isBuffed = true;
-				buffTimer = 200;
-				bulletPerClip = Integer.MAX_VALUE;
+				if (isHellfireMag) {
+					buffTimer = 200;
+					bulletPerClip = Integer.MAX_VALUE;
+				} else {
+					System.out.println("Another Item");
+				}
 				javafx.application.Platform.runLater(() -> {
 					gameStage.removeItem();
 				});
@@ -268,21 +300,38 @@ public class Player extends Pane {
 			return;
 		}
 		
-		for (Platform platform : platforms) {
-			boolean isCollidedXAxis = (xPosition + width) >= platform.getXPosition() && xPosition <= platform.getXPosition() + platform.getPaneWidth();
-			boolean isAbovePlatform = yPosition < platform.getYPosition() && (yPosition + height + yVelocity) >= platform.getYPosition();
-			if (isFalling && isCollidedXAxis && isAbovePlatform) {
-				yPosition = platform.getYPosition() - height;
-				isOnPlatform = true;
-				isFalling = false;
-				canJump = true;
-			} else if (isOnPlatform && !isCollidedXAxis && !isJumping) {
-				isOnPlatform = false;
-				isFalling = true;
-				canJump = false;
-				isJumping = false;
-				yVelocity = 4;
+		boolean onAPlatformThisFrame = false;
+		
+			for (Platform platform : platforms) {
+				boolean isCollidedXAxis = (xPosition + width) > platform.getXPosition() && xPosition < platform.getXPosition() + platform.getPaneWidth();
+				boolean isLanding = isFalling && (yPosition + height) <= platform.getYPosition() && (yPosition + height + yVelocity) >= platform.getYPosition();
+				boolean isStanding = Math.abs((yPosition + height) - platform.getYPosition()) < 1;				
+				
+				if (isCollidedXAxis && (isLanding || (isOnPlatform && isStanding))) {
+					
+					if (isLanding) {
+						yPosition = platform.getYPosition() - height;
+						yVelocity = 0;
+						isFalling = false;
+					}
+					
+					canJump = true;
+					isOnPlatform = true;
+					if (platform.getIsGround()) {
+						canDropDown = false;
+					} else {
+						canDropDown = true;
+					}
+					onAPlatformThisFrame = true;
+					
+					break;
 			}
+		}
+		
+		if (!isFalling && !isJumping && !onAPlatformThisFrame) {
+			isFalling = true;
+			isOnPlatform = false;
+			canJump = false;
 		}
 	}
 	
@@ -321,6 +370,5 @@ public class Player extends Pane {
 	public int getYPosition() {
 		return yPosition;
 	}
-	
-	
+
 }

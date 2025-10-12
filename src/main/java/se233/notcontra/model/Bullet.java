@@ -3,20 +3,20 @@ package se233.notcontra.model;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 
-public class Bullet extends Pane {
+public class Bullet extends Rectangle {
     private int xPosition, yPosition, speedX, speedY;
     private ShootingDirection direction;
     private Image bulletImg;
     public Bullet(int xPosition, int yPosition, int speedX, int speedY, ShootingDirection direction) {
     	setTranslateX(xPosition);
     	setTranslateY(yPosition);
-    	bulletImg = new Image(Launcher.class.getResourceAsStream("assets/FD.png"));
-    	ImageView imageView = new ImageView(bulletImg);
-    	imageView.setFitHeight(8);
-    	imageView.setFitWidth(8);
-    	getChildren().add(imageView);
+    	this.setFill(Color.BLACK);
+    	this.setWidth(10);
+    	this.setHeight(10);
     	this.direction = direction;
         this.xPosition = xPosition;
         this.yPosition = yPosition;
@@ -51,23 +51,23 @@ public class Bullet extends Pane {
     }
     
     public void moveUpRight() {
-    	yPosition -= speedY;
-    	xPosition += speedX;
+    	yPosition -= speedY + 2;
+    	xPosition += speedX - 2;
     }
     
     public void moveUpLeft() {
-    	yPosition -= speedY;
-    	xPosition -= speedX;
+    	yPosition -= speedY - 2;
+    	xPosition -= speedX - 2;
     }
     
     public void moveDownRight() {
-    	yPosition += speedY;
-    	xPosition += speedX;
+    	yPosition += speedY - 2;
+    	xPosition += speedX + 2;
     }
     
     public void moveDownLeft() {
-    	yPosition += speedY;
-    	xPosition -= speedX;
+    	yPosition += speedY - 2;
+    	xPosition -= speedX + 2;
     }
 
 	public int getXPosition() {
