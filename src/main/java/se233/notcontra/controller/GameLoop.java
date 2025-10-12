@@ -83,6 +83,14 @@ public class GameLoop implements Runnable{
 
 		gameStage.getKeys().clear();
 	}
+	
+	public void addScore(int score) {
+		this.score += score;
+	}
+	
+	public void stop() {
+		running = false;
+	}
 
 	@Override
 	public void run() {

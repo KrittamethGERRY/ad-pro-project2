@@ -51,7 +51,6 @@ public class MainMenu extends AnchorPane {
 		});
 		exitButton.setOnAction(e -> {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.getDialogPane().setStyle(style);
 			alert.setTitle("Are you sure?");
 			alert.setHeaderText("Exit?");
 			alert.setContentText("Are you sure you want to exit?");
@@ -61,7 +60,6 @@ public class MainMenu extends AnchorPane {
 			}
 		});
 		getChildren().addAll(background, title, buttonBox, list);
-		
 	}
 	
 	public Button drawStartButton() {

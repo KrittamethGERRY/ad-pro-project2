@@ -1,9 +1,7 @@
 package se233.notcontra.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javafx.application.Platform;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.ShootingDirection;
@@ -43,6 +41,10 @@ public class DrawingLoop implements Runnable {
 				});
 			}
 		});
+	}
+	
+	public void stop() {
+		running = false;
 	}
 	
 	@Override

@@ -1,7 +1,5 @@
 package se233.notcontra;
 
-import java.util.List;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -15,25 +13,35 @@ import se233.notcontra.view.ThirdStage;
 
 public class Launcher extends Application {
 	public static Stage primaryStage;
-	public static List<GameStage> stages = List.of(
-			new FirstStage(), new SecondStage(), new ThirdStage()
-			);
 	private static GameStage currentStage = null;
+	private static Thread currentDrawingThread = null;
+	private static Thread currentGameThread = null;
+	private static GameLoop currentGameLoop = null;
+	private static DrawingLoop currentDrawingLoop = null;
 	
     @Override
     public void start(Stage stage) {
-    	
-    	primaryStage = stage;
     	Scene scene = new Scene(new MainMenu(), GameStage.WIDTH, GameStage.HEIGHT);
     	stage.setScene(scene);
     	stage.setTitle("Not Contra");
     	stage.show();
-
+    	primaryStage = stage;
     }
     
     public static void changeStage(int index) {
     	javafx.application.Platform.runLater(() -> {
-    		GameStage gameStage = stages.get(index);
+    		if (currentGameLoop != null) {
+    			currentGameLoop.stop();
+    		}
+    		if (currentDrawingLoop != null) {
+    			currentDrawingLoop.stop();
+    		}
+    		GameStage gameStage = switch (index) {
+	    		case 0 -> new FirstStage();
+	    		case 1 -> new SecondStage();
+	    		case 2 -> new ThirdStage();
+				default -> throw new IllegalArgumentException("Unexpected value: " + index);
+    		};
     		Scene newScene = new Scene(gameStage, GameStage.WIDTH, GameStage.HEIGHT);
     		newScene.setOnKeyPressed(e -> {
     			if (e.getCode() != gameStage.getPlayer().getShootKey()) {
@@ -49,12 +57,23 @@ public class Launcher extends Application {
     			gameStage.getKeys().remove(e.getCode());
 
     		});
-    		GameLoop gameLoop = new GameLoop(gameStage);
-    		DrawingLoop drawingLoop = new DrawingLoop(gameStage);
+    		currentGameLoop = new GameLoop(gameStage);
+    		currentDrawingLoop = new DrawingLoop(gameStage);
+    		
+    		currentGameThread = new Thread(currentGameLoop, "GameLoopThread");
+    		currentDrawingThread = new Thread(currentDrawingLoop, "DrawingLoopThread");
+    		
     		primaryStage.setScene(newScene);
-    		(new Thread(drawingLoop)).start();
-    		(new Thread(gameLoop)).start();    		
+    		currentStage = gameStage;
+    		
+    		currentGameThread.start();
+    		currentDrawingThread.start();
+    		
     	});
+    }
+    
+    public static GameStage getCurrentStage() {
+    	return currentStage;
     }
 
     public static void main(String[] args) {

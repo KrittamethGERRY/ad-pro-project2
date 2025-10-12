@@ -12,8 +12,11 @@ import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Items.HellfireMagazine;
+import se233.notcontra.view.FirstStage;
 import se233.notcontra.view.GameStage;
 import se233.notcontra.view.Platform;
+import se233.notcontra.view.SecondStage;
+import se233.notcontra.view.ThirdStage;
 
 public class Player extends Rectangle {
 	
@@ -46,6 +49,7 @@ public class Player extends Rectangle {
 	private boolean isDropping = false;
 	private boolean canDropDown = false;
 	private boolean isBuffed = false;
+	private boolean isHellfireMag = false;
 	
 	public static int height;
 	public static int width;
@@ -111,7 +115,6 @@ public class Player extends Rectangle {
 		isJumping = false;
 		this.setTranslateX(xPosition);
 		this.setTranslateY(yPosition);
-
 	}
 	
 	public void die() {
@@ -172,11 +175,16 @@ public class Player extends Rectangle {
     		
             Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction)
             		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction);
-                GameLoop.bullets.add(bullet);
+            if (isBuffed && isHellfireMag) {
+            	bullet.setFill(Color.RED);
+            } else if (isBuffed && !isHellfireMag) {
+            	
+            }
+            GameLoop.bullets.add(bullet);
 
-                javafx.application.Platform.runLater(() -> {
-                    gameStage.getChildren().add(bullet);
-                });
+            javafx.application.Platform.runLater(() -> {
+                gameStage.getChildren().add(bullet);
+            });
     	}
 	}
 	
@@ -271,20 +279,31 @@ public class Player extends Rectangle {
 		if (buffTimer > 0) {
 			buffTimer--;
 			return;
-		} else if (isBuffed) {
+		} else if (isBuffed && this.isHellfireMag) {
 			isBuffed = false;
 			fireDelay = 30;
 			bulletPerClip = 3;
+		} else if (isBuffed && !this.isHellfireMag) {
+			
 		}
 		if (gameStage.getItem() != null) {
 			if (gameStage.getItem().getBoundsInParent().intersects(this.getBoundsInParent())) {
-				boolean isHellfireMag = gameStage.getItem() instanceof HellfireMagazine;
-				isBuffed = true;
-				if (isHellfireMag) {
-					buffTimer = 200;
-					bulletPerClip = Integer.MAX_VALUE;
-				} else {
-					System.out.println("Another Item");
+//				boolean isHellfireMag = gameStage.getItem() instanceof HellfireMagazine;
+//				isBuffed = true;
+//				if (isHellfireMag) {
+//					this.isHellfireMag = true;
+//					buffTimer = 200;
+//					bulletPerClip = Integer.MAX_VALUE;
+//				} else {
+//					this.isHellfireMag = false;
+//					System.out.println("Another Item");
+//				}
+				if (Launcher.getCurrentStage() instanceof FirstStage) {
+					Launcher.changeStage(1);
+				} else if (Launcher.getCurrentStage() instanceof SecondStage) {
+					Launcher.changeStage(2);
+				} else if (Launcher.getCurrentStage() instanceof ThirdStage) {
+					Launcher.changeStage(0);
 				}
 				javafx.application.Platform.runLater(() -> {
 					gameStage.removeItem();

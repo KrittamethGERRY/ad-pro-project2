@@ -1,8 +1,6 @@
 package se233.notcontra.model.Items;
 
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import se233.notcontra.model.Player;
 
 public abstract class Item extends Rectangle {
 	private int width;
