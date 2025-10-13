@@ -111,8 +111,8 @@ public class Player extends Pane {
     	if (now - lastShotTime >= fireDelay) {
     		lastShotTime = now;
     		
-            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction)
-            		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction);
+            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction , BulletOwner.PLAYER)
+            		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction , BulletOwner.PLAYER);
                 GameLoop.bullets.add(bullet);
 
                 javafx.application.Platform.runLater(() -> {

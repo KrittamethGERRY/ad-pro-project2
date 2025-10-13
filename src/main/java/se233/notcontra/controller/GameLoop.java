@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import se233.notcontra.model.Bullet;
+import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.ShootingDirection;
 import se233.notcontra.view.GameStage;
@@ -17,6 +18,7 @@ public class GameLoop implements Runnable{
 	private boolean running;
 
 	public static ArrayList<Bullet> bullets = new ArrayList<>();
+	public static ArrayList<Enemy> enemies = new ArrayList<>();
 
 	public GameLoop(GameStage gameStage) {
 		this.gameStage = gameStage;
@@ -73,9 +75,9 @@ public class GameLoop implements Runnable{
 		if (jumpPressed && !downPressed) {
 			player.jump();
 		}
-
-
 	}
+
+
 
 	@Override
 	public void run() {

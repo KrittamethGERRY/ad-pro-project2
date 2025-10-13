@@ -9,7 +9,10 @@ public class Bullet extends Pane {
     private int xPosition, yPosition, speedX, speedY;
     private ShootingDirection direction;
     private Image bulletImg;
-    public Bullet(int xPosition, int yPosition, int speedX, int speedY, ShootingDirection direction) {
+	private BulletOwner owner;
+	private boolean Alive = true;
+
+    public Bullet(int xPosition, int yPosition, int speedX, int speedY, ShootingDirection direction , BulletOwner owner) {
     	setTranslateX(xPosition);
     	setTranslateY(yPosition);
     	bulletImg = new Image(Launcher.class.getResourceAsStream("assets/FD.png"));
@@ -22,11 +25,10 @@ public class Bullet extends Pane {
         this.yPosition = yPosition;
         this.speedX = speedX;
         this.speedY = speedY;
+		this.owner = owner;
     }
     
     public void move() {
-    	setTranslateX(xPosition);
-    	setTranslateY(yPosition);
     	switch (direction) {
     	case LEFT: moveLeft(); break;
     	case RIGHT: moveRight(); break;
@@ -36,6 +38,9 @@ public class Bullet extends Pane {
     	case DOWN_LEFT: moveDownLeft(); break;
     	case DOWN_RIGHT: moveDownRight(); break;
     	}
+
+		setTranslateX(xPosition);
+		setTranslateY(yPosition);
     }
     
     public void moveLeft() {
@@ -77,4 +82,9 @@ public class Bullet extends Pane {
 	public int getYPosition() {
 		return yPosition;
 	}
+
+	public boolean isAlive() { return Alive; }
+	public void destroy() { Alive = false; }
+
+	public boolean isEnemyBullet() { return owner == BulletOwner.ENEMY;}
 }

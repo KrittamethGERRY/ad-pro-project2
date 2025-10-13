@@ -113,6 +113,8 @@ public class Boss extends Pane {
     public double getY() { return y; }
     public int getHealth() { return health; }
     public int getMaxHealth() { return maxHealth; }
+    public int gethight() { return height; }
+    public int getwidth() { return width; }
     public BossState getCurrentState() { return currentState; }
     public boolean isDefeated() { return isDefeated(); }
     public boolean isAlive() { return isAlive; }

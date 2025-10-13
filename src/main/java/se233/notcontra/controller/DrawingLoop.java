@@ -5,10 +5,7 @@ import java.util.Iterator;
 
 import javafx.application.Platform;
 import javafx.scene.shape.Rectangle;
-import se233.notcontra.model.Bullet;
-import se233.notcontra.model.Player;
-import se233.notcontra.model.ShootingDirection;
-import se233.notcontra.model.Wallboss;
+import se233.notcontra.model.*;
 import se233.notcontra.view.GameStage;
 
 public class DrawingLoop implements Runnable {
@@ -23,23 +20,27 @@ public class DrawingLoop implements Runnable {
 		interval = 1000f / frameRate;
 		running = true;
 	}
-	
-	public void checkAllCollisions(Player player , Wallboss wallboss) {
+
+	public void checkAllCollisions(Player player ) {
 		player.checkGroundCollision();
 		player.checkHighestJump();
 		player.checkStageBoundaryCollision();
 
+	}
+
+	public void checkPlayerBoss(Player player , Wallboss wallboss) {
 		if (wallboss != null && wallboss.isAlive()) {
-			checkBulletBossCollisions(GameLoop.bullets, wallboss);
+				checkBulletBossCollisions(GameLoop.bullets, wallboss);
 			// TODO: Add player vs. boss collision logic here
 		}
 	}
-
 
 	private void checkBulletBossCollisions(ArrayList<Bullet> bullets, Wallboss wallboss) {
 		Iterator<Bullet> bulletIterator = bullets.iterator();
 		while (bulletIterator.hasNext()) {
 			Bullet bullet = bulletIterator.next();
+			if (bullet.isEnemyBullet()) continue;
+
 			boolean hit = false;
 			for (Rectangle hitbox : wallboss.getWeakPoints()) {
 				if (bullet.getBoundsInParent().intersects(hitbox.getBoundsInParent())) {
@@ -56,32 +57,98 @@ public class DrawingLoop implements Runnable {
 		}
 	}
 
+	private void checkBulletEnemyCollisions(ArrayList<Bullet> bullets, ArrayList<Enemy> enemies) {
+		Iterator<Bullet> bulletIterator = bullets.iterator();
+		while (bulletIterator.hasNext()) {
+			Bullet bullet = bulletIterator.next();
+			if (bullet.isEnemyBullet()) continue; // Skip enemy bullets
+
+			Iterator<Enemy> enemyIterator = enemies.iterator();
+			boolean bulletHit = false;
+
+			while (enemyIterator.hasNext()) {
+				Enemy enemy = enemyIterator.next();
+				if (!enemy.isAlive()) continue;
+
+				// Create a rectangle for enemy bounds
+				double enemyLeft = enemy.getX();
+				double enemyRight = enemy.getX() + enemy.getW();
+				double enemyTop = enemy.getY();
+				double enemyBottom = enemy.getY() + enemy.getH();
+
+				double bulletX = bullet.getXPosition();
+				double bulletY = bullet.getYPosition();
+
+				// Simple point-in-rectangle collision
+				if (bulletX >= enemyLeft && bulletX <= enemyRight &&
+						bulletY >= enemyTop && bulletY <= enemyBottom) {
+
+					enemy.kill();
+					Platform.runLater(() -> gameStage.getChildren().remove(bullet));
+					bulletIterator.remove();
+					bulletHit = true;
+					System.out.println("Enemy destroyed!");
+					break;
+				}
+			}
+			if (bulletHit) break;
+		}
+	}
+
+	private void checkEnemyPlayerCollisions(ArrayList<Enemy> enemies, Player player) {
+		for (Enemy enemy : enemies) {
+			if (!enemy.isAlive()) continue;
+			if (enemy.getType() == EnemyType.FLYING) {
+				if (enemy.checkCollisionWithPlayer(player)) {
+					enemy.kill();
+					System.out.println("Player hit by flying enemy! Game Over!");
+					// TODO: Handle player death/damage
+				}
+			}
+		}
+	}
+
 	public void paint(Player player) {
 		player.repaint();
 	}
-	
-	public void paintBullet(ArrayList<Bullet> bullets, ShootingDirection direction) {
-		bullets.forEach(bullet -> {
+
+	private void paintBullet(ArrayList<Bullet> bullets, ShootingDirection direction) {
+		Iterator<Bullet> iterator = bullets.iterator();
+		while (iterator.hasNext()) {
+			Bullet bullet = iterator.next();
 			bullet.move();
-			if ((bullet.getXPosition() >= GameStage.WIDTH || bullet.getXPosition() <= 0) /* or collided with enemy/boss*/) {
-				javafx.application.Platform.runLater(() -> {
-					gameStage.getChildren().remove(bullet);
-					bullets.remove(bullet);
-				});
+
+			if (bullet.getXPosition() >= GameStage.WIDTH || bullet.getXPosition() <= 0 ||
+					bullet.getYPosition() >= GameStage.HEIGHT || bullet.getYPosition() <= 0) {
+				Platform.runLater(() -> gameStage.getChildren().remove(bullet));
+				iterator.remove();
 			}
-		});
+		}
+	}
+
+	private void updateEnemies(ArrayList<Enemy> enemies, Player player) {
+		Iterator<Enemy> iterator = enemies.iterator();
+		while (iterator.hasNext()) {
+			Enemy enemy = iterator.next();
+			if (enemy.isAlive()) {
+				enemy.updateWithPlayer(player, gameStage);
+			} else {
+				iterator.remove();
+			}
+		}
 	}
 	
 	@Override
 	public void run() {
 		while (running) {
 			float time = System.currentTimeMillis();
-			checkAllCollisions(gameStage.getPlayer() , gameStage.getWallboss());
+			checkAllCollisions(gameStage.getPlayer());
 			paint(gameStage.getPlayer());
 			paintBullet(GameLoop.bullets, GameLoop.shootingDir);
+			updateEnemies(GameLoop.enemies, gameStage.getPlayer());
 
 			if (gameStage.getWallboss() != null && gameStage.getWallboss().isAlive()) {
-				gameStage.getWallboss().update();
+				Platform.runLater(() -> gameStage.getWallboss().update());
 			}
 
 			time = System.currentTimeMillis() - time;
