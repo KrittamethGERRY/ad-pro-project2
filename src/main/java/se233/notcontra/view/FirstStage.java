@@ -8,9 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
-import se233.notcontra.model.Items.Bomboclat;
 import se233.notcontra.model.Items.HellfireMagazine;
 import se233.notcontra.model.Items.Item;
+import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 
@@ -66,7 +66,7 @@ public class FirstStage extends GameStage {
 	@Override
 	public void spawnItem() {
 		boolean itemType = new Random().nextBoolean();
-		item = /*itemType ? new HellfireMagazine(64,64,150,280) :*/ new Bomboclat(64,64,150,280);
+		item = itemType ? new HellfireMagazine(64,64,150,280) : new TankBuster(64,64,150,280);
 	}
 	
 	@Override
