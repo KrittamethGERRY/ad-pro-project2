@@ -1,14 +1,11 @@
 package se233.notcontra.controller;
 
 import java.util.List;
-
-import se233.notcontra.model.Bullet;
-import se233.notcontra.model.Player;
-import se233.notcontra.model.ShootingDirection;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import javafx.application.Platform;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.model.*;
 import se233.notcontra.view.GameStage;
@@ -31,12 +28,6 @@ public class DrawingLoop implements Runnable {
 		player.checkStageBoundaryCollision();
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
-	}
-	
-	public void checkBulletCollisions(List<Bullet> bullets) {
-		for (Bullet bullet : bullets) {
-			bullet.enemyCollision(GameLoop.enemies, gameStage.getBoss());
-		}
 	}
 
 	public void playerCollideBossCollision(Player player , Wallboss wallboss) {
@@ -122,8 +113,8 @@ public class DrawingLoop implements Runnable {
 		player.repaint();
 	}
 
-	private void paintBullet(List<Bullet> bullets, ShootingDirection direction) {
-		Iterator<Bullet> iterator = bullets.iterator();
+	private void paintBullet(GameStage gameStage, ShootingDirection direction) {
+		Iterator<Bullet> iterator = gameStage.getBullets().iterator();
 		while (iterator.hasNext()) {
 			Bullet bullet = iterator.next();
 			bullet.move();
@@ -132,6 +123,20 @@ public class DrawingLoop implements Runnable {
 					bullet.getYPosition() >= GameStage.HEIGHT || bullet.getYPosition() <= 0) {
 				Platform.runLater(() -> gameStage.getChildren().remove(bullet));
 				iterator.remove();
+			}
+			for (Enemy enemy : gameStage.getEnemies()) {
+				if (gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent()) && bullet.getOwner() == BulletOwner.PLAYER) {
+					enemy.setFill(Color.BLACK);
+					enemy.takeDamage(500);
+					if (GameLoop.bullets.size() > 1) {
+						iterator.remove();
+						javafx.application.Platform.runLater(() -> {
+							gameStage.getChildren().remove(bullet);
+						});
+					} else {
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -158,9 +163,8 @@ public class DrawingLoop implements Runnable {
 			float time = System.currentTimeMillis();
 			checkPlayerCollisions(gameStage.getPlayer());
 			paint(gameStage.getPlayer());
-			paintBullet(GameLoop.bullets, GameLoop.shootingDir);
+			paintBullet(gameStage, GameLoop.shootingDir);
 			updateEnemies(GameLoop.enemies, gameStage.getPlayer());
-			checkBulletCollisions(gameStage.getBullets());
 
 			if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
 				gameStage.getBoss().update();

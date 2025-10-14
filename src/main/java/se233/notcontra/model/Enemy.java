@@ -7,19 +7,21 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.view.GameStage;
 
 public class Enemy extends Rectangle {
-    int xPos, yPos, width, height;
+    private int xPos, yPos, width, height;
+    private int health;
     double speed = 2;
     boolean alive = true;
     private EnemyType  type;
     private int shootTimer = 75;
 
 
-    public Enemy(int xPos, int yPos, int speed, int width, int height, EnemyType type) {
+    public Enemy(int xPos, int yPos, int speed, int width, int height, int health, EnemyType type) {
     	setLayoutX(xPos);
     	setLayoutY(yPos);
     	this.setFill(Color.RED);
     	this.setWidth(width);
     	this.setHeight(height);
+    	this.health = health;
         this.xPos = xPos;
         this.yPos = yPos;
         this.speed = speed;
@@ -89,15 +91,13 @@ public class Enemy extends Rectangle {
         if (type == EnemyType.FLYING) {
             return null;
         }
-
-        //long currentTime = System.currentTimeMillis();
-
+        
         if (shootTimer > 0) {
             shootTimer--;
             return null;
         }
 
-        double enemyCenterX = xPos + width / 2;
+        double enemyCenterX =  xPos + width / 2;
         double enemyCenterY = yPos + height / 2;
         double playerCenterX = player.getXPosition() + Player.width / 2;
         double playerCenterY = player.getYPosition() + Player.height / 2;
@@ -133,6 +133,13 @@ public class Enemy extends Rectangle {
         else if (degrees >= 202.5 && degrees < 247.5) return ShootingDirection.UP_LEFT;
         else if (degrees >= 247.5 && degrees < 292.5) return ShootingDirection.UP_LEFT;
         else return ShootingDirection.UP_RIGHT;
+    }
+    
+    public void takeDamage(int damage) {
+    	health -= damage;
+    	if (health <= 0) {
+    		kill();
+    	}
     }
 
     public double getXPos() { return xPos; }

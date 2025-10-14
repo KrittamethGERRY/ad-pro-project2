@@ -26,8 +26,8 @@ public class Wallboss extends Boss {
         this.gameStage = gameStage;
         this.phaseChangeHealth = this.getMaxHealth() / 2;
         this.core = new Rectangle(0, 80, 128, 128);
-        turretLeft = new Enemy(0, 0, 0, 32, 32, EnemyType.TURRET);
-        turretRight = new Enemy(100, 0, 0, 32, 32, EnemyType.TURRET);
+        turretLeft = new Enemy(0, 0, 0, 32, 32, this.getMaxHealth()/2, EnemyType.TURRET);
+        turretRight = new Enemy(100, 0, 0, 32, 32, this.getMaxHealth()/2, EnemyType.TURRET);
         GameLoop.enemies.addAll(List.of(turretLeft, turretRight));
         System.out.println(this.localToParent(turretLeft.getBoundsInParent()));
         getWeakPoints().add(turretLeft);
@@ -77,8 +77,8 @@ public class Wallboss extends Boss {
 
         ShootingDirection randomDirection = leftDirections[(int)(Math.random() * leftDirections.length)];
 
-        int turretXPos = this.getXPos() + turret.xPos;
-        int turretYPos = this.getYPos() + turret.yPos;
+        int turretXPos = (int) (this.getXPos() + turret.getXPos());
+        int turretYPos = (int) (this.getYPos() + turret.getYPos());
         
         int speedX = 5;
         int speedY = (randomDirection == ShootingDirection.UP_LEFT ||
@@ -107,10 +107,11 @@ public class Wallboss extends Boss {
         if (aliveCount < maxEnemies) {
 
             int spawnX = 100;
-            int spawnY = - 200;
+            int spawnY = -200;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, EnemyType.WALL_SHOOTER);
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, 1, EnemyType.WALL_SHOOTER);
+            // NOTE: Get children's position do not touch!!!!
             System.out.print("Enemy Bound: " + enemy.getBoundsInParent());
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {

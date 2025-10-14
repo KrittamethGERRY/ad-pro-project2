@@ -4,6 +4,8 @@ import java.util.List;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import se233.notcontra.controller.GameLoop;
+import se233.notcontra.view.GameStage;
 
 public class Bullet extends Rectangle {
     private int xPosition, yPosition, speedX, speedY;
@@ -79,19 +81,12 @@ public class Bullet extends Rectangle {
 	public int getYPosition() {
 		return yPosition;
 	}
-	
-	public void enemyCollision(List<Enemy> enemies, Boss boss) {
-		for (Enemy enemy : enemies) {
-			if (boss.localToParent(enemy.getBoundsInParent()).intersects(this.getBoundsInParent()) && this.owner == BulletOwner.PLAYER) {
-				enemy.setFill(Color.BLACK);
-				System.out.println("Collided");
-			}
-		}
-	}
-	
+
 
 	public boolean isAlive() { return Alive; }
 	public void destroy() { Alive = false; }
+	
+	public BulletOwner getOwner() { return owner; }
 
 	public boolean isEnemyBullet() { return owner == BulletOwner.ENEMY;}
 }

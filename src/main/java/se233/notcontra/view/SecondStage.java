@@ -69,7 +69,7 @@ public class SecondStage extends GameStage {
 	
 	@Override
 	public Boss getBoss() {
-		return this.boss;
+		return boss;
 	}
 	
 	@Override
