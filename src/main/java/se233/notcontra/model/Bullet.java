@@ -6,7 +6,10 @@ import javafx.scene.shape.Rectangle;
 public class Bullet extends Rectangle {
     private int xPosition, yPosition, speedX, speedY;
     private ShootingDirection direction;
-    public Bullet(int xPosition, int yPosition, int speedX, int speedY, ShootingDirection direction) {
+	private BulletOwner owner;
+	private boolean Alive = true;
+
+    public Bullet(int xPosition, int yPosition, int speedX, int speedY, ShootingDirection direction , BulletOwner owner) {
     	setTranslateX(xPosition);
     	setTranslateY(yPosition);
     	this.setFill(Color.BLACK);
@@ -17,11 +20,10 @@ public class Bullet extends Rectangle {
         this.yPosition = yPosition;
         this.speedX = speedX;
         this.speedY = speedY;
+		this.owner = owner;
     }
     
     public void move() {
-    	setTranslateX(xPosition);
-    	setTranslateY(yPosition);
     	switch (direction) {
     	case LEFT: moveLeft(); break;
     	case RIGHT: moveRight(); break;
@@ -31,6 +33,9 @@ public class Bullet extends Rectangle {
     	case DOWN_LEFT: moveDownLeft(); break;
     	case DOWN_RIGHT: moveDownRight(); break;
     	}
+
+		setTranslateX(xPosition);
+		setTranslateY(yPosition);
     }
     
     public void moveLeft() {
@@ -72,4 +77,9 @@ public class Bullet extends Rectangle {
 	public int getYPosition() {
 		return yPosition;
 	}
+
+	public boolean isAlive() { return Alive; }
+	public void destroy() { Alive = false; }
+
+	public boolean isEnemyBullet() { return owner == BulletOwner.ENEMY;}
 }

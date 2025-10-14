@@ -176,13 +176,11 @@ public class Player extends Rectangle {
     			reloadTimer = 2;
     			bulletPerClip = 3;
     		}
-    		
-            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction)
-            		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction);
+
+            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction , BulletOwner.PLAYER)
+            		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction , BulletOwner.PLAYER);
             if (isBuffed && isHellfireMag) {
             	bullet.setFill(Color.RED);
-            } else if (isBuffed && !isHellfireMag) {
-            	
             }
             GameLoop.bullets.add(bullet);
 

@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.Launcher;
+import se233.notcontra.model.Boss;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 
@@ -26,10 +27,12 @@ public abstract class GameStage extends Pane {
 	protected Image backgroundIMG;
 	protected Player player;
 	protected Keys keys;
+	protected Boss boss;
 	
 	public GameStage() {
 		this.keys = new Keys();
 	}
+	
 	public ImageView drawScore() {
 		scoreLabel = new Label("Score: 0");
 		ImageView scoreBackground = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Paper.png")));
@@ -64,4 +67,5 @@ public abstract class GameStage extends Pane {
 	public abstract void logging();
 	public abstract void spawnItem();
 	public abstract void removeItem();
+	public abstract Boss getBoss();
 }

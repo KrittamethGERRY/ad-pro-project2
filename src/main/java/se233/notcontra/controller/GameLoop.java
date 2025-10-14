@@ -1,14 +1,13 @@
 package se233.notcontra.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import se233.notcontra.model.Bullet;
+import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.ShootingDirection;
 import se233.notcontra.view.GameStage;
-import se233.notcontra.view.Platform;
 
 public class GameLoop implements Runnable{
 	public static ShootingDirection shootingDir;
@@ -20,6 +19,7 @@ public class GameLoop implements Runnable{
 	private int score;
 
 	public static List<Bullet> bullets = new ArrayList<>();
+	public static ArrayList<Enemy> enemies = new ArrayList<>();
 
 	public GameLoop(GameStage gameStage) {
 		this.score = 0;
@@ -91,6 +91,8 @@ public class GameLoop implements Runnable{
 	public void stop() {
 		running = false;
 	}
+
+
 
 	@Override
 	public void run() {

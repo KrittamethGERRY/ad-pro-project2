@@ -11,6 +11,7 @@ import se233.notcontra.model.Items.HellfireMagazine;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.Launcher;
+import se233.notcontra.model.Boss;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 
@@ -61,6 +62,11 @@ public class SecondStage extends GameStage {
 	public void removeItem() {
 		getChildren().remove(item);
 		item = null;
+	}
+	
+	@Override
+	public Boss getBoss() {
+		return this.boss;
 	}
 	
 	@Override

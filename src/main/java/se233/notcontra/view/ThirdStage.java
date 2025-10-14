@@ -3,6 +3,7 @@ package se233.notcontra.view;
 import java.util.List;
 
 import se233.notcontra.model.Items.Item;
+import se233.notcontra.model.Boss;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 
@@ -41,6 +42,11 @@ public class ThirdStage extends GameStage {
 	public void removeItem() {
 		getChildren().remove(item);
 		item = null;
+	}
+	
+	@Override
+	public Boss getBoss() {
+		return this.boss;
 	}
 	
 	@Override
