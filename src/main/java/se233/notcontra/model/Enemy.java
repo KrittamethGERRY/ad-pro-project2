@@ -7,17 +7,17 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.view.GameStage;
 
 public class Enemy extends Rectangle {
-    double xPos, yPos, width, height;
+    int xPos, yPos, width, height;
     double speed = 2;
     boolean alive = true;
     private EnemyType  type;
     private int shootTimer = 75;
 
 
-    public Enemy(double xPos, double yPos, double speed, double width, double height, EnemyType type) {
-    	this.setTranslateX(xPos);
-    	this.setTranslateY(yPos);
-    	this.setFill(Color.GREEN);
+    public Enemy(int xPos, int yPos, int speed, int width, int height, EnemyType type) {
+    	setLayoutX(xPos);
+    	setLayoutY(yPos);
+    	this.setFill(Color.RED);
     	this.setWidth(width);
     	this.setHeight(height);
         this.xPos = xPos;
@@ -26,6 +26,7 @@ public class Enemy extends Rectangle {
         this.width = width;
         this.height = height;
         this.type = type;
+        System.out.println();
     }
 
     public void updateWithPlayer(Player player, GameStage gameStage) {

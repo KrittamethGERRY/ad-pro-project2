@@ -12,6 +12,8 @@ import javafx.scene.layout.Pane;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Boss;
+import se233.notcontra.model.Bullet;
+import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 
@@ -68,4 +70,6 @@ public abstract class GameStage extends Pane {
 	public abstract void spawnItem();
 	public abstract void removeItem();
 	public abstract Boss getBoss();
+	public abstract List<Enemy> getEnemies();
+	public abstract List<Bullet> getBullets();
 }

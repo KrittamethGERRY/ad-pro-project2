@@ -26,12 +26,17 @@ public class DrawingLoop implements Runnable {
 		running = true;
 	}
 	
-	public void checkAllCollisions(Player player) {
+	public void checkPlayerCollisions(Player player) {
 		player.checkHighestJump();
 		player.checkStageBoundaryCollision();
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
-
+	}
+	
+	public void checkBulletCollisions(List<Bullet> bullets) {
+		for (Bullet bullet : bullets) {
+			bullet.enemyCollision(GameLoop.enemies, gameStage.getBoss());
+		}
 	}
 
 	public void playerCollideBossCollision(Player player , Wallboss wallboss) {
@@ -40,7 +45,7 @@ public class DrawingLoop implements Runnable {
 		}
 	}
 
-	private void bossHitCollisions(List<Bullet> bullets, Wallboss wallboss) {
+	private void bossHitCollision(List<Bullet> bullets, Wallboss wallboss) {
 		Iterator<Bullet> bulletIterator = bullets.iterator();
 		while (bulletIterator.hasNext()) {
 			Bullet bullet = bulletIterator.next();
@@ -62,7 +67,7 @@ public class DrawingLoop implements Runnable {
 		}
 	}
 
-	private void enemyHitCollisions(List<Bullet> bullets, ArrayList<Enemy> enemies) {
+	private void enemyHitCollision(List<Bullet> bullets, ArrayList<Enemy> enemies) {
 		Iterator<Bullet> bulletIterator = bullets.iterator();
 		while (bulletIterator.hasNext()) {
 			Bullet bullet = bulletIterator.next();
@@ -151,10 +156,11 @@ public class DrawingLoop implements Runnable {
 	public void run() {
 		while (running) {
 			float time = System.currentTimeMillis();
-			checkAllCollisions(gameStage.getPlayer());
+			checkPlayerCollisions(gameStage.getPlayer());
 			paint(gameStage.getPlayer());
 			paintBullet(GameLoop.bullets, GameLoop.shootingDir);
 			updateEnemies(GameLoop.enemies, gameStage.getPlayer());
+			checkBulletCollisions(gameStage.getBullets());
 
 			if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
 				gameStage.getBoss().update();

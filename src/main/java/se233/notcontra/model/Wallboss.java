@@ -1,5 +1,7 @@
 package se233.notcontra.model;
 
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -9,9 +11,9 @@ import se233.notcontra.view.GameStage;
 
 public class Wallboss extends Boss {
     private final int phaseChangeHealth;
-    private Turret turretLeft;
-    private Turret turretRight;
-    private final Rectangle core;
+    private Enemy turretLeft;
+    private Enemy turretRight;
+    private Rectangle core;
     private GameStage gameStage;
 
     private int enemyTimer = 0;
@@ -24,15 +26,17 @@ public class Wallboss extends Boss {
         this.gameStage = gameStage;
         this.phaseChangeHealth = this.getMaxHealth() / 2;
         this.core = new Rectangle(0, 80, 128, 128);
-        turretLeft = new Turret(0, 0, 32, 32);
-        turretRight = new Turret(100, 0, 32, 32);
-
+        turretLeft = new Enemy(0, 0, 0, 32, 32, EnemyType.TURRET);
+        turretRight = new Enemy(100, 0, 0, 32, 32, EnemyType.TURRET);
+        GameLoop.enemies.addAll(List.of(turretLeft, turretRight));
+        System.out.println(this.localToParent(turretLeft.getBoundsInParent()));
         getWeakPoints().add(turretLeft);
         getWeakPoints().add(turretRight);
         getWeakPoints().add(core);
         core.setFill(Color.BLUE);
-        
-        getChildren().addAll(turretLeft, turretRight, core);
+        javafx.application.Platform.runLater(() -> {
+            this.getChildren().addAll(turretLeft, turretRight, core);        	
+        });
     }
 
     @Override
@@ -43,7 +47,7 @@ public class Wallboss extends Boss {
         }
 
         if (Math.random() < 0.6) {
-            Turret firingTurret = (Math.random() < 0.5) ? turretLeft : turretRight;
+            Enemy firingTurret = (Math.random() < 0.5) ? turretLeft : turretRight;
             shootFromTurret(firingTurret);
             shootTimer = 100;
         }
@@ -64,7 +68,7 @@ public class Wallboss extends Boss {
         }
     }
 
-    private void shootFromTurret(Turret turret) {
+    private void shootFromTurret(Enemy turret) {
 
         ShootingDirection[] leftDirections = {
                 ShootingDirection.LEFT,
@@ -85,7 +89,6 @@ public class Wallboss extends Boss {
         GameLoop.bullets.add(bullet);
         Platform.runLater(() -> {
             gameStage.getChildren().add(bullet);
-            System.out.println("Boss shot bullet in direction: " + randomDirection);
         });
     }
 
@@ -103,17 +106,16 @@ public class Wallboss extends Boss {
 
         if (aliveCount < maxEnemies) {
 
-            double spawnX = this.getXPos() + 100;
-            double spawnY = this.getYPos() - 200;
+            int spawnX = 100;
+            int spawnY = - 200;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, EnemyType.WALL_SHOOTER);
-
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, EnemyType.WALL_SHOOTER);
+            System.out.print("Enemy Bound: " + enemy.getBoundsInParent());
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
-                getChildren().add(enemy);
+                this.getChildren().add(enemy);
             });
-            System.out.println("Enemy spawned at: " + spawnX + ", " + spawnY);
             enemyTimer = 500;
         }
     }
