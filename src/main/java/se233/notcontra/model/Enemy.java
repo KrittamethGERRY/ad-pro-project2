@@ -10,8 +10,8 @@ public class Enemy {
     boolean alive = true;
     private EnemyType  type;
     private long lastShotTime = 0;
-    private long shootCooldown = 2000;
-
+    private long shootCooldown = 1000;
+    private int shootTimer = 35;
 
 
     public Enemy(double x, double y, double speed, double w, double h, EnemyType type) {
@@ -75,6 +75,7 @@ public class Enemy {
     }
 
     private void handleFlyingAttack(Player player) {
+
     }
 
     public Bullet shootAtPlayer(Player player) {
@@ -83,8 +84,10 @@ public class Enemy {
             return null;
         }
 
-        long currentTime = System.currentTimeMillis();
-        if (currentTime - lastShotTime < shootCooldown) {
+        //long currentTime = System.currentTimeMillis();
+
+        if (shootTimer > 0) {
+            shootTimer--;
             return null;
         }
 
@@ -103,7 +106,8 @@ public class Enemy {
 
         ShootingDirection direction = determineDirection(deltaX, deltaY);
 
-        lastShotTime = currentTime;
+        //lastShotTime = currentTime;
+        shootTimer = 35;
         return new Bullet((int)enemyCenterX, (int)enemyCenterY,
                 Math.abs(speedX), Math.abs(speedY),
                 direction, BulletOwner.ENEMY);

@@ -2,6 +2,7 @@ package se233.notcontra.view;
 
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import se233.notcontra.model.Boss;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Wallboss;
@@ -22,5 +23,5 @@ public abstract class GameStage extends Pane {
 	
 	public abstract Keys getKeys();
 	public abstract Player getPlayer();
-	public abstract Wallboss getWallboss();
+	public abstract Boss getBoss();
 }

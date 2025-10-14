@@ -12,15 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Wallboss extends Boss {
-
-
     private final int phaseChangeHealth;
     private final Rectangle turretLeft;
     private final Rectangle turretRight;
     private final Rectangle core;
     private GameStage gameStage;
-    private long lastShotTime;
-    private final long shootCooldown = 1000;
     private ImageView turretleftSprite;
     private ImageView turretrightSprite;
     private ImageView coreSprite;
@@ -33,8 +29,7 @@ public class Wallboss extends Boss {
 
     public Wallboss(double x, double y ,GameStage gameStage) {
         super(x, y, 300, 200, 5000);
-
-
+        this.gameStage = gameStage;
         this.phaseChangeHealth = this.getMaxHealth() / 2;
 
         this.turretLeft = new Rectangle(30, 50, 40, 40);
@@ -58,21 +53,22 @@ public class Wallboss extends Boss {
         core.setFill(Color.BLUE);
         getChildren().addAll(turretLeft, turretRight, core);
 
-        this.lastShotTime = System.currentTimeMillis();
         this.spawnedEnemyViews = new ArrayList<>();
         this.lastEnemySpawnTime = System.currentTimeMillis();
     }
 
     @Override
     protected void handleAttackingState() {
-        long currentTime = System.currentTimeMillis();
+        if (shootTimer > 0) {
+            shootTimer--;
+            return;
+        }
 
-        if (currentTime - lastShotTime > shootCooldown) {
-            if (Math.random() < 0.6) {
-                Rectangle firingTurret = (Math.random() < 0.5) ? turretLeft : turretRight;
-                shootFromTurret(firingTurret);
-            }
-            lastShotTime = currentTime;
+        if (Math.random() < 0.6) {
+            Rectangle firingTurret = (Math.random() < 0.5) ? turretLeft : turretRight;
+            shootFromTurret(firingTurret);
+            System.out.println("Shoot");
+            shootTimer = 100;
         }
 
         spawnEnemy();
@@ -98,7 +94,6 @@ public class Wallboss extends Boss {
 
         ShootingDirection[] leftDirections = {
                 ShootingDirection.LEFT,
-                ShootingDirection.UP_LEFT,
                 ShootingDirection.DOWN_LEFT
         };
 
@@ -168,12 +163,8 @@ public class Wallboss extends Boss {
             return false;
         });
     }
-
-    @Override
-    protected void handleVulnerableState() {
-    }
-
     @Override
     protected void updateWeakPointsPosition() {
     }
+
 }

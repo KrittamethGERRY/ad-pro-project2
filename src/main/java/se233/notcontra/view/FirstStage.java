@@ -30,5 +30,5 @@ public class FirstStage extends GameStage {
 	public Player getPlayer() {
 		return this.player;
 	}
-	public Wallboss getWallboss() {return this.wallboss; }
+	public Wallboss getBoss() {return this.wallboss; }
 }

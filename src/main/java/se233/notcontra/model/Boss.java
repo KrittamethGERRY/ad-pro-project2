@@ -12,7 +12,9 @@ public class Boss extends Pane {
     private final int maxHealth;
     private boolean isAlive;
     private BossState currentState;
-    private long stateTimer;
+    protected int shootTimer = 10;
+    protected int idleTimer = 5;
+    protected int dieTimer = 20;
 
     private int width, height;
     private ArrayList<Rectangle> weakPoints;
@@ -26,8 +28,7 @@ public class Boss extends Pane {
         this.maxHealth = maxHealth;
         this.health = maxHealth;
         this.isAlive = true;
-        this.currentState = BossState.ENTERING;
-        this.stateTimer = System.currentTimeMillis();
+        this.currentState = BossState.IDLE;
 
         // Position the Pane itself
         setLayoutX(x);
@@ -44,48 +45,48 @@ public class Boss extends Pane {
             return;
         }
         switch (currentState) {
-            case ENTERING:   handleEnteringState();   break;
             case IDLE:       handleIdleState();       break;
             case ATTACKING:  handleAttackingState();  break;
-            case VULNERABLE: handleVulnerableState(); break;
             case DEFEATED:   handleDefeatedState();   break;
         }
         updateWeakPointsPosition();
     }
 
     // These methods are protected so subclasses can override them
-    protected void handleEnteringState() {
-        if (System.currentTimeMillis() - stateTimer > 2000) {
-            setState(BossState.IDLE);
-        }
-    }
+
 
     protected void handleIdleState() {
-        if (System.currentTimeMillis() - stateTimer > 3000) {
+        if (idleTimer > 0) {
+            idleTimer--;
+            return;
+        } else {
             setState(BossState.ATTACKING);
+            idleTimer = 5;
         }
     }
 
     protected void handleAttackingState() {
-        if (System.currentTimeMillis() - stateTimer > 5000) {
+        if (shootTimer > 0) {
+            shootTimer--;
+            return;
+        } else {
             setState(BossState.IDLE);
-        }
-    }
-
-    protected void handleVulnerableState() {
-        if (System.currentTimeMillis() - stateTimer > 4000) {
-            setState(BossState.ATTACKING);
+            shootTimer = 10;
         }
     }
 
     protected void handleDefeatedState() {
-        if (System.currentTimeMillis() - stateTimer > 3000) {
-            this.isAlive = false;
+        if (dieTimer > 0) {
+            idleTimer--;
+            return;
+        } else {
+            setState(BossState.DEFEATED);
+            dieTimer = 20;
         }
     }
 
     public void takeDamage(int amount) {
-        if (currentState == BossState.VULNERABLE || currentState == BossState.ATTACKING) {
+        if (currentState == BossState.ATTACKING) {
             this.health -= amount;
             if (this.health <= 0) {
                 this.health = 0;
@@ -105,7 +106,6 @@ public class Boss extends Pane {
 
     protected void setState(BossState newState) {
         this.currentState = newState;
-        this.stateTimer = System.currentTimeMillis();
     }
 
     // Getters
@@ -119,5 +119,4 @@ public class Boss extends Pane {
     public boolean isDefeated() { return isDefeated(); }
     public boolean isAlive() { return isAlive; }
     public ArrayList<Rectangle> getWeakPoints() { return weakPoints; }
-    public long getStateTimer() { return stateTimer; } // Added for subclasses
 }

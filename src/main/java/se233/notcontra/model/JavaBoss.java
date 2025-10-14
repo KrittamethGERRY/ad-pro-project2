@@ -21,9 +21,4 @@ public class JavaBoss extends Boss{
 
     }
 
-    @Override
-    protected void handleVulnerableState() {
-
-    }
-
 }

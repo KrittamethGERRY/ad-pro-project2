@@ -147,8 +147,8 @@ public class DrawingLoop implements Runnable {
 			paintBullet(GameLoop.bullets, GameLoop.shootingDir);
 			updateEnemies(GameLoop.enemies, gameStage.getPlayer());
 
-			if (gameStage.getWallboss() != null && gameStage.getWallboss().isAlive()) {
-				Platform.runLater(() -> gameStage.getWallboss().update());
+			if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
+				gameStage.getBoss().update();
 			}
 
 			time = System.currentTimeMillis() - time;
