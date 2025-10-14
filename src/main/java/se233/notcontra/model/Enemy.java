@@ -49,8 +49,6 @@ public class Enemy extends Rectangle {
     }
 
     private void flyTowardsPlayer(Player player) {
-        // Calculate center positions
-        // This type enemy didn't work yet
         double enemyCenterX = xPos + width / 2;
         double enemyCenterY = yPos + height / 2;
         double playerCenterX = player.getXPosition() + Player.width / 2;
@@ -84,54 +82,71 @@ public class Enemy extends Rectangle {
     }
 
     public Bullet shootAtPlayer(Player player) {
-        // Only wall shooters can shoot
+
         if (type == EnemyType.FLYING) {
             return null;
         }
-
-        //long currentTime = System.currentTimeMillis();
 
         if (shootTimer > 0) {
             shootTimer--;
             return null;
         }
 
-        double enemyCenterX = xPos + width / 2;
-        double enemyCenterY = yPos + height / 2;
-        double playerCenterX = player.getXPosition() + Player.width / 2;
-        double playerCenterY = player.getYPosition() + Player.height / 2;
+        Vector2D enemyCenter =  new Vector2D((double) (xPos + width / 2), (double) (yPos + height / 2));
 
-        double deltaX = playerCenterX - enemyCenterX;
-        double deltaY = playerCenterY - enemyCenterY;
-        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        Vector2D playerCenter = new Vector2D((double) (player.getXPosition() + Player.width / 2.0), (double) (player.getYPosition() + Player.height / 2.0));
 
-        double bulletSpeed = 5.0;
-        int speedX = (int) ((deltaX / distance) * bulletSpeed);
-        int speedY = (int) ((deltaY / distance) * bulletSpeed);
+        Vector2D directionToPlayer = playerCenter.subtract(enemyCenter);
 
-        ShootingDirection direction = determineDirection(deltaX, deltaY);
+        if (directionToPlayer.getLength() == 0) {
+            return null;
+        }
 
-        //lastShotTime = currentTime;
-        shootTimer = 35;
-        return new Bullet((int)enemyCenterX, (int)enemyCenterY,
-                Math.abs(speedX), Math.abs(speedY),
-                direction, BulletOwner.ENEMY);
+        double bulletSpeed = 0.007525;
+        ShootingDirection direction = determineDirection(directionToPlayer);
+
+        shootTimer = 75;
+        return new Bullet(
+                enemyCenter,
+                directionToPlayer,
+                (double) bulletSpeed,
+                BulletOwner.ENEMY
+        );
     }
 
-    private ShootingDirection determineDirection(double deltaX, double deltaY) {
-        double angle = Math.atan2(deltaY, deltaX);
+    private ShootingDirection determineDirection(Vector2D direction) {
+        // Calculate angle in degrees
+        double angle = Math.atan2(direction.y, direction.x);
         double degrees = Math.toDegrees(angle);
 
+        // Normalize to 0-360 range
         if (degrees < 0) degrees += 360;
 
-        if (degrees >= 337.5 || degrees < 22.5) return ShootingDirection.RIGHT;
-        else if (degrees >= 22.5 && degrees < 67.5) return ShootingDirection.DOWN_RIGHT;
-        else if (degrees >= 67.5 && degrees < 112.5) return ShootingDirection.DOWN_LEFT;
-        else if (degrees >= 112.5 && degrees < 157.5) return ShootingDirection.DOWN_LEFT;
-        else if (degrees >= 157.5 && degrees < 202.5) return ShootingDirection.LEFT;
-        else if (degrees >= 202.5 && degrees < 247.5) return ShootingDirection.UP_LEFT;
-        else if (degrees >= 247.5 && degrees < 292.5) return ShootingDirection.UP_LEFT;
-        else return ShootingDirection.UP_RIGHT;
+
+        if (degrees >= 337.5 || degrees < 22.5) {
+            return ShootingDirection.RIGHT;
+        }
+        else if (degrees >= 22.5 && degrees < 67.5) {
+            return ShootingDirection.DOWN_RIGHT;
+        }
+        else if (degrees >= 67.5 && degrees < 112.5) {
+            return ShootingDirection.DOWN_LEFT;
+        }
+        else if (degrees >= 112.5 && degrees < 157.5) {
+            return ShootingDirection.LEFT;
+        }
+        else if (degrees >= 157.5 && degrees < 202.5) {
+            return ShootingDirection.LEFT;
+        }
+        else if (degrees >= 202.5 && degrees < 247.5) {
+            return ShootingDirection.UP_LEFT;
+        }
+        else if (degrees >= 247.5 && degrees < 292.5) {
+            return ShootingDirection.UP_LEFT;
+        }
+        else {
+            return ShootingDirection.UP_RIGHT;
+        }
     }
 
     public double getXPos() { return xPos; }

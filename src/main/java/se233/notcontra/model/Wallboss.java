@@ -29,7 +29,6 @@ public class Wallboss extends Boss {
 
         getWeakPoints().add(turretLeft);
         getWeakPoints().add(turretRight);
-        getWeakPoints().add(core);
         core.setFill(Color.BLUE);
         
         getChildren().addAll(turretLeft, turretRight, core);
@@ -60,7 +59,7 @@ public class Wallboss extends Boss {
             // TODO: Trigger explosion animations at turret locations.
 
             // Switch to the VULNERABLE state (Phase 2)
-            setState(BossState.VULNERABLE);
+            getWeakPoints().add(core);
         }
     }
 
@@ -119,6 +118,11 @@ public class Wallboss extends Boss {
     }
     @Override
     protected void updateWeakPointsPosition() {
+    }
+
+    @Override
+    protected void handleDefeatedState(){
+
     }
 
 }

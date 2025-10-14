@@ -12,6 +12,7 @@ import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Boss;
+import se233.notcontra.model.JavaBoss;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 
@@ -30,7 +31,9 @@ public class SecondStage extends GameStage {
 		spawnItem();
 		platforms.add(groundPlatform);
 
-		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, item, player);
+		boss = new JavaBoss(1010, 20,250,300,this);
+
+		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, item, player, boss);
 
 	}
 	

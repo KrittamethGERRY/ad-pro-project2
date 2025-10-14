@@ -4,82 +4,102 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Bullet extends Rectangle {
-    private int xPosition, yPosition, speedX, speedY;
+    private Vector2D velocity;
+	private Vector2D position;
     private ShootingDirection direction;
 	private BulletOwner owner;
 	private boolean Alive = true;
 
     public Bullet(int xPosition, int yPosition, int speedX, int speedY, ShootingDirection direction , BulletOwner owner) {
-    	setTranslateX(xPosition);
-    	setTranslateY(yPosition);
-    	this.setFill(Color.BLACK);
-    	this.setWidth(10);
-    	this.setHeight(10);
     	this.direction = direction;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.speedX = speedX;
-        this.speedY = speedY;
+        this.position = new Vector2D(xPosition, yPosition);
+		this.velocity =  calculateVelocity(speedX, speedY, direction);
 		this.owner = owner;
-    }
-    
-    public void move() {
-    	switch (direction) {
-    	case LEFT: moveLeft(); break;
-    	case RIGHT: moveRight(); break;
-    	case UP: moveUp(); break;
-    	case UP_LEFT: moveUpLeft(); break;
-    	case UP_RIGHT: moveUpRight(); break;
-    	case DOWN_LEFT: moveDownLeft(); break;
-    	case DOWN_RIGHT: moveDownRight(); break;
-    	}
 
-		setTranslateX(xPosition);
-		setTranslateY(yPosition);
+		setupBullet();
     }
-    
-    public void moveLeft() {
-    	xPosition -= speedX;
-    }
-    
-    public void moveRight() {
-    	xPosition += speedX;
-    }
-    
-    public void moveUp() {
-    	yPosition -= speedY;
-    }
-    
-    public void moveUpRight() {
-    	yPosition -= speedY + 2;
-    	xPosition += speedX - 2;
-    }
-    
-    public void moveUpLeft() {
-    	yPosition -= speedY - 2;
-    	xPosition -= speedX - 2;
-    }
-    
-    public void moveDownRight() {
-    	yPosition += speedY - 2;
-    	xPosition += speedX + 2;
-    }
-    
-    public void moveDownLeft() {
-    	yPosition += speedY - 2;
-    	xPosition -= speedX + 2;
-    }
+
+	public Bullet(Vector2D startPos, Vector2D diractionVector, double speed, BulletOwner owner) {
+		this.position = new Vector2D(startPos.x, startPos.y);
+		this.owner = owner;
+		this.direction = ShootingDirection.RIGHT;
+		Vector2D normalizedDir = diractionVector.normalize();
+		this.velocity = diractionVector.multiply(speed);
+
+		setupBullet();
+	}
+
+	private void setupBullet() {
+		setTranslateX((int)position.x);
+		setTranslateY((int)position.y);
+		this.setFill(Color.BLACK);
+		this.setWidth(10);
+		this.setHeight(10);
+	}
+
+	private Vector2D calculateVelocity(int speedX, int speedY, ShootingDirection direction) {
+		switch (direction) {
+			case LEFT:
+				return new Vector2D(-speedX, 0);
+			case RIGHT:
+				return new Vector2D(speedX, 0);
+			case UP:
+				return new Vector2D(0, -speedY);
+			case UP_LEFT:
+				return new Vector2D(-speedX + 2, -speedY + 2);
+			case UP_RIGHT:
+				return new Vector2D(speedX - 2, -speedY - 2);
+			case DOWN_LEFT:
+				return new Vector2D(-speedX - 2, speedY - 2);
+			case DOWN_RIGHT:
+				return new Vector2D(speedX + 2, speedY - 2);
+			default:
+				return new Vector2D(0, 0);
+		}
+	}
+
+	public void move() {
+		position = position.add(velocity);
+		setTranslateX((int)position.x);
+		setTranslateY((int)position.y);
+	}
+
+	public void move(float deltaTime) {
+		Vector2D movement = velocity.multiply(deltaTime);
+		position = position.add(movement);
+		setTranslateX((int)position.x);
+		setTranslateY((int)position.y);
+	}
+
+
+	public Vector2D getPosition() {
+		return position;
+	}
+
+	public Vector2D getVelocity() {
+		return velocity;
+	}
+
+	public void setVelocity(Vector2D newVelocity) {
+		this.velocity = newVelocity;
+	}
 
 	public int getXPosition() {
-		return xPosition;
+		return (int)position.x;
 	}
 
 	public int getYPosition() {
-		return yPosition;
+		return (int)position.y;
 	}
 
 	public boolean isAlive() { return Alive; }
 	public void destroy() { Alive = false; }
 
+	public boolean isOutOfBounds(int screenWidth, int screenHeight) {
+		return position.x < -5 || position.x > screenWidth + 5 ||
+				position.y < -5 || position.y > screenHeight + 5;
+	}
+
 	public boolean isEnemyBullet() { return owner == BulletOwner.ENEMY;}
 }
+

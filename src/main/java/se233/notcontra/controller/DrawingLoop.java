@@ -123,10 +123,10 @@ public class DrawingLoop implements Runnable {
 			Bullet bullet = iterator.next();
 			bullet.move();
 
-			if (bullet.getXPosition() >= GameStage.WIDTH || bullet.getXPosition() <= 0 ||
-					bullet.getYPosition() >= GameStage.HEIGHT || bullet.getYPosition() <= 0) {
+			if (bullet.isOutOfBounds(GameStage.WIDTH, GameStage.HEIGHT ) && GameLoop.bullets.size() > 1) {
 				Platform.runLater(() -> gameStage.getChildren().remove(bullet));
 				iterator.remove();
+				System.out.println("Bullet out of bounds!");
 			}
 		}
 	}
