@@ -50,6 +50,7 @@ public class Player extends Rectangle {
 	private boolean canDropDown = false;
 	private boolean isBuffed = false;
 	private boolean isHellfireMag = false;
+	private boolean isTankBuster = false;
 	
 	public static int height;
 	public static int width;
@@ -87,6 +88,9 @@ public class Player extends Rectangle {
 	
 	//					Starting of Movement Behaviors
 	public void moveLeft() {
+		if (isTankBuster) {
+			return;
+		}
 		isMoveRight = false;
 		isMoveLeft = true;
 		this.setScaleX(-1);
@@ -189,6 +193,10 @@ public class Player extends Rectangle {
 	}
 	
 	public void stop() {
+		if (isTankBuster) {
+			return;
+		}
+		
 		isMoveLeft = false;
 		isMoveRight = false;
 		xVelocity = 0;
@@ -239,72 +247,37 @@ public class Player extends Rectangle {
 		}
 	}
 	
-//	public void checkItemCollision(GameStage gameStage) {
-//		if (buffTimer > 0) {
-//			buffTimer--;
-//			return;
-//		} else if (isBuffed) {
-//			isBuffed = false;
-//			fireDelay = 30;
-//			bulletPerClip = 3;
-//		}
-//		
-//		if (gameStage.getItem() != null) {
-//			double itemXPos = gameStage.getItem().getXPos();
-//			double itemYPos = gameStage.getItem().getYPos();
-//			double itemWidth = gameStage.getItem().getPaneWidth();
-//			double itemHeight = gameStage.getItem().getPaneHeight();
-//			
-//			boolean isHellfireMag = gameStage.getItem() instanceof HellfireMagazine;
-//			
-//			boolean collidedXAxis = ((xPosition + width) >= itemXPos && xPosition <= itemXPos) ||
-//					(xPosition <= (itemXPos + itemWidth) && (xPosition + width) >= itemXPos +itemWidth);
-//			boolean collidedYAxis = (yPosition + height >= itemYPos) && (yPosition <= itemYPos+itemHeight);
-//			if (collidedXAxis && collidedYAxis) {
-//				isBuffed = true;
-//				buffTimer = 200;
-//				
-//				bulletPerClip = Integer.MAX_VALUE;
-//				System.out.print(isHellfireMag);
-//				javafx.application.Platform.runLater(() -> {
-//					gameStage.removeItem();
-//					return;
-//				});
-//			}
-//		}
-//
-//	}
-	
 	public void checkItemCollision(GameStage gameStage) {
 		if (buffTimer > 0) {
 			buffTimer--;
 			return;
 		} else if (isBuffed && this.isHellfireMag) {
 			isBuffed = false;
+			isHellfireMag = false;
 			fireDelay = 30;
 			bulletPerClip = 3;
-		} else if (isBuffed && !this.isHellfireMag) {
-			
+		} else if (isBuffed && this.isTankBuster) {
+			isTankBuster = false;
+			xMaxVelocity = 5;
 		}
 		if (gameStage.getItem() != null) {
 			if (gameStage.getItem().getBoundsInParent().intersects(this.getBoundsInParent())) {
-//				boolean isHellfireMag = gameStage.getItem() instanceof HellfireMagazine;
-//				isBuffed = true;
-//				if (isHellfireMag) {
-//					this.isHellfireMag = true;
-//					buffTimer = 200;
-//					bulletPerClip = Integer.MAX_VALUE;
-//				} else {
-//					this.isHellfireMag = false;
-//					System.out.println("Another Item");
-//				}
-				if (Launcher.getCurrentStage() instanceof FirstStage) {
-					Launcher.changeStage(1);
-				} else if (Launcher.getCurrentStage() instanceof SecondStage) {
-					Launcher.changeStage(2);
-				} else if (Launcher.getCurrentStage() instanceof ThirdStage) {
-					Launcher.changeStage(0);
+				boolean isHellfireMag = gameStage.getItem() instanceof HellfireMagazine;
+				isBuffed = true;
+				if (isHellfireMag) {
+					this.isHellfireMag = true;
+					this.isTankBuster = false;
+					buffTimer = 200;
+					bulletPerClip = Integer.MAX_VALUE;
+				} else {
+					this.isTankBuster = true;
+					this.isHellfireMag = false;
+					bulletPerClip = 3;
+					buffTimer = 100;
+					xMaxVelocity = 13;
+					stop();
 				}
+
 				javafx.application.Platform.runLater(() -> {
 					gameStage.removeItem();
 				});
@@ -312,7 +285,6 @@ public class Player extends Rectangle {
 		}
 
 	}
-	
 	public void checkPlatformCollision(List<Platform> platforms) {
 		if (dropDownTimer > 0) {
 			dropDownTimer--;
@@ -385,9 +357,10 @@ public class Player extends Rectangle {
 		return xPosition;
 	}
 
-
 	public int getYPosition() {
 		return yPosition;
 	}
 
+	public boolean getIsTankBuster() { return isTankBuster; }
+	
 }
