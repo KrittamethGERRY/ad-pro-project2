@@ -23,6 +23,7 @@ public abstract class GameStage extends Pane {
 	protected Label scoreLabel;
 	protected Label livesLabel;
 	protected Item item;
+	protected PauseMenu pauseMenu;
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 720;
 	
@@ -33,6 +34,12 @@ public abstract class GameStage extends Pane {
 	
 	public GameStage() {
 		this.keys = new Keys();
+	}
+	
+	public void displayPauseMenu(boolean enable) {		
+		pauseMenu.setPrefWidth(250);
+		pauseMenu.setPrefHeight(200);
+		pauseMenu.setVisible(enable);
 	}
 	
 	public ImageView drawScore() {

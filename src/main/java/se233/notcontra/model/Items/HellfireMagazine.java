@@ -1,4 +1,4 @@
-package se233.notcontra.model.Items;
+ package se233.notcontra.model.Items;
 
 import javafx.scene.paint.Color;
 

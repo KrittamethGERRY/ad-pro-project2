@@ -2,6 +2,7 @@ package se233.notcontra;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import se233.notcontra.controller.DrawingLoop;
@@ -45,6 +46,9 @@ public class Launcher extends Application {
     		};
     		Scene newScene = new Scene(gameStage, GameStage.WIDTH, GameStage.HEIGHT);
     		newScene.setOnKeyPressed(e -> {
+    			if (e.getCode() == KeyCode.ESCAPE) {
+    				GameLoop.pause();
+    			}
     			if (e.getCode() != gameStage.getPlayer().getShootKey()) {
         			gameStage.getKeys().add(e.getCode());
     			} else {
