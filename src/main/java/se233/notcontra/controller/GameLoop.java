@@ -3,6 +3,7 @@ package se233.notcontra.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.input.KeyCode;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Player;
@@ -11,12 +12,13 @@ import se233.notcontra.view.GameStage;
 
 public class GameLoop implements Runnable{
 	public static ShootingDirection shootingDir;
-
+	private static int score;
+	
 	private GameStage gameStage;
 	private int frameRate;
 	private float interval;
 	private boolean running;
-	private int score;
+	
 
 	public static List<Bullet> bullets = new ArrayList<>();
 	public static ArrayList<Enemy> enemies = new ArrayList<>();
@@ -37,6 +39,7 @@ public class GameLoop implements Runnable{
 		boolean downPressed = gameStage.getKeys().isPressed(player.getDownKey());
 		boolean shootPressed = gameStage.getKeys().isPressed(player.getShootKey());
 		boolean jumpPressed = gameStage.getKeys().isPressed(player.getJumpKey());
+		boolean pausePressed = gameStage.getKeys().isPressed(KeyCode.ESCAPE);
 
 		if (leftPressed && rightPressed) {
 			player.stop();
@@ -79,14 +82,16 @@ public class GameLoop implements Runnable{
 			player.dropDown();
 		} else if (jumpPressed) {
 			player.jump();
-		} 
+		}
 
 		gameStage.getKeys().clear();
 	}
 	
-	public void addScore(int score) {
-		this.score += score;
+	public static void addScore(int addition) {
+		score += addition;
 	}
+	
+	public static int getScore() { return score; }
 	
 	public void stop() {
 		running = false;

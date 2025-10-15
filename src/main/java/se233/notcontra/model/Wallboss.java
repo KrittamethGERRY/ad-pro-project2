@@ -13,10 +13,11 @@ public class Wallboss extends Boss {
     private final int phaseChangeHealth;
     private Enemy turretLeft;
     private Enemy turretRight;
-    private Rectangle core;
+    private Enemy core;
     private GameStage gameStage;
 
     private int enemyTimer = 0;
+    public static int totalTurret = 2;
     private final int maxEnemies = 1;
 
     public Wallboss(int xPos, int yPos, int width, int height, GameStage gameStage) {
@@ -25,17 +26,15 @@ public class Wallboss extends Boss {
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
         this.phaseChangeHealth = this.getMaxHealth() / 2;
-        this.core = new Rectangle(0, 80, 128, 128);
-        turretLeft = new Enemy(0, 0, 0, 32, 32, this.getMaxHealth()/2, EnemyType.TURRET);
-        turretRight = new Enemy(100, 0, 0, 32, 32, this.getMaxHealth()/2, EnemyType.TURRET);
+        this.core = new Enemy(0, 80, 0, 128, 128, this.getMaxHealth()/2, EnemyType.WALL);
+        turretLeft = new Enemy(0, 0, 0, 32, 32, this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        turretRight = new Enemy(100, 0, 0, 32, 32, this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         GameLoop.enemies.addAll(List.of(turretLeft, turretRight));
-        System.out.println(this.localToParent(turretLeft.getBoundsInParent()));
-        getWeakPoints().add(turretLeft);
-        getWeakPoints().add(turretRight);
+        //System.out.println(this.localToParent(turretLeft.getBoundsInParent()));
         getWeakPoints().add(core);
         core.setFill(Color.BLUE);
         javafx.application.Platform.runLater(() -> {
-            this.getChildren().addAll(turretLeft, turretRight, core);        	
+            this.getChildren().addAll(turretLeft, turretRight);        	
         });
     }
 
@@ -56,14 +55,7 @@ public class Wallboss extends Boss {
         // Check if health has dropped below the threshold to trigger Phase 2
         if (getHealth() <= this.phaseChangeHealth) {
             System.out.println("Turrets destroyed! Core is exposed!");
-            getWeakPoints().remove(turretLeft);
-            getWeakPoints().remove(turretRight);
-            getChildren().remove(turretLeft);
-            getChildren().remove(turretRight);
-
-            // TODO: Trigger explosion animations at turret locations.
-
-            // Switch to the VULNERABLE state (Phase 2)
+            
             setState(BossState.VULNERABLE);
         }
     }
@@ -105,14 +97,13 @@ public class Wallboss extends Boss {
         }
 
         if (aliveCount < maxEnemies) {
-
             int spawnX = 100;
             int spawnY = -200;
 
             // Create wall shooter (stands still and shoots)
             Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, 1, EnemyType.WALL_SHOOTER);
-            // NOTE: Get children's position do not touch!!!!
-            System.out.print("Enemy Bound: " + enemy.getBoundsInParent());
+            // NOTE: Get children's global position do not touch!!!!
+            //System.out.print("Enemy Bound: " + thisgetLocalToParentTransform());
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);
@@ -120,8 +111,4 @@ public class Wallboss extends Boss {
             enemyTimer = 500;
         }
     }
-    @Override
-    protected void updateWeakPointsPosition() {
-    }
-
 }

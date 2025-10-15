@@ -4,6 +4,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Boss extends Pane {
 
@@ -17,7 +18,7 @@ public class Boss extends Pane {
     protected int dieTimer = 20;
 
     private int width, height;
-    private ArrayList<Rectangle> weakPoints;
+    private List<Enemy> weakPoints;
 
     public Boss(int xPos, int yPos, int width, int height, int maxHealth) {
     	setTranslateX(xPos);
@@ -88,7 +89,7 @@ public class Boss extends Pane {
         }
     }
 
-    protected void updateWeakPointsPosition() {
+    public void updateWeakPointsPosition() {
         // This method can be overridden by stationary bosses
         if (!weakPoints.isEmpty()) {
             // Update positions relative to the Pane's origin (0,0)
@@ -111,5 +112,5 @@ public class Boss extends Pane {
     public BossState getCurrentState() { return currentState; }
     public boolean isDefeated() { return isDefeated(); }
     public boolean isAlive() { return isAlive; }
-    public ArrayList<Rectangle> getWeakPoints() { return weakPoints; }
+    public List<Enemy> getWeakPoints() { return weakPoints; }
 }

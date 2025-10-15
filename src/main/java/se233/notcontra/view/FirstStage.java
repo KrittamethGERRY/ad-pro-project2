@@ -30,7 +30,7 @@ public class FirstStage extends GameStage {
 		ImageView background = new ImageView(backgroundIMG);
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
-		player = new Player(30, 600 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
+		player = new Player(30, 400 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
 		player.respawn();
 		
 		

@@ -68,9 +68,7 @@ public class SecondStage extends GameStage {
 	}
 	
 	@Override
-	public Boss getBoss() {
-		return boss;
-	}
+	public Boss getBoss() { return boss; }
 	
 	@Override
 	public List<Enemy> getEnemies() { return GameLoop.enemies; }

@@ -88,7 +88,11 @@ public class Enemy extends Rectangle {
 
     public Bullet shootAtPlayer(Player player) {
         // Only wall shooters can shoot
-        if (type == EnemyType.FLYING) {
+    	if (alive == false) {
+    		return null;
+    	}
+    	
+        if (type == EnemyType.FLYING || type == EnemyType.WALL) {
             return null;
         }
         
@@ -135,9 +139,16 @@ public class Enemy extends Rectangle {
         else return ShootingDirection.UP_RIGHT;
     }
     
+    // Reduce Enemy HP, and Add Game score
     public void takeDamage(int damage) {
     	health -= damage;
     	if (health <= 0) {
+    		switch (type) {
+    		case WALL_SHOOTER: GameLoop.addScore(100); break;
+    		case TURRET: GameLoop.addScore(500); Wallboss.totalTurret--;  break;
+    		case FLYING: GameLoop.addScore(150); break;
+    		case WALL: GameLoop.addScore(1000);  break;
+    		}
     		kill();
     	}
     }
@@ -147,7 +158,9 @@ public class Enemy extends Rectangle {
     public double getW() { return width; }
     public double getH() { return height; }
     public boolean isAlive() { return alive; }
-    public void kill() { alive = false; }
+    public void kill() {
+    	alive = false; this.setFill(Color.BLACK);
+    }
     public EnemyType getType() { return type; }
 
 }

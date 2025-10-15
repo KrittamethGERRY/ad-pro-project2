@@ -9,8 +9,10 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.Launcher;
+import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Boss;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
@@ -36,7 +38,7 @@ public abstract class GameStage extends Pane {
 	}
 	
 	public ImageView drawScore() {
-		scoreLabel = new Label("Score: 0");
+		scoreLabel = new Label(String.format("%06d", 0));
 		ImageView scoreBackground = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Paper.png")));
 		scoreBackground.setFitWidth(150);
 		scoreBackground.setFitHeight(60);
@@ -46,6 +48,10 @@ public abstract class GameStage extends Pane {
 		scoreLabel.setLayoutY(50);
 		
 		return scoreBackground;
+	}
+	
+	public void updateScore(int score) {
+		scoreLabel.setText(String.format("%06d", score));
 	}
 	
 	public ImageView drawLives() {
@@ -70,6 +76,8 @@ public abstract class GameStage extends Pane {
 	public abstract void spawnItem();
 	public abstract void removeItem();
 	public abstract Boss getBoss();
+	public Label getScoreLabel() { return scoreLabel;}
+	public Label getLivesLabel() { return livesLabel;}
 	public abstract List<Enemy> getEnemies();
 	public abstract List<Bullet> getBullets();
 }

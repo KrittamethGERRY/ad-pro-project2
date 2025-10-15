@@ -18,7 +18,7 @@ import se233.notcontra.view.Platform;
 import se233.notcontra.view.SecondStage;
 import se233.notcontra.view.ThirdStage;
 
-public class Player extends Rectangle {
+public class Player extends Pane {
 	
 	private KeyCode leftKey;
 	private KeyCode rightKey;
@@ -29,6 +29,8 @@ public class Player extends Rectangle {
 	
 	private int xPosition;
 	private int yPosition;
+	private int startX;
+	private int startY;
 	private double xVelocity = 0;
 	private double xAcceleration = 1;
 	private double yVelocity = 0;
@@ -62,8 +64,13 @@ public class Player extends Rectangle {
 	private int dropDownTimer = 0;
 	private int buffTimer = 0;
 	private int reloadTimer = 0;
+	private int respawnTimer = 0;
 	
 	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
+		this.setTranslateX(xPosition);
+		this.setTranslateY(yPosition);
+		this.startX = xPosition;
+		this.startY = yPosition;
 		this.leftKey = leftKey;
 		this.rightKey = rightKey;
 		this.upKey = upKey;
@@ -74,16 +81,15 @@ public class Player extends Rectangle {
 		this.yPosition = yPosition;
 		Player.height = 64;
 		Player.width = 64;
-		this.setTranslateX(xPosition);
-		this.setTranslateY(yPosition);
 		this.sprite = new ImageView();
-		
 		this.sprite.setImage(new Image(Launcher.class.getResource("assets/FD.png").toString()));
 		this.sprite.setFitWidth(width);
 		this.sprite.setFitHeight(height);
-		this.setWidth(width);
-		this.setHeight(height);
-		this.setFill(Color.AZURE);
+		this.getChildren().add(sprite);
+		
+//		this.setWidth(width);
+//		this.setHeight(height);
+//		this.setFill(Color.AZURE);
 	}
 	
 	//					Starting of Movement Behaviors
@@ -113,15 +119,18 @@ public class Player extends Rectangle {
 	}
 	
 	public void respawn() {
-		yPosition -= 100;
-		isFalling = true;
-		canJump = false;
-		isJumping = false;
-		this.setTranslateX(xPosition);
-		this.setTranslateY(yPosition);
+		enableKeys();
+		this.yPosition = this.startY;
+		this.xPosition = this.startX;
+		this.isMoveLeft = false;
+		this.isMoveRight = false;
+		this.isFalling = true;
+		this.canJump = false;
+		this.isJumping = false;
 	}
 	
 	public void die() {
+		respawnTimer = 100;
 		lives--;
 	}
 	
@@ -201,8 +210,14 @@ public class Player extends Rectangle {
 	}
 	
 	public void repaint() {
-		moveX();
 		moveY();
+		if (respawnTimer > 0) {
+			respawnTimer--;
+			disableKeys();
+			return;
+		}
+		
+		moveX();
 	}
 	
 	public void moveX() {
@@ -324,6 +339,24 @@ public class Player extends Rectangle {
 		}
 	}
 	
+	public void enableKeys() {
+		this.upKey = KeyCode.W;
+		this.downKey = KeyCode.S;
+		this.leftKey = KeyCode.A;
+		this.rightKey = KeyCode.D;
+		this.jumpKey = KeyCode.K;
+		this.shootKey = KeyCode.L;
+	}
+	
+	public void disableKeys() {
+		this.upKey = null;
+		this.downKey = null;
+		this.leftKey = null;
+		this.rightKey = null;
+		this.jumpKey = null;
+		this.shootKey = null;
+	}
+	
 	// 				End of Movement Behaviors
 	
 	// GETTERS SETTERS
@@ -359,6 +392,6 @@ public class Player extends Rectangle {
 		return yPosition;
 	}
 
-	public boolean getIsTankBuster() { return isTankBuster; }
+	public boolean getTankBuster() { return isTankBuster; }
 	
 }
