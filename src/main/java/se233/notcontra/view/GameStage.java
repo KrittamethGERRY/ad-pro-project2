@@ -36,12 +36,6 @@ public abstract class GameStage extends Pane {
 		this.keys = new Keys();
 	}
 	
-	public void displayPauseMenu(boolean enable) {		
-		pauseMenu.setPrefWidth(250);
-		pauseMenu.setPrefHeight(200);
-		pauseMenu.setVisible(enable);
-	}
-	
 	public ImageView drawScore() {
 		scoreLabel = new Label("Score: 000000");
 		ImageView scoreBackground = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Paper.png")));

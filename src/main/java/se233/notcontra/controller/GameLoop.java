@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.input.KeyCode;
+import se233.notcontra.Launcher;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Player;
@@ -15,7 +16,7 @@ public class GameLoop implements Runnable{
 	public static ShootingDirection shootingDir;
 
 	private GameStage gameStage;
-	private PauseMenu pauseMenu;
+	private static PauseMenu pauseMenu;
 	private int frameRate;
 	private float interval;
 	private boolean running;
@@ -29,7 +30,9 @@ public class GameLoop implements Runnable{
 	public GameLoop(GameStage gameStage) {
 		score = 0;
 		pauseMenu = new PauseMenu();
+		pauseMenu.setVisible(false);
 		gameStage.getChildren().add(pauseMenu);
+		
 		this.gameStage = gameStage;
 		this.frameRate = 10;
 		this.interval = 1000 / frameRate;
@@ -105,7 +108,7 @@ public class GameLoop implements Runnable{
 	
 	public static void pause() {
 		isPaused = !isPaused;
-		
+		pauseMenu.setVisible(isPaused);
 	}
 
 

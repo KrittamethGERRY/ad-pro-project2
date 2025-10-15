@@ -59,10 +59,7 @@ public class MainMenu extends AnchorPane {
 				Launcher.primaryStage.close();
 			}
 		});
-		PauseMenu pauseMenu = new PauseMenu();
-		pauseMenu.setLayoutX(1000);
-		pauseMenu.setLayoutY(400);
-		getChildren().addAll(background, title, buttonBox, list, pauseMenu);
+		getChildren().addAll(background, title, buttonBox, list);
 	}
 	
 	public Button drawStartButton() {
