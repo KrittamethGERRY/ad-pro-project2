@@ -2,6 +2,7 @@ package se233.notcontra;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
@@ -62,7 +63,8 @@ public class Launcher extends Application {
     		
     		currentGameThread = new Thread(currentGameLoop, "GameLoopThread");
     		currentDrawingThread = new Thread(currentDrawingLoop, "DrawingLoopThread");
-    		
+
+
     		primaryStage.setScene(newScene);
     		currentStage = gameStage;
     		

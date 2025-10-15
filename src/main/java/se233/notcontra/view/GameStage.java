@@ -36,7 +36,7 @@ public abstract class GameStage extends Pane {
 	}
 	
 	public ImageView drawScore() {
-		scoreLabel = new Label("Score: 0");
+		scoreLabel = new Label("Score: 000000");
 		ImageView scoreBackground = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Paper.png")));
 		scoreBackground.setFitWidth(150);
 		scoreBackground.setFitHeight(60);
@@ -60,10 +60,7 @@ public abstract class GameStage extends Pane {
 		
 		return livesBackground;
 	}
-	public void updateScore(int score) {
-		scoreLabel.setText(String.format("%06d", score));
-	}
-	
+
 	public abstract Keys getKeys();
 	public abstract Player getPlayer();
 	public abstract List<Platform> getPlatforms();

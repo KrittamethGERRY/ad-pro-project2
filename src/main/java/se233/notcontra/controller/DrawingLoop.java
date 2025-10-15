@@ -75,8 +75,13 @@ public class DrawingLoop implements Runnable {
 			}
 			
 			// Player collisions with bullet
-			if (gameStage.getPlayer().getBoundsInParent().intersects(bullet.getBoundsInParent()) && bullet.getOwner() != BulletOwner.PLAYER && !gameStage.getPlayer().getTankBuster()) {
+			if (gameStage.getPlayer().getBoundsInParent().intersects(bullet.getBoundsInParent())
+					&& bullet.getOwner() != BulletOwner.PLAYER
+					&& !gameStage.getPlayer().getTankBuster()
+					&& !gameStage.getPlayer().isDying()) {
 				gameStage.getPlayer().die();
+				Platform.runLater(this::updateLives);
+
 				shouldRemove = true;
 			}
 			
@@ -84,12 +89,16 @@ public class DrawingLoop implements Runnable {
 			if (shouldRemove) {
 				iterator.remove();
 				Platform.runLater(() -> gameStage.getChildren().remove(bullet));
-				
 			}
 		}
 	}
+
 	private void updateScore() {
-		gameStage.getScoreLabel().setText(String.format("%06d", GameLoop.getScore()));
+		gameStage.getScoreLabel().setText("Score: " + String.format("%06d", GameLoop.getScore()));
+	}
+	
+	private void updateLives() {
+		gameStage.getLivesLabel().setText("Lives: " + gameStage.getPlayer().getLives());
 	}
 
 	private void updateBoss() {

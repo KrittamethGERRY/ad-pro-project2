@@ -102,7 +102,7 @@ public class Wallboss extends Boss {
             // Create wall shooter (stands still and shoots)
             Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, 1, EnemyType.WALL_SHOOTER);
             // NOTE: Get children's global position do not touch!!!!
-            //System.out.print("Enemy Bound: " + thisgetLocalToParentTransform());
+            //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);

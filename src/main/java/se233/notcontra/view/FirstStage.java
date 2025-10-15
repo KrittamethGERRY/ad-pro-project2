@@ -29,9 +29,8 @@ public class FirstStage extends GameStage {
 		ImageView background = new ImageView(backgroundIMG);
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
-		player = new Player(30, 600 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
+		player = new Player(30, 0 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
 		player.respawn();
-		
 		
 		
 		boss = new Wallboss(660, 350, 500, 220, this);

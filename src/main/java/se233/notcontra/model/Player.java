@@ -2,21 +2,16 @@ package se233.notcontra.model;
 
 import java.util.List;
 
-import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Items.HellfireMagazine;
-import se233.notcontra.view.FirstStage;
 import se233.notcontra.view.GameStage;
 import se233.notcontra.view.Platform;
-import se233.notcontra.view.SecondStage;
-import se233.notcontra.view.ThirdStage;
 
 public class Player extends Rectangle {
 	
@@ -29,6 +24,8 @@ public class Player extends Rectangle {
 	
 	private int xPosition;
 	private int yPosition;
+	private int startX;
+	private int startY;
 	private double xVelocity = 0;
 	private double xAcceleration = 1;
 	private double yVelocity = 0;
@@ -51,6 +48,7 @@ public class Player extends Rectangle {
 	private boolean isBuffed = false;
 	private boolean isHellfireMag = false;
 	private boolean isTankBuster = false;
+	private boolean isDying = false;
 	
 	public static int height;
 	public static int width;
@@ -62,8 +60,11 @@ public class Player extends Rectangle {
 	private int dropDownTimer = 0;
 	private int buffTimer = 0;
 	private int reloadTimer = 0;
+	public static int respawnTimer = 0;
 	
 	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
+		this.startX = xPosition;
+		this.startY = yPosition;
 		this.leftKey = leftKey;
 		this.rightKey = rightKey;
 		this.upKey = upKey;
@@ -113,16 +114,25 @@ public class Player extends Rectangle {
 	}
 	
 	public void respawn() {
-		yPosition -= 100;
-		isFalling = true;
-		canJump = false;
-		isJumping = false;
-		this.setTranslateX(xPosition);
-		this.setTranslateY(yPosition);
+		enableKeys();
+		this.yPosition = this.startY;
+		this.xPosition = this.startX;
+		this.isMoveLeft = false;
+		this.isMoveRight = false;
+		this.isFalling = true;
+		this.canJump = false;
+		this.isJumping = false;
+		isDying = false;
 	}
 	
+	
 	public void die() {
+		respawnTimer = 100;
 		lives--;
+		isDying = true;
+		if (lives <= 0) {
+			// Display Game over text or smth
+		}
 	}
 	
 	public void setProning(boolean isProning) {
@@ -201,8 +211,16 @@ public class Player extends Rectangle {
 	}
 	
 	public void repaint() {
-		moveX();
 		moveY();
+		if (respawnTimer > 0) {
+			respawnTimer--;
+			disableKeys();
+			if (respawnTimer == 0) respawn();
+			return;
+		}
+		isDying = false;
+		enableKeys();
+		moveX();
 	}
 	
 	public void moveX() {
@@ -324,9 +342,32 @@ public class Player extends Rectangle {
 		}
 	}
 	
+	public void enableKeys() {
+		this.upKey = KeyCode.W;
+		this.downKey = KeyCode.S;
+		this.leftKey = KeyCode.A;
+		this.rightKey = KeyCode.D;
+		this.jumpKey = KeyCode.K;
+		this.shootKey = KeyCode.L;
+	}
+	
+	public void disableKeys() {
+		this.upKey = null;
+		this.downKey = null;
+		this.leftKey = null;
+		this.rightKey = null;
+		this.jumpKey = null;
+		this.shootKey = null;
+	}
+	
+	
 	// 				End of Movement Behaviors
 	
 	// GETTERS SETTERS
+	public int getLives() {
+		return this.lives;
+	}
+	
 	public KeyCode getLeftKey() {
 		return this.leftKey;
 	}
@@ -360,5 +401,6 @@ public class Player extends Rectangle {
 	}
 
 	public boolean getTankBuster() { return isTankBuster; }
+	public boolean isDying() { return isDying; }
 	
 }
