@@ -12,11 +12,11 @@ public class JavaBoss extends Boss{
     private final int maxEnemies = 3;
     private int enemyTimer = 0;
     private GameStage gameStage;
-    private final Rectangle Head;
+    private final Enemy Head;
 
     public JavaBoss(int xPos, int yPos , int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 7000);
-        this.Head = new  Rectangle(xPos, yPos, Width, Height);
+        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 10000, EnemyType.WALL);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
@@ -44,10 +44,10 @@ public class JavaBoss extends Boss{
 
         if (aliveCount < maxEnemies) {
 
-            double spawnX = this.getXPos() - 200;
-            double spawnY = this.getYPos() + 30;
+            int spawnX = this.getXPos() - 200;
+            int spawnY = this.getYPos() + 30;
 
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, EnemyType.FLYING);
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 500, EnemyType.FLYING);
 
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {

@@ -19,12 +19,12 @@ public class Bullet extends Rectangle {
 		setupBullet();
     }
 
-	public Bullet(Vector2D startPos, Vector2D diractionVector, double speed, BulletOwner owner) {
+	public Bullet(Vector2D startPos, Vector2D directionVector, double speed, BulletOwner owner) {
 		this.position = new Vector2D(startPos.x, startPos.y);
 		this.owner = owner;
 		this.direction = ShootingDirection.RIGHT;
-		Vector2D normalizedDir = diractionVector.normalize();
-		this.velocity = diractionVector.multiply(speed);
+		Vector2D normalizedDir = directionVector.normalize();
+		this.velocity = directionVector.multiply(speed);
 
 		setupBullet();
 	}
@@ -100,6 +100,7 @@ public class Bullet extends Rectangle {
 				position.y < -5 || position.y > screenHeight + 5;
 	}
 
+	public BulletOwner getOwner() { return owner; }
 	public boolean isEnemyBullet() { return owner == BulletOwner.ENEMY;}
 }
 

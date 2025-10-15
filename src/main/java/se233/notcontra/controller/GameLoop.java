@@ -16,13 +16,13 @@ public class GameLoop implements Runnable{
 	private int frameRate;
 	private float interval;
 	private boolean running;
-	private int score;
+	private static int score;
 
 	public static List<Bullet> bullets = new ArrayList<>();
 	public static ArrayList<Enemy> enemies = new ArrayList<>();
 
 	public GameLoop(GameStage gameStage) {
-		this.score = 0;
+		score = 0;
 		this.gameStage = gameStage;
 		this.frameRate = 10;
 		this.interval = 1000 / frameRate;
@@ -84,14 +84,14 @@ public class GameLoop implements Runnable{
 		gameStage.getKeys().clear();
 	}
 	
-	public void addScore(int score) {
-		this.score += score;
+	public static void addScore(int addition) {
+		score += addition;
 	}
+	public static int getScore() { return score; }
 	
 	public void stop() {
 		running = false;
 	}
-
 
 
 	@Override

@@ -11,7 +11,10 @@ import se233.notcontra.model.Items.HellfireMagazine;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.Launcher;
+import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Boss;
+import se233.notcontra.model.Bullet;
+import se233.notcontra.model.Enemy;
 import se233.notcontra.model.JavaBoss;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
@@ -66,12 +69,7 @@ public class SecondStage extends GameStage {
 		getChildren().remove(item);
 		item = null;
 	}
-	
-	@Override
-	public Boss getBoss() {
-		return this.boss;
-	}
-	
+
 	@Override
 	public void logging() {
 		logger.info("Player spawned at X:{} Y:{}", player.getXPosition(), player.getYPosition());
@@ -80,4 +78,12 @@ public class SecondStage extends GameStage {
 		}
 		logger.info("Item spawned at X:{} Y:{}", item.getXPos(), item.getYPos());
 	}
+	
+	@Override
+	public Boss getBoss() { return this.boss; }
+	@Override
+	public List<Enemy> getEnemies() { return GameLoop.enemies; }
+	
+	@Override
+	public List<Bullet> getBullets() { return GameLoop.bullets; }
 }

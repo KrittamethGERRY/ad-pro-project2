@@ -7,25 +7,27 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.view.GameStage;
 
 public class Enemy extends Rectangle {
-    double xPos, yPos, width, height;
+    private int xPos, yPos, width, height;
+    private int health;
     double speed = 2;
     boolean alive = true;
     private EnemyType  type;
     private int shootTimer = 75;
 
-
-    public Enemy(double xPos, double yPos, double speed, double width, double height, EnemyType type) {
-    	this.setTranslateX(xPos);
-    	this.setTranslateY(yPos);
-    	this.setFill(Color.GREEN);
+    public Enemy(int xPos, int yPos, int speed, int width, int height, int health, EnemyType type) {
+    	setLayoutX(xPos);
+    	setLayoutY(yPos);
+    	this.setFill(Color.RED);
     	this.setWidth(width);
     	this.setHeight(height);
+    	this.health = health;
         this.xPos = xPos;
         this.yPos = yPos;
         this.speed = speed;
         this.width = width;
         this.height = height;
         this.type = type;
+        System.out.println();
     }
 
     public void updateWithPlayer(Player player, GameStage gameStage) {
@@ -147,6 +149,20 @@ public class Enemy extends Rectangle {
         else {
             return ShootingDirection.UP_RIGHT;
         }
+    }
+    
+    // Reduce Enemy HP, and Add Game score
+    public void takeDamage(int damage) {
+    	health -= damage;
+    	if (health <= 0) {
+    		switch (type) {
+    		case WALL_SHOOTER: GameLoop.addScore(100); break;
+    		case TURRET: GameLoop.addScore(500); Wallboss.totalTurret--;  break;
+    		case FLYING: GameLoop.addScore(150); break;
+    		case WALL: GameLoop.addScore(1000);  break;
+    		}
+    		kill();
+    	}
     }
 
     public double getXPos() { return xPos; }

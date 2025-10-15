@@ -12,6 +12,8 @@ import javafx.scene.layout.Pane;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Boss;
+import se233.notcontra.model.Bullet;
+import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 
@@ -58,6 +60,9 @@ public abstract class GameStage extends Pane {
 		
 		return livesBackground;
 	}
+	public void updateScore(int score) {
+		scoreLabel.setText(String.format("%06d", score));
+	}
 	
 	public abstract Keys getKeys();
 	public abstract Player getPlayer();
@@ -68,4 +73,8 @@ public abstract class GameStage extends Pane {
 	public abstract void spawnItem();
 	public abstract void removeItem();
 	public abstract Boss getBoss();
+	public Label getScoreLabel() { return scoreLabel;}
+	public Label getLivesLabel() { return livesLabel;}
+	public abstract List<Enemy> getEnemies();
+	public abstract List<Bullet> getBullets();
 }

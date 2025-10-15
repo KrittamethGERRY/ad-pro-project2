@@ -359,6 +359,6 @@ public class Player extends Rectangle {
 		return yPosition;
 	}
 
-	public boolean getIsTankBuster() { return isTankBuster; }
+	public boolean getTankBuster() { return isTankBuster; }
 	
 }
