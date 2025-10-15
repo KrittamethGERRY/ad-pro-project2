@@ -133,16 +133,19 @@ public class DrawingLoop implements Runnable {
 	@Override
 	public void run() {
 		while (running) {
-			float time = System.currentTimeMillis();
-			checkAllCollisions(gameStage.getPlayer());
-			paint(gameStage.getPlayer());
-			paintBullet(GameLoop.bullets, GameLoop.shootingDir);
-			updateEnemies();
+			if (!GameLoop.isPaused) {
+				float time = System.currentTimeMillis();
+				checkAllCollisions(gameStage.getPlayer());
+				paint(gameStage.getPlayer());
+				paintBullet(GameLoop.bullets, GameLoop.shootingDir);
+				updateEnemies();
 
-			if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
-				gameStage.getBoss().update();
+				if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
+					gameStage.getBoss().update();
+				}
 			}
-
+			
+			float time = System.currentTimeMillis();
 			time = System.currentTimeMillis() - time;
 			if (time < interval) {
 				try {

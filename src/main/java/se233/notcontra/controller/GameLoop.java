@@ -3,26 +3,33 @@ package se233.notcontra.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.input.KeyCode;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.ShootingDirection;
 import se233.notcontra.view.GameStage;
+import se233.notcontra.view.PauseMenu;
 
 public class GameLoop implements Runnable{
 	public static ShootingDirection shootingDir;
 
 	private GameStage gameStage;
+	private PauseMenu pauseMenu;
 	private int frameRate;
 	private float interval;
 	private boolean running;
 	private static int score;
+	
+	public static boolean isPaused = false;
 
 	public static List<Bullet> bullets = new ArrayList<>();
 	public static ArrayList<Enemy> enemies = new ArrayList<>();
 
 	public GameLoop(GameStage gameStage) {
 		score = 0;
+		pauseMenu = new PauseMenu();
+		gameStage.getChildren().add(pauseMenu);
 		this.gameStage = gameStage;
 		this.frameRate = 10;
 		this.interval = 1000 / frameRate;
@@ -35,8 +42,12 @@ public class GameLoop implements Runnable{
 		boolean rightPressed = gameStage.getKeys().isPressed(player.getRightKey());
 		boolean upPressed = gameStage.getKeys().isPressed(player.getUpKey());
 		boolean downPressed = gameStage.getKeys().isPressed(player.getDownKey());
-		boolean shootPressed = gameStage.getKeys().isPressed(player.getShootKey());
 		boolean jumpPressed = gameStage.getKeys().isPressed(player.getJumpKey());
+		
+		
+		if (isPaused) {
+			return;
+		}
 
 		if (leftPressed && rightPressed) {
 			player.stop();
@@ -56,7 +67,6 @@ public class GameLoop implements Runnable{
 			player.stop();
 		}
 
-		
 		if (upPressed && !rightPressed && !leftPressed) {
 			shootingDir = ShootingDirection.UP;
 		} else if (upPressed && rightPressed) {
@@ -91,6 +101,11 @@ public class GameLoop implements Runnable{
 	
 	public void stop() {
 		running = false;
+	}
+	
+	public static void pause() {
+		isPaused = !isPaused;
+		
 	}
 
 
