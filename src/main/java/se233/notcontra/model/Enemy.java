@@ -108,8 +108,7 @@ public class Enemy extends Rectangle {
         ShootingDirection direction = determineDirection(directionToPlayer);
 
         shootTimer = 75;
-        return new Bullet(
-                enemyCenter,
+        return new Bullet(enemyCenter,
                 directionToPlayer,
                 (double) bulletSpeed,
                 BulletOwner.ENEMY

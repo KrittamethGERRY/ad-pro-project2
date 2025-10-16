@@ -14,6 +14,7 @@ public class Wallboss extends Boss {
     private Enemy turretRight;
     private Enemy core;
     private GameStage gameStage;
+    private Enemy lastTurretFired = null;
 
     private int enemyTimer = 0;
     public static int totalTurret = 2;
@@ -44,9 +45,22 @@ public class Wallboss extends Boss {
             return;
         }
 
-        if (Math.random() < 0.6) {
-            Enemy firingTurret = (Math.random() < 0.5) ? turretLeft : turretRight;
-            shootFromTurret(firingTurret);
+        if (turretLeft.isAlive() && !turretRight.isAlive()) {
+            shootFromTurret(turretLeft);
+            shootTimer = 100;
+        }
+        else if (!turretLeft.isAlive() && turretRight.isAlive()) {
+            shootFromTurret(turretRight);
+            shootTimer = 100;
+        }
+        else if (turretLeft.isAlive() && turretRight.isAlive()) {
+            if (lastTurretFired == null || lastTurretFired == turretRight) {
+                shootFromTurret(turretLeft);
+                lastTurretFired = turretLeft;
+            } else {
+                shootFromTurret(turretRight);
+                lastTurretFired = turretRight;
+            }
             shootTimer = 100;
         }
 
