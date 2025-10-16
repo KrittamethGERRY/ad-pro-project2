@@ -15,7 +15,11 @@ import se233.notcontra.view.GameStages.ThirdStage;
 
 public class Launcher extends Application {
 	public static Stage primaryStage;
+	private static MainMenu menu = null;
+	private static Scene menuScene = null;
+	private static Scene currentScene = null;
 	private static GameStage currentStage = null;
+	public static Integer currentStageIndex = null;
 	private static Thread currentDrawingThread = null;
 	private static Thread currentGameThread = null;
 	private static GameLoop currentGameLoop = null;
@@ -23,8 +27,10 @@ public class Launcher extends Application {
 	
     @Override
     public void start(Stage stage) {
-    	Scene scene = new Scene(new MainMenu(), GameStage.WIDTH, GameStage.HEIGHT);
-    	stage.setScene(scene);
+    	menu = new MainMenu();
+    	menuScene = new Scene(menu, GameStage.WIDTH, GameStage.HEIGHT);
+    	currentScene = menuScene;
+    	stage.setScene(menuScene);
     	stage.setTitle("Not Contra");
     	stage.show();
     	primaryStage = stage;
@@ -32,20 +38,25 @@ public class Launcher extends Application {
     
     public static void changeStage(int index) {
     	javafx.application.Platform.runLater(() -> {
+    		if (GameLoop.isPaused) GameLoop.pause(); // unpause the game
     		if (currentGameLoop != null) {
     			currentGameLoop.stop();
+    			currentGameThread = null;
     		}
     		if (currentDrawingLoop != null) {
     			currentDrawingLoop.stop();
+    			currentDrawingThread = null;
     		}
+    		
+    		currentStageIndex = index;
     		GameStage gameStage = switch (index) {
 	    		case 0 -> new FirstStage();
 	    		case 1 -> new SecondStage();
 	    		case 2 -> new ThirdStage();
 				default -> throw new IllegalArgumentException("Unexpected value: " + index);
     		};
-    		Scene newScene = new Scene(gameStage, GameStage.WIDTH, GameStage.HEIGHT);
-    		newScene.setOnKeyPressed(e -> {
+    		currentScene = new Scene(gameStage, GameStage.WIDTH, GameStage.HEIGHT);
+    		currentScene.setOnKeyPressed(e -> {
     			if (e.getCode() == KeyCode.ESCAPE) {
     				GameLoop.pause();
     			}
@@ -58,7 +69,7 @@ public class Launcher extends Application {
     				}
     			}
     		});
-    		newScene.setOnKeyReleased(e -> {
+    		currentScene.setOnKeyReleased(e -> {
     			gameStage.getKeys().remove(e.getCode());
 
     		});
@@ -69,13 +80,29 @@ public class Launcher extends Application {
     		currentDrawingThread = new Thread(currentDrawingLoop, "DrawingLoopThread");
 
 
-    		primaryStage.setScene(newScene);
+    		primaryStage.setScene(currentScene);
     		currentStage = gameStage;
     		
     		currentGameThread.start();
     		currentDrawingThread.start();
     		
     	});
+    }
+    
+    public static void exitToMenu() {
+    	javafx.application.Platform.runLater(() -> {
+        	primaryStage.setScene(menuScene);
+        	if (GameLoop.isPaused) GameLoop.pause(); // Unpause the game
+    		if (currentGameLoop != null) {
+    			currentGameLoop.stop();
+    			currentGameThread = null;
+    		}
+    		if (currentDrawingLoop != null) {
+    			currentDrawingLoop.stop();
+    			currentDrawingThread = null;
+    		}
+    	});
+
     }
     
     public static GameStage getCurrentStage() {

@@ -65,6 +65,11 @@ public class Player extends Rectangle {
 	public static int respawnTimer = 0;
 	
 	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
+		this.bulletPerClip = 3;
+		this.dropDownTimer = 0;
+		this.buffTimer = 0;
+		this.reloadTimer = 0;
+		respawnTimer = 0;
 		this.startX = xPosition;
 		this.startY = yPosition;
 		this.leftKey = leftKey;
@@ -133,7 +138,7 @@ public class Player extends Rectangle {
 		lives--;
 		isDying = true;
 		if (lives <= 0) {
-			// Display Game over text or smth
+			Launcher.exitToMenu();
 		}
 	}
 	
