@@ -1,5 +1,6 @@
 package se233.notcontra.view;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -8,17 +9,17 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.view.GameStages.GameStage;
 
 public class PauseMenu extends VBox {
+	private String buttonStyle = "";	
 	private Label text;
 	private Button continueButton;
 	private Button restartButton;
 	private Button exitButton;
 	
 	public PauseMenu() {
-		super(25);
+		super(10);
 		this.setPrefWidth(200);
 		this.setPrefHeight(250);
 		text = new Label("Paused");
-		text.setStyle("-fx-font-size: 2em; -fx-font-weight: bold;");
 		continueButton = new Button("Continue");
 		continueButton.setOnAction(e -> {
 			GameLoop.pause();
@@ -33,8 +34,16 @@ public class PauseMenu extends VBox {
 		});
 		this.setLayoutX(GameStage.WIDTH/2 - (this.getPrefWidth()/2));
 		this.setLayoutY(GameStage.HEIGHT/2 - (this.getPrefHeight()/2));
-		this.setStyle("-fx-background-color: gray");
+		this.setViewOrder(-1);
+		this.setAlignment(Pos.CENTER);
+		continueButton.setStyle(buttonStyle);
+		exitButton.setStyle(buttonStyle);
+		restartButton.setStyle(buttonStyle);
+		continueButton.setPrefSize(200, 50);
+		restartButton.setPrefSize(200, 50);
+		exitButton.setPrefSize(200, 50);
+		this.getStylesheets().add(Launcher.class.getResource("Styles/pausemenu.css").toString());
+
 		getChildren().addAll(text, continueButton, restartButton, exitButton);
-		
 	}
 }

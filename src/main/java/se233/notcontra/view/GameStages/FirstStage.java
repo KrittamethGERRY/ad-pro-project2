@@ -34,7 +34,7 @@ public class FirstStage extends GameStage {
 		player.respawn();
 		
 		
-		boss = new Wallboss(660, 350, 500, 220, this);
+		boss = new Wallboss(660, 350, 500, 750, this);
 		Platform platform1 = new Platform(165, 0, 300, false);
 		Platform platform2 = new Platform(160, 175, 390, false);
 		Platform platform3 = new Platform(150, 335, 475, false);

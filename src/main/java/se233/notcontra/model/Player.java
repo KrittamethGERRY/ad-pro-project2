@@ -5,17 +5,20 @@ import java.util.List;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SpriteAnimation;
+import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.model.Items.HellfireMagazine;
 import se233.notcontra.view.Platform;
 import se233.notcontra.view.GameStages.GameStage;
 
-public class Player extends Rectangle {
+public class Player extends Pane {
 	
 	private KeyCode leftKey;
 	private KeyCode rightKey;
@@ -34,6 +37,8 @@ public class Player extends Rectangle {
 	private double yAcceleration = 0.40d;
 	private double xMaxVelocity = 5;
 	private double yMaxVelocity = 10;
+	
+	private Rectangle hitBox;
 	
 	private int lives = 3;
 	
@@ -54,7 +59,7 @@ public class Player extends Rectangle {
 	
 	public static int height;
 	public static int width;
-	private ImageView sprite;
+	private SpriteAnimation sprite;
 	
 	private long lastShotTime = 0;
 	private int fireDelay = 30;
@@ -82,16 +87,17 @@ public class Player extends Rectangle {
 		this.yPosition = yPosition;
 		Player.height = 64;
 		Player.width = 64;
+		this.hitBox = new Rectangle(width, height);
 		this.setTranslateX(xPosition);
 		this.setTranslateY(yPosition);
-		this.sprite = new ImageView();
-		
-		this.sprite.setImage(new Image(Launcher.class.getResource("assets/FD.png").toString()));
-		this.sprite.setFitWidth(width);
-		this.sprite.setFitHeight(height);
+		Image image = new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk.png"));
+		this.sprite = new SpriteAnimation(image, 2, 2, 1, 0, 0, 64, 64);
+		this.sprite.setFitWidth(80);
+		this.sprite.setFitHeight(80);
+		this.sprite.setTranslateY(-16);
+		this.getChildren().add(sprite);
 		this.setWidth(width);
 		this.setHeight(height);
-		this.setFill(Color.AZURE);
 	}
 	
 	//					Starting of Movement Behaviors
@@ -197,7 +203,7 @@ public class Player extends Rectangle {
             Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction , BulletOwner.PLAYER)
             		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction , BulletOwner.PLAYER);
             if (isBuffed && isHellfireMag) {
-            	bullet.setFill(Color.RED);
+            	bullet.setBulletSprite(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/bullet.png")));
             }
             GameLoop.bullets.add(bullet);
 
@@ -225,6 +231,8 @@ public class Player extends Rectangle {
 			if (respawnTimer == 0) respawn();
 			return;
 		}
+		hitBox.setX(xPosition);
+		hitBox.setY(yPosition);
 		isDying = false;
 		enableKeys();
 		moveX();
@@ -349,6 +357,23 @@ public class Player extends Rectangle {
 		}
 	}
 	
+	public void isCollided(Boss boss) {
+		int bossX = boss.getXPos();
+		int bossY = boss.getYPos();
+		
+		boolean xAxisCollision = this.xPosition + this.width >= bossX;
+		boolean yAxisCollision = this.yPosition + this.height >= bossY;
+		
+		if (xAxisCollision && yAxisCollision && isTankBuster && respawnTimer <= 0) {
+			die();
+			return;
+		} else if (xAxisCollision) {
+			this.xPosition = boss.getXPos() - width;
+		}
+		//////////////////// 			PLAYER DIES WHEN CHARGING TO THE BOSS WITH TANK BUSTER AND THE BOSS TAKE DAMAGE
+
+	}
+	
 	public void enableKeys() {
 		this.upKey = KeyCode.W;
 		this.downKey = KeyCode.S;
@@ -406,8 +431,16 @@ public class Player extends Rectangle {
 	public int getYPosition() {
 		return yPosition;
 	}
+	
+	public boolean isProning() {
+		return isProning;
+	}
 
 	public boolean getTankBuster() { return isTankBuster; }
 	public boolean isDying() { return isDying; }
+
+	public SpriteAnimation getImageView() { return this.sprite;}
+	
+	public Rectangle getHitBox() { return this.hitBox; }
 	
 }

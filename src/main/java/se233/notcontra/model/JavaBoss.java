@@ -18,12 +18,11 @@ public class JavaBoss extends Boss{
 
     public JavaBoss(int xPos, int yPos , int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 7000);
-        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 10000, EnemyType.WALL);
+        this.Head = new Enemy(xPos, yPos, 0, Width, Height, "assets/Boss/Boss2/JAVA.png", 10000, EnemyType.WALL);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
         getWeakPoints().add(Head);
-        Head.setFill(Color.RED);
 
         getChildren().addAll(Head);
     }
@@ -49,7 +48,7 @@ public class JavaBoss extends Boss{
             int spawnX = this.getXPos() - 200;
             int spawnY = this.getYPos() + 30;
 
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 500, EnemyType.FLYING);
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, "assets/Enemy/FlyingEnemy.png", 500, EnemyType.FLYING);
 
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {

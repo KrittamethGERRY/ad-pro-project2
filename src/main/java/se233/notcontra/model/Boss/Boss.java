@@ -23,6 +23,8 @@ public class Boss extends Pane {
     public Boss(int xPos, int yPos, int width, int height, int maxHealth) {
     	setTranslateX(xPos);
     	setTranslateY(yPos);
+    	this.setHeight(height);
+    	this.setWidth(width);
         this.xPos = xPos;
         this.yPos = yPos;
         this.width = width;
@@ -32,6 +34,7 @@ public class Boss extends Pane {
         this.isAlive = true;
         this.currentState = BossState.IDLE;
         this.weakPoints = new ArrayList<>();
+    	System.out.println(this.getWidth());
     }
 
     public void update() {
@@ -93,8 +96,8 @@ public class Boss extends Pane {
         // This method can be overridden by stationary bosses
         if (!weakPoints.isEmpty()) {
             // Update positions relative to the Pane's origin (0,0)
-            weakPoints.get(0).setX(0);
-            weakPoints.get(0).setY(0);
+            weakPoints.get(0).setTranslateX(0);
+            weakPoints.get(0).setTranslateY(0);
         }
     }
 
@@ -107,7 +110,7 @@ public class Boss extends Pane {
     public int getYPos() { return yPos; }
     public int getHealth() { return health; }
     public int getMaxHealth() { return maxHealth; }
-    public int gethight() { return height; }
+    public int getheight() { return height; }
     public int getwidth() { return width; }
     public BossState getCurrentState() { return currentState; }
     public boolean isDefeated() { return isDefeated(); }

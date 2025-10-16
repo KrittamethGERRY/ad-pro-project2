@@ -1,27 +1,35 @@
 package se233.notcontra.model;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SpriteAnimation;
 import se233.notcontra.model.Boss.Wallboss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.view.GameStages.GameStage;
 
-public class Enemy extends Rectangle {
+public class Enemy extends Pane {
     private int xPos, yPos, width, height;
     private int health;
     double speed = 2;
     boolean alive = true;
     private EnemyType  type;
     private int shootTimer = 75;
+    private SpriteAnimation sprite;
 
-    public Enemy(int xPos, int yPos, int speed, int width, int height, int health, EnemyType type) {
-    	setLayoutX(xPos);
-    	setLayoutY(yPos);
-    	this.setFill(Color.RED);
+    public Enemy(int xPos, int yPos, int speed, int width, int height, String imgName, int health, EnemyType type) {
+    	setTranslateX(xPos);
+    	setTranslateY(yPos);
+    	Image image = new Image(Launcher.class.getResourceAsStream(imgName));
+    	sprite = new SpriteAnimation(image, 5, 5, 1, 0, 0, 32, 32);
+    	this.getChildren().add(sprite);
     	this.setWidth(width);
     	this.setHeight(height);
     	this.health = health;
@@ -31,7 +39,7 @@ public class Enemy extends Rectangle {
         this.width = width;
         this.height = height;
         this.type = type;
-        System.out.println();
+        
     }
 
     public void updateWithPlayer(Player player, GameStage gameStage) {

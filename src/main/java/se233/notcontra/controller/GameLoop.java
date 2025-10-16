@@ -3,6 +3,7 @@ package se233.notcontra.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Bullet;
@@ -59,14 +60,22 @@ public class GameLoop implements Runnable{
 			player.moveLeft();
 			shootingDir = ShootingDirection.LEFT;
 			player.setProning(false);
+			player.getImageView().tick();
 		} else if (rightPressed) {
 			player.moveRight();
 			shootingDir = ShootingDirection.RIGHT;
+			player.getImageView().tick();
 			player.setProning(false);
 		} else if (downPressed) {
 			player.prone();
+			if (player.isProning()) {
+				player.getImageView().changeImage(new Image(Launcher.class.getResourceAsStream("assets/Player/player_prone.png")));
+				player.getImageView().setCount(1);
+			}
 		} else {
 			player.setProning(false);
+			player.getImageView().changeImage(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk.png")));
+			player.getImageView().setCount(2);
 			player.stop();
 		}
 

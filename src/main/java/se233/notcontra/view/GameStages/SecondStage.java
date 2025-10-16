@@ -25,19 +25,20 @@ public class SecondStage extends GameStage {
 	public SecondStage() {
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
-		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/secondStage.png")));
+		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/secondStage.png")));
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
 		platforms = new ArrayList<Platform>();
 		player = new Player(30, 300 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
 		player.respawn();
+		Platform platform1 = new Platform(640, 0, 375, false);
 		Platform groundPlatform = new Platform(1280, 0, 490, true);
 		spawnItem();
-		platforms.add(groundPlatform);
+		platforms.addAll(List.of(groundPlatform, platform1));
 
 		boss = new JavaBoss(1010, 20,250,300,this);
 
-		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, item, player, boss);
+		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, platform1, item, player, boss);
 
 	}
 	

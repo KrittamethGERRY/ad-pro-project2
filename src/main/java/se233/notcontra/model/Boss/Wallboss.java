@@ -3,8 +3,10 @@ package se233.notcontra.model.Boss;
 import java.util.List;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-
+import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
@@ -31,13 +33,16 @@ public class Wallboss extends Boss {
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
         this.phaseChangeHealth = this.getMaxHealth() / 2;
-        this.core = new Enemy(0, 80, 0, 128, 128, this.getMaxHealth()/2, EnemyType.WALL);
-        turretLeft = new Enemy(0, 0, 0, 32, 32, this.getMaxHealth()/4 + 100, EnemyType.TURRET);
-        turretRight = new Enemy(100, 0, 0, 32, 32, this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        this.core = new Enemy(0, 80, 0, 128, 128, "assets/Boss/Boss1/Core.png", this.getMaxHealth()/2, EnemyType.WALL);
+        turretLeft = new Enemy(0, 0, 0, 32, 32, "assets/Boss/Boss1/Turret.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        turretRight = new Enemy(100, 0, 0, 32, 32, "assets/Boss/Boss1/Turret.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         GameLoop.enemies.addAll(List.of(turretLeft, turretRight));
         //System.out.println(this.localToParent(turretLeft.getBoundsInParent()));
         getWeakPoints().add(core);
-        core.setFill(Color.BLUE);
+        ImageView sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/wall.png")));
+        sprite.setFitHeight(this.getHeight());
+        sprite.setFitWidth(this.getWidth());
+        this.getChildren().add(sprite);
         javafx.application.Platform.runLater(() -> {
             this.getChildren().addAll(turretLeft, turretRight);        	
         });
@@ -119,7 +124,7 @@ public class Wallboss extends Boss {
             int spawnY = -200;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, 1, EnemyType.WALL_SHOOTER);
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, "assets/Enemy/enemy_wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
             // NOTE: Get children's global position do not touch!!!!
             //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);

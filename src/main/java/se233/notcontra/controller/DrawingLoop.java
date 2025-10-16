@@ -33,6 +33,7 @@ public class DrawingLoop implements Runnable {
 		player.checkStageBoundaryCollision();
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
+		player.isCollided(gameStage.getBoss());
 
 	}
 
@@ -77,7 +78,7 @@ public class DrawingLoop implements Runnable {
 			}
 			
 			// Player collisions with bullet
-			if (gameStage.getPlayer().getBoundsInParent().intersects(bullet.getBoundsInParent())
+			if (gameStage.getPlayer().getHitBox().getBoundsInParent().intersects(bullet.getBoundsInParent())
 					&& bullet.getOwner() != BulletOwner.PLAYER
 					&& !gameStage.getPlayer().getTankBuster()
 					&& !gameStage.getPlayer().isDying()) {

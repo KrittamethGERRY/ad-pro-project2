@@ -1,23 +1,25 @@
 package se233.notcontra.model;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import se233.notcontra.Launcher;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.ShootingDirection;
 
-public class Bullet extends Rectangle {
+public class Bullet extends Pane {
     private Vector2D velocity;
 	private Vector2D position;
     private ShootingDirection direction;
 	private BulletOwner owner;
 	private boolean Alive = true;
+	private ImageView sprite;
 
     public Bullet(int xPosition, int yPosition, int speedX, int speedY, ShootingDirection direction , BulletOwner owner) {
     	this.direction = direction;
         this.position = new Vector2D(xPosition, yPosition);
 		this.velocity =  calculateVelocity(speedX, speedY, direction);
 		this.owner = owner;
-
 		setupBullet();
     }
 
@@ -34,26 +36,29 @@ public class Bullet extends Rectangle {
 	private void setupBullet() {
 		setTranslateX((int)position.x);
 		setTranslateY((int)position.y);
-		this.setFill(Color.BLACK);
-		this.setWidth(10);
-		this.setHeight(10);
+		sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/bullet.png")));
+		sprite.setFitHeight(64);
+		sprite.setFitWidth(64);
+		this.getChildren().add(sprite);
+		this.setWidth(16);
+		this.setHeight(8);
 	}
 
 	private Vector2D calculateVelocity(int speedX, int speedY, ShootingDirection direction) {
 		switch (direction) {
-			case LEFT:
+			case LEFT: this.setRotate(180);
 				return new Vector2D(-speedX, 0);
 			case RIGHT:
 				return new Vector2D(speedX, 0);
-			case UP:
+			case UP: this.setRotate(90);
 				return new Vector2D(0, -speedY);
-			case UP_LEFT:
-				return new Vector2D(-speedX + 2, -speedY + 2);
-			case UP_RIGHT:
-				return new Vector2D(speedX - 2, -speedY - 2);
-			case DOWN_LEFT:
+			case UP_LEFT: this.setRotate(45);
+				return new Vector2D(-speedX - 2, -speedY + 2);
+			case UP_RIGHT: this.setRotate(-45);
+				return new Vector2D(speedX + 2, -speedY - 2);
+			case DOWN_LEFT: this.setRotate(135);
 				return new Vector2D(-speedX - 2, speedY - 2);
-			case DOWN_RIGHT:
+			case DOWN_RIGHT: this.setRotate(-315);
 				return new Vector2D(speedX + 2, speedY - 2);
 			default:
 				return new Vector2D(0, 0);
@@ -104,5 +109,11 @@ public class Bullet extends Rectangle {
 
 	public BulletOwner getOwner() { return owner; }
 	public boolean isEnemyBullet() { return owner == BulletOwner.ENEMY;}
+	
+	public void setBulletSprite(Image image) {
+		sprite.setImage(image);
+		sprite.setFitHeight(8);
+		sprite.setFitWidth(16);
+	}
 }
 

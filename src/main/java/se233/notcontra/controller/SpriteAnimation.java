@@ -1,55 +1,43 @@
 package se233.notcontra.controller;
 
-import javafx.animation.AnimationTimer;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
-public class SpriteAnimation extends AnimationTimer {
+public class SpriteAnimation extends ImageView {
 
-    private final ImageView imageView;
-    private final int totalFrames;
-    private final int columns;
-
-    private final int frameWidth;
-    private final int frameHeight;
-
-    private int currentFrame = 0;
-    private long lastFrameTime = 0;
-    private final long frameDuration;
-
-
-    public SpriteAnimation(ImageView imageView, int durationMs, int totalFrames, int columns, int frameWidth, int frameHeight) {
-        this.imageView = imageView;
-        this.totalFrames = totalFrames;
+    int count, columns, rows, offsetX, offsetY, width, height, curIndex, curColumnIndex = 0, curRowIndex = 0;
+    public SpriteAnimation(Image image, int count, int columns, int rows, int offsetX, int offsetY, int width, int height) {
+        this.setImage(image);
+        this.count = count;
         this.columns = columns;
-        this.frameWidth = frameWidth;
-        this.frameHeight = frameHeight;
-
-        // Calculate how long each frame should be displayed
-        this.frameDuration = (long) (durationMs * 1_000_000.0 / totalFrames);
+        this.rows = rows;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.width = width;
+        this.height = height;
+        this.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
     }
-
-    @Override
-    public void handle(long now) {
-        // Check if enough time has passed to switch to the next frame
-        if (now - lastFrameTime >= frameDuration) {
-            // Move to the next frame, looping back to 0 if at the end
-            currentFrame = (currentFrame + 1) % totalFrames;
-
-            // Calculate the row and column of the current frame in the spritesheet
-            int col = currentFrame % columns;
-            int row = currentFrame / columns;
-
-            // Calculate the x and y coordinates of the frame's top-left corner
-            int frameX = col * frameWidth;
-            int frameY = row * frameHeight;
-
-            // Update the ImageView's viewport to display the new frame
-            imageView.setViewport(new Rectangle2D(frameX, frameY, frameWidth, frameHeight));
-
-            // Update the time of the last frame change
-            lastFrameTime = now;
-        }
+    public void tick() {
+        curColumnIndex = curIndex % columns;
+        curRowIndex = curIndex / columns;
+        curIndex = (curIndex+1) % (columns * rows);
+        curIndex = curIndex < count ? curIndex : 0;
+        interpolate();
     }
+    
+    public void changeImage(Image image) {
+    	this.setImage(image);
+    }
+    
+    public void setCount(int count) {
+    	this.count = count;
+    }
+    protected void interpolate() {
+        final int x = curColumnIndex * width + offsetX;
+        final int y = curRowIndex * height + offsetY;
+        this.setViewport(new Rectangle2D(x, y, width, height));
+    }
+    
 }
