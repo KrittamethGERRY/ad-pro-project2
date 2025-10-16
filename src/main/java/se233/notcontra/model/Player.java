@@ -9,9 +9,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.model.Enums.BulletOwner;
+import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.model.Items.HellfireMagazine;
-import se233.notcontra.view.GameStage;
 import se233.notcontra.view.Platform;
+import se233.notcontra.view.GameStages.GameStage;
 
 public class Player extends Rectangle {
 	

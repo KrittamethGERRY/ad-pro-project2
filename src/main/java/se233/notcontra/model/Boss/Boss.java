@@ -1,6 +1,7 @@
-package se233.notcontra.model;
+package se233.notcontra.model.Boss;
 
 import javafx.scene.layout.Pane;
+import se233.notcontra.model.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;

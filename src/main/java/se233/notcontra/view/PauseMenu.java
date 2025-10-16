@@ -4,6 +4,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import se233.notcontra.Launcher;
+import se233.notcontra.view.GameStages.GameStage;
 
 public class PauseMenu extends VBox {
 	private Label text;

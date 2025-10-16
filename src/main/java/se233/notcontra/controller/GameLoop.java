@@ -8,9 +8,9 @@ import se233.notcontra.Launcher;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Player;
-import se233.notcontra.model.ShootingDirection;
-import se233.notcontra.view.GameStage;
+import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.view.PauseMenu;
+import se233.notcontra.view.GameStages.GameStage;
 
 public class GameLoop implements Runnable{
 	public static ShootingDirection shootingDir;

@@ -1,60 +1,46 @@
-package se233.notcontra.view;
+package se233.notcontra.view.GameStages;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import se233.notcontra.Launcher;
-import se233.notcontra.controller.GameLoop;
+import javafx.scene.image.Image;
 import se233.notcontra.model.Items.HellfireMagazine;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.TankBuster;
-import se233.notcontra.model.Boss;
+import se233.notcontra.view.Platform;
+import se233.notcontra.Launcher;
+import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
+import se233.notcontra.model.JavaBoss;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
-import se233.notcontra.model.Wallboss;
+import se233.notcontra.model.Boss.Boss;
 
-public class FirstStage extends GameStage {
-	
-	public FirstStage() {
+public class SecondStage extends GameStage {
+
+	public SecondStage() {
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
-		platforms = new ArrayList<Platform>();
-		this.backgroundIMG = new Image(Launcher.class.getResource("assets/firstStage.png").toString());
-		ImageView background = new ImageView(backgroundIMG);
+		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/secondStage.png")));
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
-		player = new Player(30, 0 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
+		platforms = new ArrayList<Platform>();
+		player = new Player(30, 300 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
 		player.respawn();
-		
-		
-		boss = new Wallboss(660, 350, 500, 220, this);
-		Platform platform1 = new Platform(165, 0, 300, false);
-		Platform platform2 = new Platform(160, 175, 390, false);
-		Platform platform3 = new Platform(150, 335, 475, false);
-		Platform platform4 = new Platform(165, 0, 450, false);
-		Platform groundPlatform = new Platform(1280, 0, 585, true);
+		Platform groundPlatform = new Platform(1280, 0, 490, true);
 		spawnItem();
-		platforms.add(platform1);
-		platforms.add(platform2);
-		platforms.add(platform3);
-		platforms.add(platform4);
 		platforms.add(groundPlatform);
-		getChildren().addAll(background, boss, scoreBackground, livesBackground, livesLabel, scoreLabel, platform1, platform2, platform3, platform4, groundPlatform, item, player);
-		player.respawn();
-		logging();
+
+		boss = new JavaBoss(1010, 20,250,300,this);
+
+		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, item, player, boss);
+
 	}
 	
-	@Override
-	public Item getItem() {
-		return this.item;
-	}
-
 	@Override
 	public Keys getKeys() {
 		return this.keys;
@@ -69,6 +55,11 @@ public class FirstStage extends GameStage {
 	}
 	
 	@Override
+	public Item getItem() {
+		return this.item;
+	}
+	
+	@Override
 	public void spawnItem() {
 		boolean itemType = new Random().nextBoolean();
 		item = itemType ? new HellfireMagazine(64,64,150,280) : new TankBuster(64,64,150,280);
@@ -79,7 +70,7 @@ public class FirstStage extends GameStage {
 		getChildren().remove(item);
 		item = null;
 	}
-	
+
 	@Override
 	public void logging() {
 		logger.info("Player spawned at X:{} Y:{}", player.getXPosition(), player.getYPosition());
@@ -88,6 +79,7 @@ public class FirstStage extends GameStage {
 		}
 		logger.info("Item spawned at X:{} Y:{}", item.getXPos(), item.getYPos());
 	}
+	
 	@Override
 	public Boss getBoss() { return this.boss; }
 	@Override

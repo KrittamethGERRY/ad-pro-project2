@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import se233.notcontra.Launcher;
+import se233.notcontra.view.GameStages.GameStage;
 
 public class MainMenu extends AnchorPane {
 	

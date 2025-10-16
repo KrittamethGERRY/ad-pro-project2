@@ -7,11 +7,11 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.view.FirstStage;
-import se233.notcontra.view.GameStage;
 import se233.notcontra.view.MainMenu;
-import se233.notcontra.view.SecondStage;
-import se233.notcontra.view.ThirdStage;
+import se233.notcontra.view.GameStages.FirstStage;
+import se233.notcontra.view.GameStages.GameStage;
+import se233.notcontra.view.GameStages.SecondStage;
+import se233.notcontra.view.GameStages.ThirdStage;
 
 public class Launcher extends Application {
 	public static Stage primaryStage;
