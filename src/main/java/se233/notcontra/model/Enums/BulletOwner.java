@@ -1,4 +1,4 @@
-package se233.notcontra.model;
+package se233.notcontra.model.Enums;
 
 public enum BulletOwner {
     PLAYER,

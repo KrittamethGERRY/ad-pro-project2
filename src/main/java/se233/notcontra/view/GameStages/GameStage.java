@@ -1,4 +1,4 @@
-package se233.notcontra.view;
+package se233.notcontra.view.GameStages;
 
 import java.util.List;
 
@@ -10,12 +10,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import se233.notcontra.model.Items.Item;
+import se233.notcontra.view.PauseMenu;
+import se233.notcontra.view.Platform;
 import se233.notcontra.Launcher;
-import se233.notcontra.model.Boss;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
+import se233.notcontra.model.Boss.Boss;
 
 public abstract class GameStage extends Pane {
 	protected Logger logger = LogManager.getLogger(GameStage.class);
@@ -34,12 +36,6 @@ public abstract class GameStage extends Pane {
 	
 	public GameStage() {
 		this.keys = new Keys();
-	}
-	
-	public void displayPauseMenu(boolean enable) {		
-		pauseMenu.setPrefWidth(250);
-		pauseMenu.setPrefHeight(200);
-		pauseMenu.setVisible(enable);
 	}
 	
 	public ImageView drawScore() {

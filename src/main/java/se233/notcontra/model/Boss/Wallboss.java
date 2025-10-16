@@ -1,4 +1,4 @@
-package se233.notcontra.model;
+package se233.notcontra.model.Boss;
 
 import java.util.List;
 
@@ -6,7 +6,12 @@ import javafx.application.Platform;
 import javafx.scene.paint.Color;
 
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.view.GameStage;
+import se233.notcontra.model.Bullet;
+import se233.notcontra.model.Enemy;
+import se233.notcontra.model.Enums.BulletOwner;
+import se233.notcontra.model.Enums.EnemyType;
+import se233.notcontra.model.Enums.ShootingDirection;
+import se233.notcontra.view.GameStages.GameStage;
 
 public class Wallboss extends Boss {
     private final int phaseChangeHealth;

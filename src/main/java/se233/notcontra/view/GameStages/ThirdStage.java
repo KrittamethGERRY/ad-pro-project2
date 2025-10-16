@@ -1,14 +1,15 @@
-package se233.notcontra.view;
+package se233.notcontra.view.GameStages;
 
 import java.util.List;
 
 import se233.notcontra.model.Items.Item;
+import se233.notcontra.view.Platform;
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.model.Boss;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
+import se233.notcontra.model.Boss.Boss;
 
 public class ThirdStage extends GameStage {
 

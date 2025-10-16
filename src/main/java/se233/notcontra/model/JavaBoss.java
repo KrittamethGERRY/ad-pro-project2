@@ -3,7 +3,9 @@ package se233.notcontra.model;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.view.GameStage;
+import se233.notcontra.model.Boss.Boss;
+import se233.notcontra.model.Enums.EnemyType;
+import se233.notcontra.view.GameStages.GameStage;
 
 import java.util.List;
 

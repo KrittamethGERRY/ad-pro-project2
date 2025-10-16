@@ -4,7 +4,11 @@ import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.view.GameStage;
+import se233.notcontra.model.Boss.Wallboss;
+import se233.notcontra.model.Enums.BulletOwner;
+import se233.notcontra.model.Enums.EnemyType;
+import se233.notcontra.model.Enums.ShootingDirection;
+import se233.notcontra.view.GameStages.GameStage;
 
 public class Enemy extends Rectangle {
     private int xPos, yPos, width, height;

@@ -2,16 +2,18 @@ package se233.notcontra.controller;
 
 import java.util.List;
 
-import se233.notcontra.model.Bullet;
-import se233.notcontra.model.Player;
-import se233.notcontra.model.ShootingDirection;
+import se233.notcontra.model.Boss.Wallboss;
+import se233.notcontra.model.Enums.BulletOwner;
+import se233.notcontra.model.Enums.EnemyType;
+import se233.notcontra.model.Enums.ShootingDirection;
+import se233.notcontra.view.GameStages.FirstStage;
+import se233.notcontra.view.GameStages.GameStage;
+import se233.notcontra.view.GameStages.SecondStage;
+
 import java.util.Iterator;
 
 import javafx.application.Platform;
 import se233.notcontra.model.*;
-import se233.notcontra.view.FirstStage;
-import se233.notcontra.view.GameStage;
-import se233.notcontra.view.SecondStage;
 
 public class DrawingLoop implements Runnable {	
 	private GameStage gameStage;

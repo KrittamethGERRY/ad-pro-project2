@@ -10,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import se233.notcontra.Launcher;
+import se233.notcontra.view.GameStages.GameStage;
 
 public class MainMenu extends AnchorPane {
 	
@@ -59,10 +60,7 @@ public class MainMenu extends AnchorPane {
 				Launcher.primaryStage.close();
 			}
 		});
-		PauseMenu pauseMenu = new PauseMenu();
-		pauseMenu.setLayoutX(1000);
-		pauseMenu.setLayoutY(400);
-		getChildren().addAll(background, title, buttonBox, list, pauseMenu);
+		getChildren().addAll(background, title, buttonBox, list);
 	}
 	
 	public Button drawStartButton() {

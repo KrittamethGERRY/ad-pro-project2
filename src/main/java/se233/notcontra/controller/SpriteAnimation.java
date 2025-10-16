@@ -18,16 +18,7 @@ public class SpriteAnimation extends AnimationTimer {
     private long lastFrameTime = 0;
     private final long frameDuration;
 
-    /**
-     * Constructor for the SpriteAnimation.
-     *
-     * @param imageView The ImageView that displays the sprite.
-     * @param durationMs The total duration of one animation cycle in milliseconds.
-     * @param totalFrames The total number of frames in the spritesheet.
-     * @param columns The number of columns in the spritesheet grid.
-     * @param frameWidth The width of a single frame.
-     * @param frameHeight The height of a single frame.
-     */
+
     public SpriteAnimation(ImageView imageView, int durationMs, int totalFrames, int columns, int frameWidth, int frameHeight) {
         this.imageView = imageView;
         this.totalFrames = totalFrames;

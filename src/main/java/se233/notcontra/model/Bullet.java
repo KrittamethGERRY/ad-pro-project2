@@ -2,6 +2,8 @@ package se233.notcontra.model;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import se233.notcontra.model.Enums.BulletOwner;
+import se233.notcontra.model.Enums.ShootingDirection;
 
 public class Bullet extends Rectangle {
     private Vector2D velocity;
