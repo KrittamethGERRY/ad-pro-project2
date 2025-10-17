@@ -1,5 +1,6 @@
 package se233.notcontra.controller;
 
+import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +50,8 @@ public class GameLoop implements Runnable{
 		boolean downPressed = gameStage.getKeys().isPressed(player.getDownKey());
 		boolean jumpPressed = gameStage.getKeys().isPressed(player.getJumpKey());
 		
-		if (isPaused) {
+		
+		if (isPaused || player.getState() == PlayerState.CHARGING || player.getState() == PlayerState.DIE) {
 			return;
 		}
 
@@ -69,6 +71,7 @@ public class GameLoop implements Runnable{
 			player.setState(PlayerState.WALKSHOOT);
 		} else if (downPressed) {
 			player.prone();
+			player.setState(PlayerState.PRONE);
 		} else {
 			player.setProning(false);
 			player.stop();
@@ -99,19 +102,24 @@ public class GameLoop implements Runnable{
 		} else {
 			// Set default direction while not pressing any key
 			shootingDir = shootingDir.toString().matches(".*RIGHT") ? ShootingDirection.RIGHT : ShootingDirection.LEFT;
-			player.setState(PlayerState.IDLE);
+			PlayerState currentState = player.getState();
+		    if (currentState != PlayerState.PRONE && currentState != PlayerState.WALKSHOOT) {
+		        player.setState(PlayerState.IDLE);
+		    }
 		}
+		
+		
 		if (gameStage.getKeys().isJustPressed(player.getShootKey())) {
 			player.shoot(gameStage, shootingDir);
-			
-			player.setState(PlayerState.SHOOTING);
+			if (player.isProning()) {
+				player.setState(PlayerState.PRONE);
+			}
 		}
 		
 		if (jumpPressed && downPressed) {
 			player.dropDown();
 		} else if (jumpPressed) {
 			player.jump();
-			player.setState(PlayerState.JUMP);
 		} 
 
 		gameStage.getKeys().clear();
@@ -119,26 +127,38 @@ public class GameLoop implements Runnable{
 	
 	public void updateAnimation(Player player) {
 		PlayerState currentState = player.getState();
-		if (currentState == PlayerState.WALK) {
-			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk.png")), 3, 3, 1);
-		} else if (currentState == PlayerState.SHOOTING) {
-			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk.png")), 3, 3, 1);
+		
+		if (currentState == PlayerState.CHARGING) {
+			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_charging.png")), 3, 3, 1);
+			return;
+		}
+		
+		if (player.isJumping()) {
+			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_jump.png")), 3, 3, 1);
+
+			return;
+		}
+		
+		if (currentState == PlayerState.SHOOTING) {
+			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk_shoot_straight.png")), 3, 3, 1);
 		} else if (currentState == PlayerState.PRONE) {
 			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_prone.png")), 1, 1, 1);
 		} else if (currentState == PlayerState.DIE) {
-			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_die.png")), 3, 3, 1);
+			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_die.png")), 5, 2, 3);
+		} else if (currentState == PlayerState.JUMP) {
 		} else if (currentState == PlayerState.FACE_DOWN_SIDE) {
 			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk_shoot_down_side.png")), 3, 3, 1);
 		} else if (currentState == PlayerState.FACE_UP_SIDE) {
 			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk_shoot_up_side.png")), 3, 3, 1);
 		} else if (currentState == PlayerState.FACE_UP) {
-			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk_shoot_up.png")), 3, 3, 1);
+			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk_shoot_up.png")), 1, 3, 1);
 		} else if (currentState == PlayerState.WALKSHOOT) {
-			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk_shoot_straight.png")), 2, 1, 1);
+			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk_shoot_straight.png")), 2, 2, 1);
 		} else {
 			player.getImageView().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Player/player_idle.png")), 3, 3, 1);
 		} 
 		player.getImageView().tick();
+		System.out.println(currentState);
 	}
 	
 	public static void addScore(int addition) {

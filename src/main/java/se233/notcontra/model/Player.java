@@ -99,9 +99,11 @@ public class Player extends Pane {
 		this.sprite.setFitWidth(80);
 		this.sprite.setFitHeight(80);
 		this.sprite.setTranslateY(-16);
-		this.getChildren().add(sprite);
+		this.hitBox.setFill(null);
+		this.getChildren().addAll(sprite, hitBox);
 		this.setWidth(width);
 		this.setHeight(height);
+		
 	}
 	
 	//					Starting of Movement Behaviors
@@ -139,7 +141,8 @@ public class Player extends Pane {
 		this.isFalling = true;
 		this.canJump = false;
 		this.isJumping = false;
-		isDying = false;
+		this.isDying = false;
+		this.setState(PlayerState.IDLE);
 	}
 	
 	
@@ -147,6 +150,7 @@ public class Player extends Pane {
 		respawnTimer = 100;
 		lives--;
 		isDying = true;
+		this.setState(PlayerState.DIE);
 		if (lives <= 0) {
 			Launcher.exitToMenu();
 		}
@@ -232,11 +236,11 @@ public class Player extends Pane {
 		if (respawnTimer > 0) {
 			respawnTimer--;
 			disableKeys();
-			if (respawnTimer == 0) respawn();
+			if (respawnTimer == 0) {
+				respawn();
+			}
 			return;
 		}
-		hitBox.setX(xPosition);
-		hitBox.setY(yPosition);
 		isDying = false;
 		enableKeys();
 		moveX();
@@ -310,6 +314,7 @@ public class Player extends Pane {
 					bulletPerClip = 3;
 					buffTimer = 100;
 					xMaxVelocity = 13;
+					this.setState(PlayerState.CHARGING);
 					stop();
 				}
 
@@ -451,5 +456,7 @@ public class Player extends Pane {
 	public void setState(PlayerState playerState) {
 		this.playerState = playerState;
 	}
+
+	public boolean isJumping() { return this.isJumping; }
 	
 }
