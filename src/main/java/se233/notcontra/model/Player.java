@@ -110,7 +110,6 @@ public class Player extends Pane {
 		this.getChildren().addAll(sprite, hitBox);
 		this.setWidth(width);
 		this.setHeight(height);
-		System.out.println(getHitBox().getBoundsInParent());
 	}
 	
 	//					Starting of Movement Behaviors

@@ -10,6 +10,7 @@ public class Effect extends Pane {
     private int totalFrames;
 
     public Effect(Image spriteSheet, int count, int columns, int rows, double x, double y, int displayWidth, int displayHeight) {
+    	// total frame in spritesheet
         this.totalFrames = count;
 
         int width = (int) spriteSheet.getWidth() / columns;
