@@ -15,7 +15,7 @@ import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.view.GameStages.GameStage;
 
-public class Wallboss extends Boss {
+public class WallBoss extends Boss {
     private final int phaseChangeHealth;
     private Enemy turretLeft;
     private Enemy turretRight;
@@ -27,7 +27,7 @@ public class Wallboss extends Boss {
     public static int totalTurret = 2;
     private final int maxEnemies = 1;
 
-    public Wallboss(int xPos, int yPos, int width, int height, GameStage gameStage) {
+    public WallBoss(int xPos, int yPos, int width, int height, GameStage gameStage) {
         super(xPos, yPos, width, height, 5000);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
@@ -39,10 +39,6 @@ public class Wallboss extends Boss {
         GameLoop.enemies.addAll(List.of(turretLeft, turretRight));
         //System.out.println(this.localToParent(turretLeft.getBoundsInParent()));
         getWeakPoints().add(core);
-        ImageView sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/wall.png")));
-        sprite.setFitHeight(this.getHeight());
-        sprite.setFitWidth(this.getWidth());
-        this.getChildren().add(sprite);
         javafx.application.Platform.runLater(() -> {
             this.getChildren().addAll(turretLeft, turretRight);        	
         });

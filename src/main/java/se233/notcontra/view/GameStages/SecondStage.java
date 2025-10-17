@@ -15,10 +15,10 @@ import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
-import se233.notcontra.model.JavaBoss;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Boss.Boss;
+import se233.notcontra.model.Boss.JavaBoss;
 
 public class SecondStage extends GameStage {
 

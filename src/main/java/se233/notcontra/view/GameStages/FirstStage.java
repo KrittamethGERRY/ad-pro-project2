@@ -18,7 +18,7 @@ import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Boss.Boss;
-import se233.notcontra.model.Boss.Wallboss;
+import se233.notcontra.model.Boss.WallBoss;
 
 public class FirstStage extends GameStage {
 	
@@ -34,7 +34,7 @@ public class FirstStage extends GameStage {
 		player.respawn();
 		
 		
-		boss = new Wallboss(660, 350, 500, 750, this);
+		boss = new WallBoss(660, 350, 500, 750, this);
 		Platform platform1 = new Platform(165, 0, 300, false);
 		Platform platform2 = new Platform(160, 175, 390, false);
 		Platform platform3 = new Platform(150, 335, 475, false);

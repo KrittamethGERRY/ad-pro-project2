@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SpriteAnimation;
-import se233.notcontra.model.Boss.Wallboss;
+import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
@@ -168,7 +168,7 @@ public class Enemy extends Pane {
     	if (health <= 0) {
     		switch (type) {
     		case WALL_SHOOTER: GameLoop.addScore(100); break;
-    		case TURRET: GameLoop.addScore(500); Wallboss.totalTurret--;  break;
+    		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--;  break;
     		case FLYING: GameLoop.addScore(150); break;
     		case WALL: GameLoop.addScore(1000);  break;
     		}

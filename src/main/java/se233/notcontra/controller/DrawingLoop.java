@@ -2,7 +2,7 @@ package se233.notcontra.controller;
 
 import java.util.List;
 
-import se233.notcontra.model.Boss.Wallboss;
+import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
@@ -64,7 +64,7 @@ public class DrawingLoop implements Runnable {
 					if (enemy.getType() == EnemyType.WALL_SHOOTER) {
 						
 					} else if (enemy.getType() == EnemyType.TURRET) {
-						if (Wallboss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
+						if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
 							Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
                             Platform.runLater(() -> {
                                 GameLoop.enemies.add(core);

@@ -13,6 +13,7 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SpriteAnimation;
 import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Enums.BulletOwner;
+import se233.notcontra.model.Enums.PlayerState;
 import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.model.Items.HellfireMagazine;
 import se233.notcontra.view.Platform;
@@ -69,7 +70,10 @@ public class Player extends Pane {
 	private int reloadTimer = 0;
 	public static int respawnTimer = 0;
 	
+	private PlayerState playerState;
+	
 	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
+		this.playerState = PlayerState.IDLE;
 		this.bulletPerClip = 3;
 		this.dropDownTimer = 0;
 		this.buffTimer = 0;
@@ -442,5 +446,10 @@ public class Player extends Pane {
 	public SpriteAnimation getImageView() { return this.sprite;}
 	
 	public Rectangle getHitBox() { return this.hitBox; }
+	
+	public PlayerState getState() { return this.playerState; }
+	public void setState(PlayerState playerState) {
+		this.playerState = playerState;
+	}
 	
 }

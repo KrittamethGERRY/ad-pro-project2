@@ -27,13 +27,18 @@ public class SpriteAnimation extends ImageView {
         interpolate();
     }
     
-    public void changeImage(Image image) {
+    public void changeSpriteSheet(Image image, int count, int columns, int rows) {
     	this.setImage(image);
+    	this.count = count;
+    	this.columns = columns;
+    	this.rows = rows;
+    	
+        this.width = (int) image.getWidth() / columns;
+        this.height = (int) image.getHeight() / rows;
+
+        this.curIndex = 0;
     }
     
-    public void setCount(int count) {
-    	this.count = count;
-    }
     protected void interpolate() {
         final int x = curColumnIndex * width + offsetX;
         final int y = curRowIndex * height + offsetY;
