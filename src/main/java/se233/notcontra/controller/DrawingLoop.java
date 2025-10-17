@@ -39,6 +39,8 @@ public class DrawingLoop implements Runnable {
 		player.isCollided(gameStage);
 		player.updateReloadTimer();
 		player.resetHitBoxHeight();
+
+		checkPlayerEnemyCollision();
 	}
 
 	public void paint(Player player) {
@@ -107,6 +109,32 @@ public class DrawingLoop implements Runnable {
 			}
 		}
 	}
+
+	private void checkPlayerEnemyCollision() {
+		if (gameStage.getPlayer().getTankBuster() || gameStage.getPlayer().isDying()) {
+			return;
+		}
+
+		Bounds playerBounds = gameStage.getPlayer().localToParent(
+				gameStage.getPlayer().getHitBox().getBoundsInParent()
+		);
+
+		List<Enemy> enemiesCopy = new ArrayList<>(GameLoop.enemies);
+
+		for (Enemy enemy : enemiesCopy) {
+			if (enemy.isAlive() && enemy.getType() == EnemyType.FLYING) {
+				Bounds enemyBounds = gameStage.getBoss().localToParent(enemy.getBoundsInParent());
+
+				if (enemyBounds.intersects(playerBounds)) {
+					gameStage.getPlayer().die();
+
+					clearAllEnemies();
+
+					Platform.runLater(this::updateLives);
+				}
+			}
+		}
+	}
 	
 	private void paintEffects(List<Effect> effects) {
         Iterator<Effect> iterator = effects.iterator();
@@ -119,6 +147,37 @@ public class DrawingLoop implements Runnable {
             }
         }
     }
+
+	private void clearAllEnemies() {
+		List<Enemy> enemiesToRemove = new ArrayList<>();
+
+		for (Enemy enemy : GameLoop.enemies) {
+			if (enemy.getType() == EnemyType.FLYING) {
+				// Add explosion effect for each removed enemy
+				Bounds enemyBounds = gameStage.getBoss().localToParent(enemy.getBoundsInParent());
+				Effect explosion = new Effect(
+						ImageAssets.EXPLOSION_IMG, 8, 8, 1,
+						(int) enemyBounds.getCenterX() - 32,
+						(int) enemyBounds.getCenterY() - 32,
+						64, 64
+				);
+				effects.add(explosion);
+				Platform.runLater(() -> {
+					gameStage.getChildren().add(explosion);
+				});
+
+				enemiesToRemove.add(enemy);
+			}
+		}
+
+		// Remove all marked enemies
+		for (Enemy enemy : enemiesToRemove) {
+			GameLoop.enemies.remove(enemy);
+			Platform.runLater(() -> {
+				gameStage.getBoss().getChildren().remove(enemy);
+			});
+		}
+	}
 
 	private void updateScore() {
 		gameStage.getScoreLabel().setText("Score: " + String.format("%06d", GameLoop.getScore()));

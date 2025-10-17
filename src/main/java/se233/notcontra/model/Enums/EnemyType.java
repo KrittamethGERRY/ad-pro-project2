@@ -4,5 +4,6 @@ public enum EnemyType {
     WALL_SHOOTER,
     FLYING,
     TURRET,
-    WALL
+    WALL,
+    Head,
 }

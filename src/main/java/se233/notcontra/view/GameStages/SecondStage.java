@@ -26,8 +26,13 @@ public class SecondStage extends GameStage {
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
 		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/secondStage.png")));
+		ImageView platformIm = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/platforms.png")));
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
+		platformIm.setFitWidth(640);
+		platformIm.setFitHeight(50);
+		platformIm.setLayoutX(0);
+		platformIm.setLayoutY(360);
 		platforms = new ArrayList<Platform>();
 		player = new Player(30, 300 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
 		player.respawn();
@@ -36,9 +41,9 @@ public class SecondStage extends GameStage {
 		spawnItem();
 		platforms.addAll(List.of(groundPlatform, platform1));
 
-		boss = new JavaBoss(1010, 20,250,300,this);
+		boss = new JavaBoss(1010, 50,128,256,this);
 
-		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, platform1, item, player, boss);
+		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, platformIm, groundPlatform, platform1, item, player, boss);
 
 	}
 	

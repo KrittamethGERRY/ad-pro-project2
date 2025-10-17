@@ -15,13 +15,16 @@ public class JavaBoss extends Boss{
 
     public JavaBoss(int xPos, int yPos , int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 7000);
-        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 3, 3, 1,"assets/Boss/Boss2/JAVA.png", 10000, EnemyType.WALL);
+        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 3, 3, 1,"assets/Boss/Boss2/JAVA.png", 7000, EnemyType.Head);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
         getWeakPoints().add(Head);
 
-        getChildren().addAll(Head);
+        GameLoop.enemies.add(Head);
+        javafx.application.Platform.runLater(() -> {
+            this.getChildren().addAll(Head);
+        });
     }
 
 
@@ -29,6 +32,8 @@ public class JavaBoss extends Boss{
     @Override
     protected void handleAttackingState() {
         spawnEnemy();
+
+
     }
 
     private void spawnEnemy() {
@@ -45,18 +50,23 @@ public class JavaBoss extends Boss{
         }
 
         if (aliveCount < maxEnemies) {
-            int spawnX = -100;
-            int spawnY = +200;
+            int spawnX = -50;
+            int spawnY = +100;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 5, 5, 1,"assets/Enemy/enemy_wall_shooter.png", 1, EnemyType.FLYING);
+            Enemy enemy = new Enemy(spawnX, spawnY, 2, 64, 82, 5, 5, 1,"assets/Enemy/FlyingEnemy.png", 50, EnemyType.FLYING);
             // NOTE: Get children's global position do not touch!!!!
             //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);
             });
-            enemyTimer = 500;
+
+            enemyTimer = 80;
+
+            if (aliveCount == maxEnemies) {
+                enemyTimer = 500;
+            }
         }
     }
 }

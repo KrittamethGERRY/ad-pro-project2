@@ -10,8 +10,12 @@ import org.apache.logging.log4j.Logger;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
+import se233.notcontra.model.Boss.Boss;
+import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
+import se233.notcontra.model.Enums.EnemyState;
+import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Enums.PlayerState;
@@ -168,7 +172,19 @@ public class GameLoop implements Runnable{
 		} 
 		player.getImageView().tick();
 	}
-	
+
+	public void updateEnemyAnimation(Enemy enemy){
+		if(!enemy.isAlive() && enemy.getType() == EnemyType.TURRET){
+			enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Turret.png"), 2, 1,2);
+		}
+
+		enemy.getSprite().tick();
+	}
+
+	public Image getimage(String path){
+		return new Image(Launcher.class.getResourceAsStream(path));
+	}
+
 	public static void addScore(int addition) {
 		score += addition;
 		traceScore(addition);
@@ -199,6 +215,9 @@ public class GameLoop implements Runnable{
 			float time = System.currentTimeMillis();
 			update(gameStage.getPlayer());
 			updateAnimation(gameStage.getPlayer());
+			for (Enemy e: gameStage.getEnemies()) {
+				updateEnemyAnimation(e);
+			}
 			time = System.currentTimeMillis() - time;
 			if (time < interval) {
 				try {

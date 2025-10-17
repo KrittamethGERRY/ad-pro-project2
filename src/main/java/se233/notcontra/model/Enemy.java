@@ -2,17 +2,12 @@ package se233.notcontra.model;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SpriteAnimation;
 import se233.notcontra.model.Boss.WallBoss;
-import se233.notcontra.model.Enums.BulletOwner;
-import se233.notcontra.model.Enums.EnemyType;
-import se233.notcontra.model.Enums.ShootingDirection;
+import se233.notcontra.model.Enums.*;
 import se233.notcontra.view.GameStages.GameStage;
 
 public class Enemy extends Pane {
@@ -23,8 +18,9 @@ public class Enemy extends Pane {
     private EnemyType  type;
     private int shootTimer = 75;
     private SpriteAnimation sprite;
+    private EnemyState enemyState;
 
-    public Enemy(int xPos, int yPos, int speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
+    public Enemy(int xPos, int yPos, double speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
     	setTranslateX(xPos);
     	setTranslateY(yPos);
     	Image image = new Image(Launcher.class.getResourceAsStream(imgName));
@@ -47,10 +43,8 @@ public class Enemy extends Pane {
 
         if (type == EnemyType.FLYING) {
             flyTowardsPlayer(player);
+            setState(EnemyState.ATTACKING);
 
-            if (checkCollisionWithPlayer(player)) {
-                handleFlyingAttack(player);
-            }
         } else if (type == EnemyType.WALL_SHOOTER) {
             Bullet bullet = shootAtPlayer(player);
             if (bullet != null) {
@@ -59,6 +53,7 @@ public class Enemy extends Pane {
                     gameStage.getChildren().add(bullet);
                 });
             }
+            setState(EnemyState.ATTACKING);
         }
     }
 
@@ -87,7 +82,7 @@ public class Enemy extends Pane {
         // Normalize and move
         direction = direction.normalize();
 
-        double speed = 3.0; // tweak this for faster/slower movement
+        speed = 3.0; // tweak this for faster/slower movement
 
         // Apply movement in that direction
         double moveX = direction.x * speed;
@@ -98,21 +93,7 @@ public class Enemy extends Pane {
         setTranslateY(getTranslateY() + moveY);
     }
 
-    public boolean checkCollisionWithPlayer(Player player) {
-        double playerX = player.getXPosition();
-        double playerY = player.getYPosition();
-        double playerW = Player.width;
-        double playerH = Player.height;
 
-        return xPos < playerX + playerW &&
-        		xPos + width > playerX &&
-        		yPos < playerY + playerH &&
-        		yPos + height > playerY;
-    }
-
-    private void handleFlyingAttack(Player player) {
-
-    }
 
     public Bullet shootAtPlayer(Player player) {
 
@@ -193,6 +174,7 @@ public class Enemy extends Pane {
     		case WALL: GameLoop.addScore(1000);  break;
     		}
     		kill();
+            setState(EnemyState.DEAD);
     	}
     }
 
@@ -202,6 +184,9 @@ public class Enemy extends Pane {
     public double getH() { return height; }
     public boolean isAlive() { return alive; }
     public void kill() { alive = false; }
+    public EnemyState  getState() { return enemyState;}
+    public void setState(EnemyState enemyState) { this.enemyState = enemyState;}
     public EnemyType getType() { return type; }
+    public SpriteAnimation getSprite() { return sprite; }
 
 }
