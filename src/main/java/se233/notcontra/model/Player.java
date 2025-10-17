@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
+import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SpriteAnimation;
 import se233.notcontra.model.Boss.Boss;
@@ -105,7 +106,7 @@ public class Player extends Pane {
 		double offset = (Player.width - 80) / 2.0; 
 		this.sprite.setTranslateX(offset);
 		this.sprite.setTranslateY(offset);
-		this.hitBox.setFill(Color.BLUE);
+		this.hitBox.setFill(null);
 		this.getChildren().addAll(sprite, hitBox);
 		this.setWidth(width);
 		this.setHeight(height);
@@ -372,21 +373,24 @@ public class Player extends Pane {
 		}
 	}
 	
-	public void isCollided(Boss boss) {
-		int bossX = boss.getXPos();
-		int bossY = boss.getYPos();
+	public void isCollided(GameStage gameStage) {
+		int bossX = gameStage.getBoss().getXPos();
+		int bossY = gameStage.getBoss().getYPos();
 		
 		boolean xAxisCollision = this.xPosition + this.width >= bossX;
 		boolean yAxisCollision = this.yPosition + this.height >= bossY;
 		
 		if (xAxisCollision && yAxisCollision && isTankBuster && respawnTimer <= 0) {
 			die();
-			for (Enemy enemy: boss.getWeakPoints()) {
+			Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX, 300, 128, 128);
+			DrawingLoop.effects.add(explosion);
+			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
+			for (Enemy enemy: GameLoop.enemies) {
 				enemy.takeDamage(1000);
 			}
 			return;
 		} else if (xAxisCollision) {
-			this.xPosition = boss.getXPos() - width;
+			this.xPosition = bossX - width;
 		}
 		//////////////////// 			PLAYER DIES WHEN CHARGING TO THE BOSS WITH TANK BUSTER AND THE BOSS TAKE DAMAGE
 

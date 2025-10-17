@@ -18,7 +18,7 @@ import javafx.geometry.Bounds;
 import se233.notcontra.model.*;
 
 public class DrawingLoop implements Runnable {	
-	private List<Effect> effects = new ArrayList<>();
+	public static List<Effect> effects = new ArrayList<>();
 	private GameStage gameStage;
 	private int frameRate;
 	private float interval;
@@ -36,7 +36,7 @@ public class DrawingLoop implements Runnable {
 		player.checkStageBoundaryCollision();
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
-		player.isCollided(gameStage.getBoss());
+		player.isCollided(gameStage);
 
 	}
 
@@ -61,7 +61,7 @@ public class DrawingLoop implements Runnable {
 				if (gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
 					// Add effect after the bullet hit the enemies
-					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bullet.getXPosition() - 16, bullet.getYPosition() - 16);
+					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bullet.getXPosition() - 16, bullet.getYPosition() - 16, 64, 64);
 					effects.add(explosion);
 					javafx.application.Platform.runLater(() -> {
 						gameStage.getChildren().add(explosion);

@@ -9,18 +9,18 @@ public class Effect extends Pane {
     private int currentFrame = 0;
     private int totalFrames;
 
-    public Effect(Image spriteSheet, int count, int columns, int rows, double x, double y) {
+    public Effect(Image spriteSheet, int count, int columns, int rows, double x, double y, int displayWidth, int displayHeight) {
         this.totalFrames = count;
 
         int width = (int) spriteSheet.getWidth() / columns;
         int height = (int) spriteSheet.getHeight() / rows;
 
-        this.sprite = new SpriteAnimation(spriteSheet, count, columns, rows, 0, 0, 32, 32);
+        this.sprite = new SpriteAnimation(spriteSheet, count, columns, rows, 0, 0, width, height);
 
         setTranslateX(x);
         setTranslateY(y);
-        sprite.setFitWidth(64);
-        sprite.setFitHeight(64);
+        sprite.setFitWidth(displayWidth);
+        sprite.setFitHeight(displayHeight);
         getChildren().add(this.sprite);
     }
 
