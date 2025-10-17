@@ -280,4 +280,13 @@ public class PlayerTest  {
 		assertTrue(isProningField.getBoolean(player), "isProning should be true.");
 	}
 	
+	@Test
+	public void playerIs_atHighestJump_thenStartFalling() throws IllegalArgumentException, IllegalAccessException {
+		isJumpingField.setBoolean(player, true);
+		yVelocityField.setInt(player, -1);
+		player.checkHighestJump();
+		assertTrue(isFallingField.getBoolean(player), "Player should start falling.");
+		assertFalse(isJumpingField.getBoolean(player), "Player should not continue jumping.");
+		assertEquals(0, yVelocityField.getDouble(player), "yVelocity should be 0.");
+	}
 }
