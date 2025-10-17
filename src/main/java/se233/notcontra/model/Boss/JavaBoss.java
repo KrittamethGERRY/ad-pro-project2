@@ -33,6 +33,10 @@ public class JavaBoss extends Boss{
 
     private void spawnEnemy() {
 
+        if (enemyTimer > 0) {
+            enemyTimer--;
+            return;
+        }
         int aliveCount = 0;
         for (Enemy enemy : GameLoop.enemies) {
             if (enemy.isAlive() && enemy.getType() == EnemyType.FLYING) {
@@ -41,17 +45,17 @@ public class JavaBoss extends Boss{
         }
 
         if (aliveCount < maxEnemies) {
+            int spawnX = -100;
+            int spawnY = +200;
 
-            int spawnX = this.getXPos() - 200;
-            int spawnY = this.getYPos() + 30;
-
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 5, 5, 1, "assets/Enemy/FlyingEnemy.png", 500, EnemyType.FLYING);
-
+            // Create wall shooter (stands still and shoots)
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 5, 5, 1,"assets/Enemy/enemy_wall_shooter.png", 1, EnemyType.FLYING);
+            // NOTE: Get children's global position do not touch!!!!
+            //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
-                getChildren().add(enemy);
+                this.getChildren().add(enemy);
             });
-            System.out.println("Enemy spawned at: " + spawnX + ", " + spawnY);
             enemyTimer = 500;
         }
     }

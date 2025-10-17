@@ -63,20 +63,39 @@ public class Enemy extends Pane {
     }
 
     private void flyTowardsPlayer(Player player) {
-        double enemyCenterX = xPos + width / 2;
-        double enemyCenterY = yPos + height / 2;
-        double playerCenterX = player.getXPosition() + Player.width / 2;
-        double playerCenterY = player.getYPosition() + Player.height / 2;
+        double worldX = getTranslateX();
+        double worldY = getTranslateY();
 
-        double deltaX = playerCenterX - enemyCenterX;
-        double deltaY = playerCenterY - enemyCenterY;
-
-        double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-        if (distance > 5) {
-            xPos += (deltaX / distance) * speed;
-            yPos += (deltaY / distance) * speed;
+        // Account for parent offsets
+        if (getParent() != null && getParent().getParent() != null) {
+            worldX += getParent().getTranslateX();
+            worldY += getParent().getTranslateY();
         }
+
+        // Calculate centers
+        Vector2D enemyCenter = new Vector2D(worldX + width / 2.0, worldY + height / 2.0);
+        Vector2D playerCenter = new Vector2D(player.getXPosition() + Player.width / 2.0,
+                player.getYPosition() + Player.height / 2.0);
+
+        // Direction vector from enemy to player
+        Vector2D direction = playerCenter.subtract(enemyCenter);
+        double distance = direction.getLength();
+
+        // Ignore invalid distances
+        if (distance < 1 || distance > 1000) return;
+
+        // Normalize and move
+        direction = direction.normalize();
+
+        double speed = 3.0; // tweak this for faster/slower movement
+
+        // Apply movement in that direction
+        double moveX = direction.x * speed;
+        double moveY = direction.y * speed;
+
+        // Update enemy position
+        setTranslateX(getTranslateX() + moveX);
+        setTranslateY(getTranslateY() + moveY);
     }
 
     public boolean checkCollisionWithPlayer(Player player) {
@@ -106,58 +125,58 @@ public class Enemy extends Pane {
             return null;
         }
 
-        Vector2D enemyCenter =  new Vector2D((double) (xPos + width / 2), (double) (yPos + height / 2));
+        double worldX = getTranslateX();
+        double worldY = getTranslateY();
 
+        if (getParent() != null && getParent().getParent() != null) {
+            worldX += getParent().getTranslateX();
+            worldY += getParent().getTranslateY();
+        }
+
+        Vector2D enemyCenter = new Vector2D(worldX + width / 2.0, worldY + height / 2.0);
         Vector2D playerCenter = new Vector2D((double) (player.getXPosition() + Player.width / 2.0), (double) (player.getYPosition() + Player.height / 2.0));
-
         Vector2D directionToPlayer = playerCenter.subtract(enemyCenter);
+
+        if (directionToPlayer.getLength() < 1 || directionToPlayer.getLength() > 1000) {
+            System.out.println("Enemy too far from player or same position. Distance: " + directionToPlayer);
+            return null;
+        }
 
         if (directionToPlayer.getLength() == 0) {
             return null;
         }
 
-        double bulletSpeed = 0.007525;
-        ShootingDirection direction = determineDirection(directionToPlayer);
+        double bulletSpeed = 0.007;
 
         shootTimer = 75;
-        return new Bullet(enemyCenter,
+
+        return new Bullet(
+                enemyCenter,
                 directionToPlayer,
                 (double) bulletSpeed,
                 BulletOwner.ENEMY
         );
     }
 
+
     private ShootingDirection determineDirection(Vector2D direction) {
         // Calculate angle in degrees
-        double angle = Math.atan2(direction.y, direction.x);
+        double angle = Math.toDegrees(Math.atan2(direction.y, direction.x));
         double degrees = Math.toDegrees(angle);
-
-        // Normalize to 0-360 range
         if (degrees < 0) degrees += 360;
 
-
+        // Map to 8 directions
         if (degrees >= 337.5 || degrees < 22.5) {
             return ShootingDirection.RIGHT;
-        }
-        else if (degrees >= 22.5 && degrees < 67.5) {
+        } else if (degrees >= 22.5 && degrees < 67.5) {
             return ShootingDirection.DOWN_RIGHT;
-        }
-        else if (degrees >= 67.5 && degrees < 112.5) {
+        } else if (degrees >= 67.5 && degrees < 112.5) {
             return ShootingDirection.DOWN_LEFT;
-        }
-        else if (degrees >= 112.5 && degrees < 157.5) {
+        } else if (degrees >= 112.5 && degrees < 202.5) {
             return ShootingDirection.LEFT;
-        }
-        else if (degrees >= 157.5 && degrees < 202.5) {
-            return ShootingDirection.LEFT;
-        }
-        else if (degrees >= 202.5 && degrees < 247.5) {
+        } else if (degrees >= 202.5 && degrees < 292.5) {
             return ShootingDirection.UP_LEFT;
-        }
-        else if (degrees >= 247.5 && degrees < 292.5) {
-            return ShootingDirection.UP_LEFT;
-        }
-        else {
+        } else {
             return ShootingDirection.UP_RIGHT;
         }
     }
