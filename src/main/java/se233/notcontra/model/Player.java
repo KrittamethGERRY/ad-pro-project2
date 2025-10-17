@@ -106,7 +106,7 @@ public class Player extends Pane {
 		double offset = (Player.width - 80) / 2.0; 
 		this.sprite.setTranslateX(offset);
 		this.sprite.setTranslateY(offset);
-		this.hitBox.setFill(null);
+		this.hitBox.setFill(Color.TRANSPARENT);
 		this.getChildren().addAll(sprite, hitBox);
 		this.setWidth(width);
 		this.setHeight(height);
@@ -168,7 +168,16 @@ public class Player extends Pane {
 
 	public void prone() {
 		isProning = true;
+		hitBox.setHeight(height/2);
+		hitBox.setY(height/2);
 		stop();
+	}
+	
+	public void resetHitBoxHeight() {
+		if (isProning == false) {
+			hitBox.setHeight(height);
+			hitBox.setY(0);
+		}
 	}
 	
 	public void dropDown() {
@@ -181,13 +190,11 @@ public class Player extends Pane {
 			isFalling = true;
 			isJumping = false;
 			canDropDown = false;
-			System.out.println("Drop down platform");
 		}
 	}
 	
 	public void shoot(GameStage gameStage, ShootingDirection direction) {
 		if (reloadTimer > 0) {
-			reloadTimer--;
 			return;
 		}
 
@@ -210,7 +217,7 @@ public class Player extends Pane {
     			reloadTimer = 0;
     			bulletPerClip--;
     		} else {
-    			reloadTimer = 2;
+    			reloadTimer = 30;
     			bulletPerClip = 3;
     		}
 
@@ -225,6 +232,12 @@ public class Player extends Pane {
                 gameStage.getChildren().add(bullet);
             });
     	}
+	}
+	
+	public void updateReloadTimer() {
+		if (reloadTimer > 0) {
+			reloadTimer--;
+		}
 	}
 	
 	public void stop() {
@@ -313,6 +326,7 @@ public class Player extends Pane {
 					this.isSpecialMag = true;
 					this.isTankBuster = false;
 					buffTimer = 200;
+					fireDelay = 0;
 					bulletPerClip = Integer.MAX_VALUE;
 				} else {
 					this.isTankBuster = true;

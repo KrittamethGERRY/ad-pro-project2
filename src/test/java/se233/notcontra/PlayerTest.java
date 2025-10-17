@@ -2,20 +2,28 @@ package se233.notcontra;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import se233.notcontra.controller.DrawingLoop;
+import se233.notcontra.controller.GameLoop;
+import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.model.Items.Item;
@@ -30,9 +38,10 @@ public class PlayerTest  {
     Field xVelocityField, yVelocityField, yAccelerationField, xPositionField
     , yPositionField, isFallingField, canJumpField, isJumpingField
     , isMoveRightField, isMoveLeftField, livesField, isBuffedField
-    , isSpecialMagField, isTankBusterField;
+    , isSpecialMagField, isTankBusterField, bulletPerClipField, reloadTimerField
+    , lastShotTimeField, widthField, heightField, isProningField
+    , canDropDownField, isOnPlatformField, dropDownTimerField;
 	
-
 	@BeforeAll
 	public static void initJfxRuntime() {
 	    javafx.application.Platform.startup(() -> {});
@@ -55,6 +64,15 @@ public class PlayerTest  {
         isBuffedField = player.getClass().getDeclaredField("isBuffed");
         isSpecialMagField = player.getClass().getDeclaredField("isSpecialMag");
         isTankBusterField = player.getClass().getDeclaredField("isTankBuster");
+        bulletPerClipField = player.getClass().getDeclaredField("bulletPerClip");
+        reloadTimerField = player.getClass().getDeclaredField("reloadTimer");
+        lastShotTimeField = player.getClass().getDeclaredField("lastShotTime");
+        widthField = player.getClass().getDeclaredField("width");
+        heightField = player.getClass().getDeclaredField("height");
+        isProningField = player.getClass().getDeclaredField("isProning");
+        canDropDownField = player.getClass().getDeclaredField("canDropDown");
+        isOnPlatformField = player.getClass().getDeclaredField("isOnPlatform");
+        dropDownTimerField = player.getClass().getDeclaredField("dropDownTimer");
         
         xVelocityField.setAccessible(true);
         yVelocityField.setAccessible(true);
@@ -70,6 +88,15 @@ public class PlayerTest  {
         isBuffedField.setAccessible(true);
         isSpecialMagField.setAccessible(true);
         isTankBusterField.setAccessible(true);
+        bulletPerClipField.setAccessible(true);
+        reloadTimerField.setAccessible(true);
+        lastShotTimeField.setAccessible(true);
+        heightField.setAccessible(true);
+        widthField.setAccessible(true);
+        isProningField.setAccessible(true);
+        canDropDownField.setAccessible(true);
+        isOnPlatformField.setAccessible(true);
+        dropDownTimerField.setAccessible(true);
 
 	}
 	
@@ -213,11 +240,44 @@ public class PlayerTest  {
 		assertFalse(isMoveLeftField.getBoolean(player), "Player always move right when picked up the tankbuster");
 	}
 	
-//	@Test
-//	public void respawn_player_thenShoot1Bullet_theShootTimer() {
-//		GameStage mockGameStage = Mockito.mock(FirstStage.class);
-//		ShootingDirection mockShootingDirection = Mockito.mock(ShootingDirection.class);
-//		
-//		player.shoot(mockGameStage, mockShootingDirection);
-//	}
+	@Test
+	public void player_onPlatform_startDropdown_thenDropDownTimer_shouldBeSet() throws IllegalArgumentException, IllegalAccessException {
+		canDropDownField.setBoolean(player, true);
+		dropDownTimerField.setInt(player, 0);
+		isOnPlatformField.setBoolean(player, true);
+		player.dropDown();
+		assertEquals(12, dropDownTimerField.getInt(player), "Dropdown Timer should be set to 12");
+	}
+	
+	@Test
+	public void playerWith1Bullet_shoots2Times_thenReloadTimerIsSet() throws IllegalArgumentException, IllegalAccessException {
+	    player.respawn();
+	    GameLoop.bullets = new ArrayList<>(); 
+	    GameStage mockGameStage = Mockito.mock(FirstStage.class);
+	    ObservableList<Node> nodeList = FXCollections.observableArrayList();
+	    when(mockGameStage.getChildren()).thenReturn(nodeList);
+
+	    bulletPerClipField.setInt(player, 1); 
+	    lastShotTimeField.setLong(player, 0); 
+
+	    player.shoot(mockGameStage, ShootingDirection.RIGHT);
+
+	    assertEquals(0, bulletPerClipField.getInt(player), "Clip should be empty");
+
+	    // Bypass the fireDelay of each bullet
+	    lastShotTimeField.setLong(player, 0L);
+
+	    player.shoot(mockGameStage, ShootingDirection.RIGHT);
+
+	    assertEquals(30, reloadTimerField.getInt(player), "The reload timer should start at 30");
+	    assertEquals(3, bulletPerClipField.getInt(player), "The clip should be refilled to 3");
+	}
+	
+	@Test
+	public void playerProne_isProningShouldBe_true() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException {
+		isProningField.setBoolean(player, false);
+		player.prone();
+		assertTrue(isProningField.getBoolean(player), "isProning should be true.");
+	}
+	
 }

@@ -37,7 +37,8 @@ public class DrawingLoop implements Runnable {
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
 		player.isCollided(gameStage);
-
+		player.updateReloadTimer();
+		player.resetHitBoxHeight();
 	}
 
 	public void paint(Player player) {
