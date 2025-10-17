@@ -2,8 +2,10 @@ package se233.notcontra.model;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -15,11 +17,12 @@ import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.PlayerState;
 import se233.notcontra.model.Enums.ShootingDirection;
-import se233.notcontra.model.Items.HellfireMagazine;
+import se233.notcontra.model.Items.SpecialMagazine;
 import se233.notcontra.view.Platform;
 import se233.notcontra.view.GameStages.GameStage;
 
 public class Player extends Pane {
+	private static final Logger logger = LogManager.getLogger(Player.class);
 	
 	private KeyCode leftKey;
 	private KeyCode rightKey;
@@ -54,7 +57,7 @@ public class Player extends Pane {
 	private boolean isDropping = false;
 	private boolean canDropDown = false;
 	private boolean isBuffed = false;
-	private boolean isHellfireMag = false;
+	private boolean isSpecialMag = false;
 	private boolean isTankBuster = false;
 	private boolean isDying = false;
 	
@@ -94,16 +97,19 @@ public class Player extends Pane {
 		this.hitBox = new Rectangle(width, height);
 		this.setTranslateX(xPosition);
 		this.setTranslateY(yPosition);
-		Image image = new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk.png"));
+		Image image = new Image(Launcher.class.getResourceAsStream("assets/Player/player_idle.png"));
 		this.sprite = new SpriteAnimation(image, 2, 2, 1, 0, 0, 64, 64);
 		this.sprite.setFitWidth(80);
 		this.sprite.setFitHeight(80);
 		this.sprite.setTranslateY(-16);
-		this.hitBox.setFill(null);
+		double offset = (Player.width - 80) / 2.0; 
+		this.sprite.setTranslateX(offset);
+		this.sprite.setTranslateY(offset);
+		this.hitBox.setFill(Color.BLUE);
 		this.getChildren().addAll(sprite, hitBox);
 		this.setWidth(width);
 		this.setHeight(height);
-		
+		System.out.println(getHitBox().getBoundsInParent());
 	}
 	
 	//					Starting of Movement Behaviors
@@ -210,8 +216,8 @@ public class Player extends Pane {
 
             Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction , BulletOwner.PLAYER)
             		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction , BulletOwner.PLAYER);
-            if (isBuffed && isHellfireMag) {
-            	bullet.setBulletSprite(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/bullet.png")));
+            if (isBuffed && isSpecialMag) {
+            	bullet.setBulletSprite(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/Bullet_Sp.png")));
             }
             GameLoop.bullets.add(bullet);
 
@@ -290,9 +296,9 @@ public class Player extends Pane {
 		if (buffTimer > 0) {
 			buffTimer--;
 			return;
-		} else if (isBuffed && this.isHellfireMag) {
+		} else if (isBuffed && this.isSpecialMag) {
 			isBuffed = false;
-			isHellfireMag = false;
+			isSpecialMag = false;
 			fireDelay = 30;
 			bulletPerClip = 3;
 		} else if (isBuffed && this.isTankBuster) {
@@ -301,16 +307,16 @@ public class Player extends Pane {
 		}
 		if (gameStage.getItem() != null) {
 			if (gameStage.getItem().getBoundsInParent().intersects(this.getBoundsInParent())) {
-				boolean isHellfireMag = gameStage.getItem() instanceof HellfireMagazine;
+				boolean isSpecialMag = gameStage.getItem() instanceof SpecialMagazine;
 				isBuffed = true;
-				if (isHellfireMag) {
-					this.isHellfireMag = true;
+				if (isSpecialMag) {
+					this.isSpecialMag = true;
 					this.isTankBuster = false;
 					buffTimer = 200;
 					bulletPerClip = Integer.MAX_VALUE;
 				} else {
 					this.isTankBuster = true;
-					this.isHellfireMag = false;
+					this.isSpecialMag = false;
 					bulletPerClip = 3;
 					buffTimer = 100;
 					xMaxVelocity = 13;
@@ -375,6 +381,9 @@ public class Player extends Pane {
 		
 		if (xAxisCollision && yAxisCollision && isTankBuster && respawnTimer <= 0) {
 			die();
+			for (Enemy enemy: boss.getWeakPoints()) {
+				enemy.takeDamage(1000);
+			}
 			return;
 		} else if (xAxisCollision) {
 			this.xPosition = boss.getXPos() - width;
@@ -458,5 +467,9 @@ public class Player extends Pane {
 	}
 
 	public boolean isJumping() { return this.isJumping; }
+	
+	public void logPos() {
+		logger.info("Player - X: {}, Y: {}", xPosition, yPosition);
+	}
 	
 }

@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.model.Items.HellfireMagazine;
+import se233.notcontra.model.Items.SpecialMagazine;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.view.Platform;
@@ -72,7 +72,7 @@ public class FirstStage extends GameStage {
 	@Override
 	public void spawnItem() {
 		boolean itemType = new Random().nextBoolean();
-		item = itemType ? new HellfireMagazine(64,64,150,280) : new TankBuster(64,64,150,280);
+		item = itemType ? new SpecialMagazine(64,64,150,280) : new TankBuster(64,64,150,280);
 	}
 	
 	@Override

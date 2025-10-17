@@ -36,6 +36,7 @@ public class SpriteAnimation extends ImageView {
         this.width = (int) image.getWidth() / columns;
         this.height = (int) image.getHeight() / rows;
 
+        interpolate();
     }
     
     protected void interpolate() {

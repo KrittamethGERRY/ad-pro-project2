@@ -10,12 +10,15 @@ import se233.notcontra.view.GameStages.FirstStage;
 import se233.notcontra.view.GameStages.GameStage;
 import se233.notcontra.view.GameStages.SecondStage;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javafx.application.Platform;
+import javafx.geometry.Bounds;
 import se233.notcontra.model.*;
 
 public class DrawingLoop implements Runnable {	
+	private List<Effect> effects = new ArrayList<>();
 	private GameStage gameStage;
 	private int frameRate;
 	private float interval;
@@ -57,6 +60,12 @@ public class DrawingLoop implements Runnable {
 			for (Enemy enemy : gameStage.getEnemies()) {
 				if (gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
+					// Add effect after the bullet hit the enemies
+					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bullet.getXPosition() - 16, bullet.getYPosition() - 16);
+					effects.add(explosion);
+					javafx.application.Platform.runLater(() -> {
+						gameStage.getChildren().add(explosion);
+					});
 					enemy.takeDamage(500);
 					
 					Platform.runLater(this::updateScore);
@@ -78,15 +87,17 @@ public class DrawingLoop implements Runnable {
 			}
 			
 			// Player collisions with bullet
-			if (gameStage.getPlayer().getHitBox().getBoundsInParent().intersects(bullet.getBoundsInParent())
+			
+			Bounds playerBounds = gameStage.getPlayer().localToParent(gameStage.getPlayer().getHitBox().getBoundsInParent());
+			if (playerBounds.intersects(bullet.getBoundsInParent())
 					&& bullet.getOwner() != BulletOwner.PLAYER
 					&& !gameStage.getPlayer().getTankBuster()
 					&& !gameStage.getPlayer().isDying()) {
 				gameStage.getPlayer().die();
-				Platform.runLater(this::updateLives);
 
 				shouldRemove = true;
 			}
+			Platform.runLater(this::updateLives);
 			
 			// Remove bullet
 			if (shouldRemove) {
@@ -95,6 +106,18 @@ public class DrawingLoop implements Runnable {
 			}
 		}
 	}
+	
+	private void paintEffects(List<Effect> effects) {
+        Iterator<Effect> iterator = effects.iterator();
+        while (iterator.hasNext()) {
+            Effect effect = iterator.next();
+            effect.tick();
+            if (effect.isFinished()) {
+                iterator.remove();
+                Platform.runLater(() -> gameStage.getChildren().remove(effect));
+            }
+        }
+    }
 
 	private void updateScore() {
 		gameStage.getScoreLabel().setText("Score: " + String.format("%06d", GameLoop.getScore()));
@@ -106,7 +129,9 @@ public class DrawingLoop implements Runnable {
 
 	private void updateBoss() {
 		if (gameStage instanceof FirstStage) {
-			
+			if (gameStage.getBoss().getChildren().isEmpty()) {
+
+			}
 		} else if (gameStage instanceof SecondStage) {
 			
 		}
@@ -140,9 +165,10 @@ public class DrawingLoop implements Runnable {
 				float time = System.currentTimeMillis();
 				checkAllCollisions(gameStage.getPlayer());
 				paint(gameStage.getPlayer());
+				paintEffects(effects);
 				paintBullet(GameLoop.bullets, GameLoop.shootingDir);
 				updateEnemies();
-
+				updateBoss();
 				if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
 					gameStage.getBoss().update();
 				}

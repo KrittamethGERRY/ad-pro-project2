@@ -3,6 +3,7 @@ package se233.notcontra.model;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.ShootingDirection;
@@ -37,11 +38,14 @@ public class Bullet extends Pane {
 		setTranslateX((int)position.x);
 		setTranslateY((int)position.y);
 		sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/bullet.png")));
-		sprite.setFitHeight(64);
-		sprite.setFitWidth(64);
+		if (this.owner != BulletOwner.PLAYER) {
+			sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/Cannonball.png")));
+		}
+		sprite.setFitHeight(32);
+		sprite.setFitWidth(32);
 		this.getChildren().add(sprite);
-		this.setWidth(16);
-		this.setHeight(8);
+		this.setWidth(32);
+		this.setHeight(32);
 	}
 
 	private Vector2D calculateVelocity(int speedX, int speedY, ShootingDirection direction) {
@@ -112,8 +116,8 @@ public class Bullet extends Pane {
 	
 	public void setBulletSprite(Image image) {
 		sprite.setImage(image);
-		sprite.setFitHeight(8);
-		sprite.setFitWidth(16);
+		sprite.setFitHeight(64);
+		sprite.setFitWidth(64);
 	}
 }
 

@@ -28,16 +28,16 @@ public class WallBoss extends Boss {
     private final int maxEnemies = 1;
 
     public WallBoss(int xPos, int yPos, int width, int height, GameStage gameStage) {
-        super(xPos, yPos, width, height, 5000);
+        super(xPos, yPos, width, height, 10000);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
         this.phaseChangeHealth = this.getMaxHealth() / 2;
-        this.core = new Enemy(0, 80, 0, 128, 128, "assets/Boss/Boss1/Core.png", this.getMaxHealth()/2, EnemyType.WALL);
-        turretLeft = new Enemy(0, 0, 0, 32, 32, "assets/Boss/Boss1/Turret.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
-        turretRight = new Enemy(100, 0, 0, 32, 32, "assets/Boss/Boss1/Turret.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        this.core = new Enemy(0, 0, 0, 128, 128, 2, 2, 1, "assets/Boss/Boss1/Core.png", this.getMaxHealth()/2, EnemyType.WALL);
+        turretLeft = new Enemy(0, 0, 0, 32, 32, 2, 2, 1,"assets/Boss/Boss1/Turret.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        turretRight = new Enemy(100, 0, 0, 32, 32, 2, 2, 1,"assets/Boss/Boss1/Turret.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         GameLoop.enemies.addAll(List.of(turretLeft, turretRight));
-        //System.out.println(this.localToParent(turretLeft.getBoundsInParent()));
+        System.out.println(this.localToParent(core.getBoundsInParent()));
         getWeakPoints().add(core);
         javafx.application.Platform.runLater(() -> {
             this.getChildren().addAll(turretLeft, turretRight);        	
@@ -71,12 +71,7 @@ public class WallBoss extends Boss {
         }
 
         spawnEnemy();
-        // Check if health has dropped below the threshold to trigger Phase 2
-        if (getHealth() <= this.phaseChangeHealth) {
-            System.out.println("Turrets destroyed! Core is exposed!");
-            
-            setState(BossState.VULNERABLE);
-        }
+
     }
 
     private void shootFromTurret(Enemy turret) {
@@ -120,7 +115,7 @@ public class WallBoss extends Boss {
             int spawnY = -200;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, "assets/Enemy/enemy_wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 5, 5, 1,"assets/Enemy/enemy_wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
             // NOTE: Get children's global position do not touch!!!!
             //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);

@@ -24,11 +24,11 @@ public class Enemy extends Pane {
     private int shootTimer = 75;
     private SpriteAnimation sprite;
 
-    public Enemy(int xPos, int yPos, int speed, int width, int height, String imgName, int health, EnemyType type) {
+    public Enemy(int xPos, int yPos, int speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
     	setTranslateX(xPos);
     	setTranslateY(yPos);
     	Image image = new Image(Launcher.class.getResourceAsStream(imgName));
-    	sprite = new SpriteAnimation(image, 5, 5, 1, 0, 0, 32, 32);
+    	sprite = new SpriteAnimation(image, count, column, row, 0, 0, width, height);
     	this.getChildren().add(sprite);
     	this.setWidth(width);
     	this.setHeight(height);
@@ -165,6 +165,7 @@ public class Enemy extends Pane {
     // Reduce Enemy HP, and Add Game score
     public void takeDamage(int damage) {
     	health -= damage;
+    	System.out.println("Health: " + this.health);
     	if (health <= 0) {
     		switch (type) {
     		case WALL_SHOOTER: GameLoop.addScore(100); break;

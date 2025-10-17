@@ -40,26 +40,30 @@ public abstract class GameStage extends Pane {
 	
 	public ImageView drawScore() {
 		scoreLabel = new Label("Score: 000000");
+		scoreLabel.setStyle("-fx-font-weight: bold;"
+				+ "-fx-font-size: 2em;");
 		ImageView scoreBackground = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Paper.png")));
-		scoreBackground.setFitWidth(150);
+		scoreBackground.setFitWidth(300);
 		scoreBackground.setFitHeight(60);
-		scoreBackground.setLayoutX(GameStage.WIDTH - 175);
+		scoreBackground.setLayoutX(25 + 300);
 		scoreBackground.setLayoutY(25);
-		scoreLabel.setLayoutX(GameStage.WIDTH - 135);
-		scoreLabel.setLayoutY(50);
+		scoreLabel.setLayoutX(385);
+		scoreLabel.setLayoutY(40);
 		
 		return scoreBackground;
 	}
 	
 	public ImageView drawLives() {
 		livesLabel = new Label("Lives: 3");
+		livesLabel.setStyle("-fx-font-weight: bold;"
+				+ "-fx-font-size: 2em;");
 		ImageView livesBackground = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Paper.png")));
 		livesBackground.setFitWidth(150);
 		livesBackground.setFitHeight(60);
 		livesBackground.setLayoutX(25);
 		livesBackground.setLayoutY(25);
-		livesLabel.setLayoutX(65);
-		livesLabel.setLayoutY(50);
+		livesLabel.setLayoutX(livesBackground.getFitWidth() - 95);
+		livesLabel.setLayoutY(livesBackground.getFitHeight()  - 20);
 		
 		return livesBackground;
 	}
