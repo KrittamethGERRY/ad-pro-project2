@@ -28,8 +28,6 @@ public class JavaBoss extends Boss{
         });
     }
 
-
-
     @Override
     protected void handleAttackingState() {
         if (Head.isAlive()) {

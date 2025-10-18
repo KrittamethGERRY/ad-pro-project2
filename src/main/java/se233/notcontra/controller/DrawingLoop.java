@@ -6,6 +6,7 @@ import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
+import se233.notcontra.view.CheatManager;
 import se233.notcontra.view.GameStages.FirstStage;
 import se233.notcontra.view.GameStages.GameStage;
 import se233.notcontra.view.GameStages.SecondStage;
@@ -36,7 +37,6 @@ public class DrawingLoop implements Runnable {
 		player.checkStageBoundaryCollision();
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
-		player.isCollided(gameStage);
 		player.updateTimer();
 		player.resetHitBoxHeight();
 		checkPlayerEnemyCollision();
@@ -105,8 +105,10 @@ public class DrawingLoop implements Runnable {
 					&& bullet.getOwner() != BulletOwner.PLAYER
 					&& !gameStage.getPlayer().getTankBuster()
 					&& !gameStage.getPlayer().isDying()) {
-				if (Player.spawnProtectionTimer <= 0) {
+				if (!CheatManager.getInstance().areCheatsActive()) {
+					if (Player.spawnProtectionTimer <= 0) {
 						gameStage.getPlayer().die();
+					}
 				}
 				shouldRemove = true;
 			}
@@ -134,10 +136,10 @@ public class DrawingLoop implements Runnable {
 		for (Enemy enemy : enemiesCopy) {
 			if (enemy.isAlive() && enemy.getType() == EnemyType.FLYING) {
 				Bounds enemyBounds = gameStage.getBoss().localToParent(enemy.getBoundsInParent());
-
-				if (enemyBounds.intersects(playerBounds)) {
-					gameStage.getPlayer().die();
-
+					if (enemyBounds.intersects(playerBounds)) {
+						if (!CheatManager.getInstance().areCheatsActive()) {
+						gameStage.getPlayer().die();
+						}
 					clearAllEnemies();
 
 					Platform.runLater(this::updateLives);
@@ -199,9 +201,7 @@ public class DrawingLoop implements Runnable {
 
 	private void updateBoss() {
 		if (gameStage instanceof FirstStage) {
-			if (gameStage.getBoss().getChildren().isEmpty()) {
-
-			}
+				gameStage.getPlayer().isCollided(gameStage);
 		} else if (gameStage instanceof SecondStage) {
 			
 		}
@@ -243,7 +243,7 @@ public class DrawingLoop implements Runnable {
 					gameStage.getBoss().update();
 				}
 			}
-			
+
 			float time = System.currentTimeMillis();
 			time = System.currentTimeMillis() - time;
 			if (time < interval) {

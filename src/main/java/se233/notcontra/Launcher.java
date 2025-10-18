@@ -7,6 +7,7 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.view.CheatManager;
 import se233.notcontra.view.MainMenu;
 import se233.notcontra.view.GameStages.FirstStage;
 import se233.notcontra.view.GameStages.GameStage;
@@ -68,6 +69,9 @@ public class Launcher extends Application {
     					gameStage.getKeys().addPressed(e.getCode());
     				}
     			}
+				if (e.getCode() == gameStage.getPlayer().getCheatKey()) {
+					CheatManager.getInstance().toggleCheats();
+				}
     		});
     		currentScene.setOnKeyReleased(e -> {
     			gameStage.getKeys().remove(e.getCode());
