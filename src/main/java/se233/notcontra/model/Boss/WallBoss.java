@@ -3,7 +3,6 @@ package se233.notcontra.model.Boss;
 import java.util.List;
 
 import javafx.application.Platform;
-import javafx.scene.image.Image;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
@@ -33,7 +32,7 @@ public class WallBoss extends Boss {
         int coreX = (int) ((turretLeft.getXPos() + turretRight.getXPos()) / 2 + 16);
         core = new Enemy(coreX, 0, 100, 64, 64, 2, 1, 1, "assets/Boss/Boss1/core.png", this.getMaxHealth()/2, EnemyType.WALL);
         core.getSprite().setLayoutY(60);
-        core.getSprite().setLayoutX(-23);
+        core.getSprite().setLayoutX(-78);
         core.getSprite().setFitHeight(192);
         core.getSprite().setFitWidth(192);
 
@@ -125,7 +124,7 @@ public class WallBoss extends Boss {
             int spawnY = -200;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 2, 5, 1,"assets/Enemy/enemy_wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 2, 5, 1,"assets/Enemy/Wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);

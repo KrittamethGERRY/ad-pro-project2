@@ -10,6 +10,7 @@ import se233.notcontra.view.CheatManager;
 import se233.notcontra.view.GameStages.FirstStage;
 import se233.notcontra.view.GameStages.GameStage;
 import se233.notcontra.view.GameStages.SecondStage;
+import se233.notcontra.view.GameStages.ThirdStage;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,7 +38,6 @@ public class DrawingLoop implements Runnable {
 		player.checkStageBoundaryCollision();
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
-		player.isCollided(gameStage);
 		player.updateTimer();
 		player.resetHitBoxHeight();
 		checkPlayerEnemyCollision();
@@ -48,7 +48,6 @@ public class DrawingLoop implements Runnable {
 				((PatrolEnemy) enemy).checkReachHighest();
 				((PatrolEnemy) enemy).checkPlatformCollision(gameStage.getPlatforms());
 				((PatrolEnemy) enemy).checkReachGameWall();
-
 			}
 		}
 	}
@@ -216,6 +215,7 @@ public class DrawingLoop implements Runnable {
 		gameStage.getLivesLabel().setText("Lives: " + gameStage.getPlayer().getLives());
 	}
 
+	// Update boss in each stage
 	private void updateBoss() {
 		if (gameStage instanceof FirstStage) {
 			gameStage.getPlayer().isCollided(gameStage);
@@ -228,7 +228,13 @@ public class DrawingLoop implements Runnable {
                     gameStage.getBoss().update();
                 }
 			}
+			
+			if (gameStage.getBoss() != null) {
+				
+			}
 		} else if (gameStage instanceof SecondStage) {
+
+		} else if (gameStage instanceof ThirdStage) {
 			
 		}
 	}

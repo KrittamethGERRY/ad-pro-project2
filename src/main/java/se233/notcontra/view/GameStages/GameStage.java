@@ -31,6 +31,7 @@ public abstract class GameStage extends Pane {
 	public static int totalMinions;
 	public static boolean bossPhase = false;
 	
+	
 	protected Image backgroundIMG;
 	protected Player player;
 	protected Keys keys;

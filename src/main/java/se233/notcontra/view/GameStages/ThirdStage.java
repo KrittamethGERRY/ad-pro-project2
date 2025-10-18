@@ -30,11 +30,16 @@ public class ThirdStage extends GameStage {
 
 		player.respawn();
 
-		Platform groundPlatform = new Platform(1280, 0, 490, false);
-		platforms.addAll(List.of(groundPlatform));
+		Platform groundPlatform = new Platform(1280, 0, 665, true);
+		Platform platform1 = new Platform(200, 100, 550, false);
+		Platform platform2 = new Platform(250, 880, 550, false);
+		Platform platform3 = new Platform(350, 0, 370, false);
+		Platform platform4 = new Platform(435, GameStage.WIDTH - 435, 370, false);
+
+		platforms.addAll(List.of(groundPlatform, platform1, platform2, platform3, platform4));
 
 		boss = new RDBoss(1280/2, 100, 128, 128 , this);
-		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, player, boss);
+		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, platform1, platform2, platform3, platform4, player, boss);
 	}
 	
 	@Override

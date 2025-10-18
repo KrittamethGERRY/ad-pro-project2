@@ -103,7 +103,7 @@ public class Player extends Pane {
 		this.yPos = yPos;
 		Player.height = 64;
 		Player.width = 64;
-		this.hitBox = new Rectangle(width, height);
+		this.hitBox = new Rectangle(width - 25, height);
 		this.setTranslateX(xPos);
 		this.setTranslateY(yPos);
 		Image image = new Image(Launcher.class.getResourceAsStream("assets/Player/player_idle.png"));

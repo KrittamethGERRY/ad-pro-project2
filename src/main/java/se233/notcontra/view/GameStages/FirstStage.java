@@ -51,10 +51,10 @@ public class FirstStage extends GameStage {
 		// spawn minions before boss
 		bossPhase = false;
 		totalMinions = 4;
-		PatrolEnemy patrolEnemy1 = new PatrolEnemy(695, 175, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy2 = new PatrolEnemy(700, 200, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy3 = new PatrolEnemy(645, 215, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy4 = new PatrolEnemy(1000, 210, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy1 = new PatrolEnemy(695, 175, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy2 = new PatrolEnemy(700, 200, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy3 = new PatrolEnemy(645, 215, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy4 = new PatrolEnemy(1000, 210, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
 		
 		GameLoop.enemies.addAll(List.of(patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4));
 		getChildren().addAll(background, boss, scoreBackground, patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4, livesBackground
