@@ -8,8 +8,10 @@ import javafx.scene.image.ImageView;
 public class SpriteAnimation extends ImageView {
 
     int count, columns, rows, offsetX, offsetY, width, height, curIndex, curColumnIndex = 0, curRowIndex = 0;
+    Image currentImage;
     public SpriteAnimation(Image image, int count, int columns, int rows, int offsetX, int offsetY, int width, int height) {
         this.setImage(image);
+        this.currentImage = image;
         this.count = count;
         this.columns = columns;
         this.rows = rows;
@@ -28,15 +30,22 @@ public class SpriteAnimation extends ImageView {
     }
     
     public void changeSpriteSheet(Image image, int count, int columns, int rows) {
-    	this.setImage(image);
-    	this.count = count;
-    	this.columns = columns;
-    	this.rows = rows;
-    	
-        this.width = (int) image.getWidth() / columns;
-        this.height = (int) image.getHeight() / rows;
-
-        interpolate();
+        if (this.currentImage != image || this.count != count || this.columns != columns || this.rows != rows) {
+            this.setImage(image);
+            this.currentImage = image;
+            this.count = count;
+            this.columns = columns;
+            this.rows = rows;
+            
+            this.width = (int) image.getWidth() / columns;
+            this.height = (int) image.getHeight() / rows;
+            
+            this.curIndex = 0;
+            this.curColumnIndex = 0;
+            this.curRowIndex = 0;
+            
+            interpolate();
+        }
     }
     
     protected void interpolate() {

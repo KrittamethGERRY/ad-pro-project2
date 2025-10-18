@@ -8,13 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
-import se233.notcontra.model.Boss.Boss;
-import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
-import se233.notcontra.model.Enums.EnemyState;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Player;
@@ -37,7 +33,7 @@ public class GameLoop implements Runnable{
 	public static boolean isPaused = false;
 
 	public static List<Bullet> bullets = new ArrayList<>();
-	public static ArrayList<Enemy> enemies = new ArrayList<>();
+	public static List<Enemy> enemies = new ArrayList<>();
 
 	public GameLoop(GameStage gameStage) {
 		score = 0;
@@ -143,12 +139,13 @@ public class GameLoop implements Runnable{
 		
 		if (currentState == PlayerState.CHARGING) {
 			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_CHARGING_IMG, 3, 3, 1);
+			player.getImageView().tick();
 			return;
 		}
 		
 		if (player.isJumping()) {
 			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_JUMP_IMG, 3, 3, 1);
-
+			player.getImageView().tick();
 			return;
 		}
 		
@@ -226,22 +223,22 @@ public class GameLoop implements Runnable{
 	@Override
 	public void run() {
 		while (running) {
-			float time = System.currentTimeMillis();
+			float startTime = System.currentTimeMillis();
 			update(gameStage.getPlayer());
 			updateAnimation(gameStage.getPlayer());
-			for (Enemy e: gameStage.getEnemies()) {
-				updateEnemyAnimation(e);
+			for (Enemy e : new ArrayList<>(gameStage.getEnemies())) {
+			    updateEnemyAnimation(e);
 			}
-			time = System.currentTimeMillis() - time;
-			if (time < interval) {
+			float elapsedTime = System.currentTimeMillis() - startTime;
+			if (elapsedTime < interval) {
 				try {
-					Thread.sleep((long) (interval-time));
+					Thread.sleep((long) (interval- elapsedTime));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			} else {
 				try {
-					Thread.sleep((long) (interval - (interval % time)));
+					Thread.sleep((long) (interval - (interval % elapsedTime)));
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

@@ -13,13 +13,11 @@ import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.view.GameStages.GameStage;
 
 public class WallBoss extends Boss {
-    private final int phaseChangeHealth;
-    private Enemy turretLeft;
-    private Enemy turretRight;
+    private static Enemy turretLeft;
+    private static Enemy turretRight;
     private Enemy core;
     private GameStage gameStage;
     private Enemy lastTurretFired = null;
-    private Image sprite;
 
     private int enemyTimer = 0;
     public static int totalTurret = 2;
@@ -30,7 +28,6 @@ public class WallBoss extends Boss {
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
-        this.phaseChangeHealth = this.getMaxHealth() / 2;
         turretLeft = new Enemy(-35, -10, 0, 64, 32, 2, 2, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         turretRight = new Enemy(90, -10, 0, 64, 32, 2, 2, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         int coreX = (int) ((turretLeft.getXPos() + turretRight.getXPos()) / 2 + 16);
@@ -40,8 +37,7 @@ public class WallBoss extends Boss {
         core.getSprite().setFitHeight(192);
         core.getSprite().setFitWidth(192);
 
-        GameLoop.enemies.addAll(List.of(turretLeft, turretRight));
-        System.out.println(this.localToParent(core.getBoundsInParent()));
+        //System.out.println(this.localToParent(core.getBoundsInParent()));
         getWeakPoints().add(core);
         javafx.application.Platform.runLater(() -> {
             this.getChildren().addAll(turretLeft, turretRight, core);        	
@@ -130,8 +126,6 @@ public class WallBoss extends Boss {
 
             // Create wall shooter (stands still and shoots)
             Enemy enemy = new Enemy(spawnX, spawnY, 0, 32, 32, 2, 5, 1,"assets/Enemy/enemy_wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
-            // NOTE: Get children's global position do not touch!!!!
-            //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);
@@ -139,4 +133,6 @@ public class WallBoss extends Boss {
             enemyTimer = 500;
         }
     }
+    
+    public static List<Enemy> getTurrets() { return List.of(turretLeft, turretRight); }
 }

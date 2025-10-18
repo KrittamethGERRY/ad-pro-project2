@@ -89,7 +89,6 @@ public class DrawingLoop implements Runnable {
 					});
 					enemy.takeDamage(500);
 
-					Platform.runLater(this::updateScore);
 
 					if (enemy.getType() == EnemyType.TURRET) {
 						if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
@@ -101,6 +100,7 @@ public class DrawingLoop implements Runnable {
 						}
 					}
 					shouldRemove = true;
+					
 					break;
 				}
 			}
@@ -126,6 +126,8 @@ public class DrawingLoop implements Runnable {
 				iterator.remove();
 				Platform.runLater(() -> gameStage.getChildren().remove(bullet));
 			}
+
+			Platform.runLater(this::updateScore);
 		}
 	}
 
@@ -191,9 +193,7 @@ public class DrawingLoop implements Runnable {
 						64, 64
 				);
 				effects.add(explosion);
-				Platform.runLater(() -> {
-					gameStage.getChildren().add(explosion);
-				});
+				Platform.runLater(() -> {gameStage.getChildren().add(explosion);});
 
 				enemiesToRemove.add(enemy);
 			}
@@ -219,6 +219,15 @@ public class DrawingLoop implements Runnable {
 	private void updateBoss() {
 		if (gameStage instanceof FirstStage) {
 			gameStage.getPlayer().isCollided(gameStage);
+			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
+				GameLoop.enemies.addAll(WallBoss.getTurrets());
+				GameStage.bossPhase = true;
+			}
+			if (GameStage.bossPhase) {
+                if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
+                    gameStage.getBoss().update();
+                }
+			}
 		} else if (gameStage instanceof SecondStage) {
 			
 		}
@@ -240,7 +249,7 @@ public class DrawingLoop implements Runnable {
 					});
 					
 					if (enemy.getType() == EnemyType.PATROL) {
-						gameStage.getChildren().remove(enemy);
+						Platform.runLater(() -> gameStage.getChildren().remove(enemy));
 					}
 				} 
 			}
@@ -266,9 +275,7 @@ public class DrawingLoop implements Runnable {
                     paintBullet(GameLoop.bullets, GameLoop.shootingDir);
                     updateEnemies();
                     updateBoss();
-                    if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
-                        gameStage.getBoss().update();
-                    }
+
                 });
 
                 float elapsedTime = System.currentTimeMillis() - startTime;

@@ -28,6 +28,8 @@ public abstract class GameStage extends Pane {
 	protected PauseMenu pauseMenu;
 	public static final int WIDTH = 1280;
 	public static final int HEIGHT = 720;
+	public static int totalMinions;
+	public static boolean bossPhase = false;
 	
 	protected Image backgroundIMG;
 	protected Player player;

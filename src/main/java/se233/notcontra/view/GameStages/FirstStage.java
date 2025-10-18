@@ -34,8 +34,7 @@ public class FirstStage extends GameStage {
 		background.setFitHeight(HEIGHT);
 		player = new Player(30, 0 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
 		player.respawn();
-		
-		
+
 		boss = new WallBoss(660, 350, 500, 750, this);
 		Platform platform1 = new Platform(165, 0, 300, false);
 		Platform platform2 = new Platform(160, 175, 390, false);
@@ -48,9 +47,18 @@ public class FirstStage extends GameStage {
 		platforms.add(platform3);
 		platforms.add(platform4);
 		platforms.add(groundPlatform);
-		PatrolEnemy patrolEnemy = new PatrolEnemy(700, 200, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
-		GameLoop.enemies.add(patrolEnemy);
-		getChildren().addAll(background, boss, patrolEnemy, scoreBackground, livesBackground, livesLabel, scoreLabel, platform1, platform2, platform3, platform4, groundPlatform, item, player);
+		
+		// spawn minions before boss
+		bossPhase = false;
+		totalMinions = 4;
+		PatrolEnemy patrolEnemy1 = new PatrolEnemy(695, 175, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy2 = new PatrolEnemy(700, 200, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy3 = new PatrolEnemy(645, 215, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy4 = new PatrolEnemy(1000, 210, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
+		
+		GameLoop.enemies.addAll(List.of(patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4));
+		getChildren().addAll(background, boss, scoreBackground, patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4, livesBackground
+				, livesLabel, scoreLabel, platform1, platform2, platform3, platform4, groundPlatform, item, player);
 		player.respawn();
 		logging();
 	}

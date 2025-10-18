@@ -16,7 +16,8 @@ public class Boss extends Pane {
     protected int shootTimer = 10;
     protected int idleTimer = 5;
     protected int dieTimer = 20;
-
+    
+    private boolean isBossSpawned;
     private int width, height;
     private List<Enemy> weakPoints;
 
@@ -34,7 +35,6 @@ public class Boss extends Pane {
         this.isAlive = true;
         this.currentState = BossState.IDLE;
         this.weakPoints = new ArrayList<>();
-    	System.out.println(this.getWidth());
     }
 
     public void update() {

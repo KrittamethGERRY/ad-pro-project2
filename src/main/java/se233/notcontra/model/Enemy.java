@@ -41,7 +41,6 @@ public class Enemy extends Pane {
         this.width = width;
         this.height = height;
         this.type = type;
-        
     }
 
     public void updateWithPlayer(Player player, GameStage gameStage) {
@@ -175,7 +174,7 @@ public class Enemy extends Pane {
     	System.out.println("Health: " + this.health);
     	if (health <= 0) {
     		switch (type) {
-    		case PATROL: GameLoop.addScore(300); break;
+    		case PATROL: GameLoop.addScore(300); GameStage.totalMinions--; break;
     		case WALL_SHOOTER: GameLoop.addScore(100); break;
     		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--;  break;
     		case FLYING: GameLoop.addScore(150); break;
