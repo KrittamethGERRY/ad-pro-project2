@@ -79,7 +79,7 @@ public class Player extends Pane {
 	private int buffTimer = 0;
 	private int reloadTimer = 0;
 	public static int respawnTimer = 0;
-	public static int spawnProtectionTimer = 50;
+	public static int spawnProtectionTimer = 200;
 	
 	private PlayerState playerState;
 	
@@ -149,7 +149,6 @@ public class Player extends Pane {
 	}
 	
 	public void respawn() {
-		spawnProtectionTimer = 50;
 		enableKeys();
 		this.yPos = this.startY;
 		this.xPos = this.startX;
@@ -165,6 +164,7 @@ public class Player extends Pane {
 	
 	public void die() {
 		respawnTimer = 100;
+		spawnProtectionTimer = 200;
 		lives--;
 		isDying = true;
 		this.setState(PlayerState.DIE);

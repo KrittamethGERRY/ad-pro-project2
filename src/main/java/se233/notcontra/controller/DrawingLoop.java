@@ -37,6 +37,7 @@ public class DrawingLoop implements Runnable {
 		player.checkStageBoundaryCollision();
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
+		player.isCollided(gameStage);
 		player.updateTimer();
 		player.resetHitBoxHeight();
 		checkPlayerEnemyCollision();
@@ -105,12 +106,12 @@ public class DrawingLoop implements Runnable {
 					&& bullet.getOwner() != BulletOwner.PLAYER
 					&& !gameStage.getPlayer().getTankBuster()
 					&& !gameStage.getPlayer().isDying()) {
-				if (!CheatManager.getInstance().areCheatsActive()) {
-					if (Player.spawnProtectionTimer <= 0) {
-						gameStage.getPlayer().die();
-					}
-				}
-				shouldRemove = true;
+                if (!CheatManager.getInstance().areCheatsActive()) {
+                    if (Player.spawnProtectionTimer <= 0) {
+						    gameStage.getPlayer().die();
+                            shouldRemove = true;
+                    }
+                }
 			}
 			Platform.runLater(this::updateLives);
 			
@@ -136,10 +137,10 @@ public class DrawingLoop implements Runnable {
 		for (Enemy enemy : enemiesCopy) {
 			if (enemy.isAlive() && enemy.getType() == EnemyType.FLYING) {
 				Bounds enemyBounds = gameStage.getBoss().localToParent(enemy.getBoundsInParent());
-					if (enemyBounds.intersects(playerBounds)) {
-						if (!CheatManager.getInstance().areCheatsActive()) {
-						gameStage.getPlayer().die();
-						}
+
+				if (enemyBounds.intersects(playerBounds)) {
+					gameStage.getPlayer().die();
+
 					clearAllEnemies();
 
 					Platform.runLater(this::updateLives);
@@ -201,7 +202,9 @@ public class DrawingLoop implements Runnable {
 
 	private void updateBoss() {
 		if (gameStage instanceof FirstStage) {
-				gameStage.getPlayer().isCollided(gameStage);
+			if (gameStage.getBoss().getChildren().isEmpty()) {
+
+			}
 		} else if (gameStage instanceof SecondStage) {
 			
 		}
@@ -227,38 +230,42 @@ public class DrawingLoop implements Runnable {
 	public void stop() {
 		running = false;
 	}
-	
-	@Override
-	public void run() {
-		while (running) {
-			if (!GameLoop.isPaused) {
-				float time = System.currentTimeMillis();
-				checkAllCollisions(gameStage.getPlayer());
-				paint(gameStage.getPlayer());
-				paintEffects(effects);
-				paintBullet(GameLoop.bullets, GameLoop.shootingDir);
-				updateEnemies();
-				updateBoss();
-				if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
-					gameStage.getBoss().update();
-				}
-			}
 
-			float time = System.currentTimeMillis();
-			time = System.currentTimeMillis() - time;
-			if (time < interval) {
-				try {
-					Thread.sleep((long) (interval - time));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					Thread.sleep((long) (interval - (interval % time)));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+    @Override
+    public void run() {
+        while (running) {
+            float startTime = System.currentTimeMillis();
+            if (!GameLoop.isPaused) {
+                javafx.application.Platform.runLater(() -> {
+                    if (GameLoop.isPaused || !running) {
+                        return;
+                    }
+                    checkAllCollisions(gameStage.getPlayer());
+                    paint(gameStage.getPlayer());
+                    paintEffects(effects);
+                    paintBullet(GameLoop.bullets, GameLoop.shootingDir);
+                    updateEnemies();
+                    updateBoss();
+                    if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
+                        gameStage.getBoss().update();
+                    }
+                });
+
+                float elapsedTime = System.currentTimeMillis() - startTime;
+                if (elapsedTime < interval) {
+                    try {
+                        Thread.sleep((long) (interval - elapsedTime));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        Thread.sleep((long) (interval - (interval % elapsedTime)));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 }
