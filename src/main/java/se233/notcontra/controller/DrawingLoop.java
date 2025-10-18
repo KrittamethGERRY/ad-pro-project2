@@ -61,7 +61,8 @@ public class DrawingLoop implements Runnable {
 			
 			// Enemies collision with bullet
 			for (Enemy enemy : gameStage.getEnemies()) {
-				if (gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
+				if (enemy.isAlive() &&
+						gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
 					// Add effect after the bullet hit the enemies
 					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bullet.getXPosition() - 16, bullet.getYPosition() - 16, 64, 64);
@@ -70,11 +71,11 @@ public class DrawingLoop implements Runnable {
 						gameStage.getChildren().add(explosion);
 					});
 					enemy.takeDamage(500);
-					
+
 					Platform.runLater(this::updateScore);
-					
+
 					if (enemy.getType() == EnemyType.WALL_SHOOTER) {
-						
+
 					} else if (enemy.getType() == EnemyType.TURRET) {
 						if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
 							Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
@@ -85,6 +86,7 @@ public class DrawingLoop implements Runnable {
 						}
 					}
 					shouldRemove = true;
+					break;
 				}
 			}
 			
@@ -202,7 +204,7 @@ public class DrawingLoop implements Runnable {
 			Enemy enemy = iterator.next();
 			if (enemy.isAlive()) {
 				enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
-			} else {
+			} else if (!(enemy.getType() == EnemyType.TURRET)){
 				// Kill remove enemy from the stage
 				iterator.remove();
 				javafx.application.Platform.runLater(() -> {
