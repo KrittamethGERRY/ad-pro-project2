@@ -80,7 +80,6 @@ public class DrawingLoop implements Runnable {
 							Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
                             Platform.runLater(() -> {
                                 GameLoop.enemies.add(core);
-                                    gameStage.getBoss().getChildren().add(core);
                                     gameStage.getBoss().getWeakPoints().remove(core);
                             });
 						}
@@ -135,8 +134,7 @@ public class DrawingLoop implements Runnable {
 			}
 		}
 	}
-
-
+	
 	private void paintEffects(List<Effect> effects) {
         Iterator<Effect> iterator = effects.iterator();
         while (iterator.hasNext()) {
@@ -204,19 +202,13 @@ public class DrawingLoop implements Runnable {
 			Enemy enemy = iterator.next();
 			if (enemy.isAlive()) {
 				enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
-
-				if (enemy.getType() == EnemyType.TURRET) {
-					enemy.updateShootingAnimation();
-				}
 			} else {
 				// Kill remove enemy from the stage
-				if (enemy.getType() != EnemyType.TURRET) {
-					iterator.remove();
-					javafx.application.Platform.runLater(() -> {
-						gameStage.getBoss().getChildren().remove(enemy);
-						GameLoop.enemies.remove(enemy);
-					});
-				}
+				iterator.remove();
+				javafx.application.Platform.runLater(() -> {
+					gameStage.getBoss().getChildren().remove(enemy);
+					GameLoop.enemies.remove(enemy);
+				});
 			} 
 		}
 	}

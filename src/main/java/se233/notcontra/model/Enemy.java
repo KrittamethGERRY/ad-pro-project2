@@ -11,9 +11,12 @@ import se233.notcontra.model.Enums.*;
 import se233.notcontra.view.GameStages.GameStage;
 
 public class Enemy extends Pane {
-    private int xPos, yPos, width, height;
-    private int health;
-    double speed = 2;
+    protected int xPos;
+	private int yPos;
+	protected int width;
+	protected int height;
+    protected int health;
+    private double speed;
     boolean alive = true;
     private EnemyType  type;
     private int shootTimer = 75;

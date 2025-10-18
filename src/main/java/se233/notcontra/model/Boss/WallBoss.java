@@ -31,7 +31,7 @@ public class WallBoss extends Boss {
     private final int maxEnemies = 1;
 
     public WallBoss(int xPos, int yPos, int width, int height, GameStage gameStage) {
-        super(xPos, yPos, width, height, 10000);
+        super(xPos, yPos, width, height, 30000);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
@@ -39,13 +39,17 @@ public class WallBoss extends Boss {
         turretLeft = new Enemy(-35, -10, 0, 64, 32, 2, 2, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         turretRight = new Enemy(90, -10, 0, 64, 32, 2, 2, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         int coreX = (int) ((turretLeft.getXPos() + turretRight.getXPos()) / 2 + 16);
-        core = new Enemy(coreX, 0, 0, 128, 128, 2, 1, 1, "assets/Boss/Boss1/core.png", this.getMaxHealth()/2, EnemyType.WALL);
+        core = new Enemy(coreX, 0, 100, 64, 64, 2, 1, 1, "assets/Boss/Boss1/core.png", this.getMaxHealth()/2, EnemyType.WALL);
+        core.getSprite().setLayoutY(60);
+        core.getSprite().setLayoutX(-23);
+        core.getSprite().setFitHeight(192);
+        core.getSprite().setFitWidth(192);
 
         GameLoop.enemies.addAll(List.of(turretLeft, turretRight));
         System.out.println(this.localToParent(core.getBoundsInParent()));
         getWeakPoints().add(core);
         javafx.application.Platform.runLater(() -> {
-            this.getChildren().addAll(turretLeft, turretRight);        	
+            this.getChildren().addAll(turretLeft, turretRight, core);        	
         });
     }
 

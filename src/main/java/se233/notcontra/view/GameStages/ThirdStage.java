@@ -22,7 +22,7 @@ public class ThirdStage extends GameStage {
 	public ThirdStage() {
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
-		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/secondStage.png")));
+		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/thirdStage.png")));
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
 		platforms = new ArrayList<Platform>();
