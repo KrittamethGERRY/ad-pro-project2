@@ -2,6 +2,7 @@ package se233.notcontra.view.GameStages;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,6 +10,8 @@ import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Boss.RDBoss;
 import se233.notcontra.model.Items.Item;
+import se233.notcontra.model.Items.SpecialMagazine;
+import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.view.Platform;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Bullet;
@@ -64,8 +67,12 @@ public class ThirdStage extends GameStage {
 	
 	@Override
 	public void spawnItem() {
-		
+		boolean itemType = new Random().nextBoolean();
+		int randX = new Random().nextInt(0, 1280);
+		item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
+		this.getChildren().add(item);
 	}
+	
 	
 	@Override
 	public void removeItem() {
@@ -80,7 +87,6 @@ public class ThirdStage extends GameStage {
 		for (Platform platform : platforms) {
 			logger.info("Platform spawned at X:{} Y:{} Width:{}", platform.getxPos(), platform.getyPos(), platform.getPaneWidth());
 		}
-		logger.info("Item spawned at X:{} Y:{}", item.getXPos(), item.getYPos());
 	}
 
 	@Override

@@ -41,7 +41,6 @@ public class FirstStage extends GameStage {
 		Platform platform3 = new Platform(150, 335, 475, false);
 		Platform platform4 = new Platform(165, 0, 450, false);
 		Platform groundPlatform = new Platform(1280, 0, 585, true);
-		spawnItem();
 		platforms.add(platform1);
 		platforms.add(platform2);
 		platforms.add(platform3);
@@ -58,7 +57,7 @@ public class FirstStage extends GameStage {
 		
 		GameLoop.enemies.addAll(List.of(patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4));
 		getChildren().addAll(background, boss, scoreBackground, patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4, livesBackground
-				, livesLabel, scoreLabel, platform1, platform2, platform3, platform4, groundPlatform, item, player);
+				, livesLabel, scoreLabel, platform1, platform2, platform3, platform4, groundPlatform, player);
 		player.respawn();
 		logging();
 	}
@@ -84,7 +83,9 @@ public class FirstStage extends GameStage {
 	@Override
 	public void spawnItem() {
 		boolean itemType = new Random().nextBoolean();
-		item = itemType ? new SpecialMagazine(64,64,150,280) : new TankBuster(64,64,150,280);
+		int randX = new Random().nextInt(0, 600);
+		item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
+		this.getChildren().add(item);
 	}
 	
 	@Override
@@ -99,7 +100,6 @@ public class FirstStage extends GameStage {
 		for (Platform platform : platforms) {
 			logger.info("Platform spawned at X:{} Y:{} Width:{}", platform.getxPos(), platform.getyPos(), platform.getPaneWidth());
 		}
-		logger.info("Item spawned at X:{} Y:{}", item.getXPos(), item.getYPos());
 	}
 	@Override
 	public Boss getBoss() { return this.boss; }

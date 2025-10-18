@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SpriteAnimation;
+import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Enums.*;
 import se233.notcontra.view.GameStages.GameStage;
@@ -169,7 +170,7 @@ public class Enemy extends Pane {
     }
     
     // Reduce Enemy HP, and Add Game score
-    public void takeDamage(int damage) {
+    public void takeDamage(int damage, Boss boss) {
     	health -= damage;
     	System.out.println("Health: " + this.health);
     	if (health <= 0) {
@@ -178,7 +179,7 @@ public class Enemy extends Pane {
     		case WALL_SHOOTER: GameLoop.addScore(100); break;
     		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--;  break;
     		case FLYING: GameLoop.addScore(150); break;
-    		case WALL: GameLoop.addScore(1000);  break;
+    		case WALL: GameLoop.addScore(1000); boss.getWeakPoints().remove(0); break;
 			default: 
 				break;
     		}

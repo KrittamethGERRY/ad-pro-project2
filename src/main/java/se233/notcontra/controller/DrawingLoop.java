@@ -17,6 +17,10 @@ import java.util.Iterator;
 
 import javafx.application.Platform;
 import javafx.geometry.Bounds;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Alert.AlertType;
+import se233.notcontra.Launcher;
 import se233.notcontra.model.*;
 
 public class DrawingLoop implements Runnable {	
@@ -25,12 +29,16 @@ public class DrawingLoop implements Runnable {
 	private int frameRate;
 	private float interval;
 	private boolean running;
+	private int itemSpawnTimer;
+	boolean isWin;
 	
 	public DrawingLoop(GameStage gameStage) {
+		this.isWin = false;
 		this.gameStage = gameStage;
 		frameRate = 60;
 		interval = 1000f / frameRate;
 		running = true;
+		itemSpawnTimer = 500;
 	}
 	
 	public void checkAllCollisions(Player player) {
@@ -49,6 +57,9 @@ public class DrawingLoop implements Runnable {
 				((PatrolEnemy) enemy).checkPlatformCollision(gameStage.getPlatforms());
 				((PatrolEnemy) enemy).checkReachGameWall();
 			}
+		}
+		if (gameStage.getItem() != null) {
+			gameStage.getItem().update(gameStage.getPlatforms());
 		}
 	}
 
@@ -71,7 +82,7 @@ public class DrawingLoop implements Runnable {
 			// Enemies collision with bullet
 			for (Enemy enemy : gameStage.getEnemies()) {
 				if (enemy.isAlive() && enemy.getBoundsInParent().intersects(bullet.getBoundsInParent()) && bullet.getOwner() == BulletOwner.PLAYER) {
-					enemy.takeDamage(500);
+					enemy.takeDamage(500, gameStage.getBoss());
 					shouldRemove = true;
 				}
 				
@@ -86,17 +97,20 @@ public class DrawingLoop implements Runnable {
 					javafx.application.Platform.runLater(() -> {
 						gameStage.getChildren().add(explosion);
 					});
-					enemy.takeDamage(500);
+					enemy.takeDamage(500, gameStage.getBoss());
 
 
 					if (enemy.getType() == EnemyType.TURRET) {
 						if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
 							Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
                             Platform.runLater(() -> {
-                                GameLoop.enemies.add(core);
-                                    gameStage.getBoss().getWeakPoints().remove(core);
+                            	GameLoop.enemies.add(core);
                             });
 						}
+					}
+					
+					if (enemy.getType() == EnemyType.WALL) {
+						
 					}
 					shouldRemove = true;
 					
@@ -228,11 +242,20 @@ public class DrawingLoop implements Runnable {
                     gameStage.getBoss().update();
                 }
 			}
-			
-			if (gameStage.getBoss() != null) {
-				
+			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
+				isWin = true;
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setHeaderText("You Win!");
+				alert.setContentText("Continue to the next stage?");
+				alert.showAndWait();
+				if (alert.getResult() == ButtonType.OK) {
+					Launcher.changeStage(1);
+				} else {
+					Launcher.exitToMenu();
+				}
 			}
 		} else if (gameStage instanceof SecondStage) {
+			gameStage.getPlayer().isCollided(gameStage);
 
 		} else if (gameStage instanceof ThirdStage) {
 			
@@ -251,9 +274,7 @@ public class DrawingLoop implements Runnable {
 					iterator.remove();
 					javafx.application.Platform.runLater(() -> {
 						gameStage.getBoss().getChildren().remove(enemy);
-						GameLoop.enemies.remove(enemy);
 					});
-					
 					if (enemy.getType() == EnemyType.PATROL) {
 						Platform.runLater(() -> gameStage.getChildren().remove(enemy));
 					}
@@ -265,12 +286,24 @@ public class DrawingLoop implements Runnable {
 	public void stop() {
 		running = false;
 	}
+	
+	public void updateItemSpawnTimer() {
+		if (itemSpawnTimer > 0) {
+			itemSpawnTimer--;
+			if (itemSpawnTimer == 0) {
+				gameStage.spawnItem();
+			}
+			return;
+		}
+		itemSpawnTimer = 500;
+		// RANDOMLY SPAWN THE ITEM WITH THE SAME Y BUT DIFFER X
+	}
 
     @Override
     public void run() {
         while (running) {
             float startTime = System.currentTimeMillis();
-            if (!GameLoop.isPaused) {
+
                 javafx.application.Platform.runLater(() -> {
                     if (GameLoop.isPaused || !running) {
                         return;
@@ -281,7 +314,7 @@ public class DrawingLoop implements Runnable {
                     paintBullet(GameLoop.bullets, GameLoop.shootingDir);
                     updateEnemies();
                     updateBoss();
-
+                    updateItemSpawnTimer();
                 });
 
                 float elapsedTime = System.currentTimeMillis() - startTime;
@@ -297,7 +330,7 @@ public class DrawingLoop implements Runnable {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                }
+                
             }
         }
     }

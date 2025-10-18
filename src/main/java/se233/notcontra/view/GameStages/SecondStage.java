@@ -40,10 +40,20 @@ public class SecondStage extends GameStage {
 		player.respawn();
 		Platform platform1 = new Platform(640, 0, 375, false);
 		Platform groundPlatform = new Platform(1280, 0, 490, true);
-		spawnItem();
 		platforms.addAll(List.of(groundPlatform, platform1));
 
 		boss = new JavaBoss(1010, 50,128,256,this);
+		System.out.println("Checking components:");
+		System.out.println("background: " + background);
+		System.out.println("platformIm: " + platformIm);
+		System.out.println("groundPlatform: " + groundPlatform);
+		System.out.println("platform1: " + platform1);
+		System.out.println("player: " + player);
+		System.out.println("boss: " + boss);
+		System.out.println("scoreBackground: " + scoreBackground);
+		System.out.println("livesBackground: " + livesBackground);
+		System.out.println("livesLabel: " + livesLabel);
+		System.out.println("scoreLabel: " + scoreLabel);
 		
 		bossPhase = false;
 		totalMinions = 4;
@@ -54,7 +64,9 @@ public class SecondStage extends GameStage {
 		
 		GameLoop.enemies.addAll(List.of(patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4));
 
-		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, platformIm, groundPlatform, platform1, item, player, boss);
+		getChildren().addAll(background, patrolEnemy1, patrolEnemy2, patrolEnemy3,patrolEnemy4
+				, scoreBackground, livesBackground, livesLabel, scoreLabel
+				, platformIm, groundPlatform, platform1, player, boss);
 
 	}
 	
@@ -79,7 +91,9 @@ public class SecondStage extends GameStage {
 	@Override
 	public void spawnItem() {
 		boolean itemType = new Random().nextBoolean();
-		item = itemType ? new SpecialMagazine(64,64,150,280) : new TankBuster(64,64,150,280);
+		int randX = new Random().nextInt(0, 900);
+		item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
+		this.getChildren().add(item);
 	}
 	
 	@Override
@@ -94,7 +108,6 @@ public class SecondStage extends GameStage {
 		for (Platform platform : platforms) {
 			logger.info("Platform spawned at X:{} Y:{} Width:{}", platform.getxPos(), platform.getyPos(), platform.getPaneWidth());
 		}
-		logger.info("Item spawned at X:{} Y:{}", item.getXPos(), item.getYPos());
 	}
 	
 	@Override

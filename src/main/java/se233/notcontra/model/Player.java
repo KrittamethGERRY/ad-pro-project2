@@ -429,13 +429,13 @@ public class Player extends Pane {
 			DrawingLoop.effects.add(explosion);
 			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
 			for (Enemy enemy: GameLoop.enemies) {
-				enemy.takeDamage(999999);
+				enemy.takeDamage(999999, null);
 			}
+			if (lives > 0) gameStage.getBoss().getWeakPoints().clear();
 			return;
 		} else if (xAxisCollision) {
 			this.xPos = bossX - width;
 		}
-		//////////////////// 			PLAYER DIES WHEN CHARGING TO THE BOSS WITH TANK BUSTER AND THE BOSS TAKE DAMAGE
 
 	}
 	
