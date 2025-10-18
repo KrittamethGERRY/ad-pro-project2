@@ -105,8 +105,9 @@ public class DrawingLoop implements Runnable {
 					&& bullet.getOwner() != BulletOwner.PLAYER
 					&& !gameStage.getPlayer().getTankBuster()
 					&& !gameStage.getPlayer().isDying()) {
-				gameStage.getPlayer().die();
-
+				if (Player.spawnProtectionTimer <= 0) {
+					gameStage.getPlayer().die();
+				}
 				shouldRemove = true;
 			}
 			Platform.runLater(this::updateLives);
