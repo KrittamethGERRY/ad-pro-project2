@@ -16,7 +16,7 @@ public class JavaBoss extends Boss{
 
     public JavaBoss(int xPos, int yPos , int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 7000);
-        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA.png", 7000, EnemyType.WALL);
+        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA.png", 7000, EnemyType.Head);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
