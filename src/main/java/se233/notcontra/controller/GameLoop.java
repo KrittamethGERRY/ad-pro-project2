@@ -184,11 +184,6 @@ public class GameLoop implements Runnable{
 			}
 		}
 
-		if (enemy.getType() == EnemyType.WALL){
-			if(!enemy.isAlive()){
-				enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Core.png"), 1, 3, 1);
-			}
-		}
 		enemy.getSprite().tick();
 	}
 

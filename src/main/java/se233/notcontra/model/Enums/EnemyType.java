@@ -5,6 +5,9 @@ public enum EnemyType {
     FLYING,
     TURRET,
     WALL,
-    Head,
-    PATROL
+    JAVAHEAD,
+    PATROL,
+    RDHAND,
+    RDEYES,
+    RDHEAD
 }

@@ -20,7 +20,7 @@ public class Enemy extends Pane {
     private double speed;
     boolean alive = true;
     private EnemyType  type;
-    private int shootTimer = 75;
+    private int shootTimer = 100;
     private SpriteAnimation sprite;
     private EnemyState enemyState;
     private int shootingAnimationTimer = 0;
@@ -135,7 +135,7 @@ public class Enemy extends Pane {
 
         double bulletSpeed = 0.007;
 
-        shootTimer = 75;
+        shootTimer = 100;
         shootingAnimationTimer = 20;
 
         return new Bullet(

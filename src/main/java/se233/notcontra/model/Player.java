@@ -429,7 +429,7 @@ public class Player extends Pane {
 			DrawingLoop.effects.add(explosion);
 			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
 			for (Enemy enemy: GameLoop.enemies) {
-				enemy.takeDamage(999999, null);
+				enemy.takeDamage(5000, null);
 			}
 			if (lives > 0) gameStage.getBoss().getWeakPoints().clear();
 			return;

@@ -256,9 +256,49 @@ public class DrawingLoop implements Runnable {
 			}
 		} else if (gameStage instanceof SecondStage) {
 			gameStage.getPlayer().isCollided(gameStage);
-
+			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
+				GameStage.bossPhase = true;
+			}
+			if (GameStage.bossPhase) {
+				if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
+					gameStage.getBoss().update();
+				}
+			}
+			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
+				isWin = true;
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setHeaderText("You Win!");
+				alert.setContentText("Continue to the next stage?");
+				alert.showAndWait();
+				if (alert.getResult() == ButtonType.OK) {
+					Launcher.changeStage(2);
+				} else {
+					Launcher.exitToMenu();
+				}
+			}
 		} else if (gameStage instanceof ThirdStage) {
-			
+			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
+				//
+				//
+				GameStage.bossPhase = true;
+			}
+			if (GameStage.bossPhase) {
+				if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
+					gameStage.getBoss().update();
+				}
+			}
+			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
+				isWin = true;
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setHeaderText("You Win!");
+				alert.setContentText("Continue to the next stage?");
+				alert.showAndWait();
+				if (alert.getResult() == ButtonType.OK) {
+					Launcher.changeStage(1);
+				} else {
+					Launcher.exitToMenu();
+				}
+			}
 		}
 	}
 	

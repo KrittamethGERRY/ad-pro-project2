@@ -1,5 +1,7 @@
 package se233.notcontra.model.Boss;
 
+import javafx.scene.image.Image;
+import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Enums.EnemyType;
@@ -18,18 +20,36 @@ public class RDBoss extends Boss{
     private Enemy RdrightEye;
 
     private Enemy lastHandspawn = null;
+    private Enemy lasteyesShoot = null;
 
 
     public RDBoss(int xPos, int yPos, int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 10000);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
-        Rdhead = new Enemy(0, 0, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/boss3_head.png", this.getMaxHealth() / 2, EnemyType.Head);
-        Rdlefthand = new Enemy( -250, 0, 0, Width, Height, 2, 1, 1,"assets/Boss/Boss3/boss3_left_hand.png", this.getMaxHealth() / 4, EnemyType.Head);
-        Rdrighthand = new Enemy( +200, 0, 0, Width, Height, 2, 1, 1,"assets/Boss/Boss3/boss3_right_hand.png", this.getMaxHealth() / 4, EnemyType.Head);
-        RdleftEye = new Enemy(+28, 30, 0, 32,32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_left_eye.png", this.getMaxHealth() / 5,EnemyType.WALL_SHOOTER);
-        RdrightEye = new Enemy(+57, 30, 0, 32,32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_right_eye.png", this.getMaxHealth() / 5,EnemyType.WALL_SHOOTER);
+        Rdhead = new Enemy(-130, -50, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/boss3_head.png", this.getMaxHealth() / 2, EnemyType.WALL);
+        Rdlefthand = new Enemy( -210, -45, 0, Width, Height, 2, 1, 1,"assets/Boss/Boss3/boss3_left_hand.png", this.getMaxHealth() / 4, EnemyType.RDHAND);
+        Rdrighthand = new Enemy( +100, -45, 0, Width, Height, 2, 1, 1,"assets/Boss/Boss3/boss3_right_hand.png", this.getMaxHealth() / 4, EnemyType.RDHAND);
+        RdleftEye = new Enemy(-45, -2, 0, 32,32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_left_eye.png", this.getMaxHealth() / 5,EnemyType.RDEYES);
+        RdrightEye = new Enemy(-22, -2, 0, 32,32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_right_eye.png", this.getMaxHealth() / 5,EnemyType.RDEYES);
         this.gameStage = gameStage;
+
+        Rdhead.getSprite().setFitHeight(192);
+        Rdhead.getSprite().setFitWidth(192);
+        Rdhead.getSprite().setLayoutX(Rdhead.getXPos());
+        Rdhead.getSprite().setLayoutY(Rdhead.getYPos());
+        Rdlefthand.getSprite().setFitHeight(128);
+        Rdlefthand.getSprite().setFitWidth(128);
+        Rdlefthand.getSprite().setLayoutX(Rdlefthand.getXPos());
+        Rdlefthand.getSprite().setLayoutY(Rdlefthand.getYPos());
+        Rdrighthand.getSprite().setFitHeight(128);
+        Rdrighthand.getSprite().setFitWidth(128);
+        Rdrighthand.getSprite().setLayoutX(Rdrighthand.getXPos());
+        Rdrighthand.getSprite().setLayoutY(Rdrighthand.getYPos());
+        RdleftEye.getSprite().setLayoutX(RdleftEye.getXPos());
+        RdleftEye.getSprite().setLayoutY(RdleftEye.getYPos());
+        RdrightEye.getSprite().setLayoutX(RdrightEye.getXPos());
+        RdrightEye.getSprite().setLayoutY(RdrightEye.getYPos());
 
         GameLoop.enemies.addAll(List.of(Rdlefthand, Rdrighthand, RdleftEye, RdrightEye));
 
@@ -55,6 +75,23 @@ public class RDBoss extends Boss{
             } else {
                 spawnEnemy(Rdrighthand);
                 lastHandspawn = Rdrighthand;
+
+            }
+        }
+
+        if (RdleftEye.isAlive() && !RdrightEye.isAlive()) {
+            RdleftEye.shootAtPlayer(gameStage.getPlayer());
+        }
+        else if (!RdleftEye.isAlive() && RdrightEye.isAlive()) {
+            RdrightEye.shootAtPlayer(gameStage.getPlayer());
+        }
+        else if (RdleftEye.isAlive() && RdrightEye.isAlive()) {
+            if (lasteyesShoot == null || lasteyesShoot == Rdrighthand) {
+                RdleftEye.shootAtPlayer(gameStage.getPlayer());
+                lasteyesShoot = RdleftEye;
+            } else {
+                RdrightEye.shootAtPlayer(gameStage.getPlayer());
+                lasteyesShoot = RdrightEye;
             }
         }
 
@@ -80,10 +117,10 @@ public class RDBoss extends Boss{
 
         if (aliveCount < maxEnemies) {
             if(Hand ==  Rdlefthand) {
-                spawnX = ((int) Hand.getXPos()) + 30;
-                spawnY = ((int) Hand.getYPos()) + 50;
+                spawnX = ((int) Hand.getXPos())-180;
+                spawnY = ((int) Hand.getYPos())+50;
             }else {
-                spawnX = ((int) Hand.getXPos()) + 47;
+                spawnX = ((int) Hand.getXPos()) + 180;
                 spawnY = ((int) Hand.getYPos()) + 50;
             }
 

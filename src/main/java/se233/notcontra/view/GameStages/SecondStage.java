@@ -41,20 +41,10 @@ public class SecondStage extends GameStage {
 		Platform platform1 = new Platform(640, 0, 375, false);
 		Platform groundPlatform = new Platform(1280, 0, 490, true);
 		platforms.addAll(List.of(groundPlatform, platform1));
+		GameLoop.enemies.clear();
 
-		boss = new JavaBoss(1010, 50,128,256,this);
-		System.out.println("Checking components:");
-		System.out.println("background: " + background);
-		System.out.println("platformIm: " + platformIm);
-		System.out.println("groundPlatform: " + groundPlatform);
-		System.out.println("platform1: " + platform1);
-		System.out.println("player: " + player);
-		System.out.println("boss: " + boss);
-		System.out.println("scoreBackground: " + scoreBackground);
-		System.out.println("livesBackground: " + livesBackground);
-		System.out.println("livesLabel: " + livesLabel);
-		System.out.println("scoreLabel: " + scoreLabel);
-		
+		boss = new JavaBoss(1010, 20,128,256,this);
+
 		bossPhase = false;
 		totalMinions = 4;
 		PatrolEnemy patrolEnemy1 = new PatrolEnemy(695, 175, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);

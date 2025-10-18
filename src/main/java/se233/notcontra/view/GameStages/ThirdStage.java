@@ -30,6 +30,9 @@ public class ThirdStage extends GameStage {
 		background.setFitHeight(HEIGHT);
 		platforms = new ArrayList<Platform>();
 		player = new Player(30, 300 , KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
+		scoreBackground.setLayoutX(990);
+		scoreLabel.setLayoutX(1100);
+		GameLoop.enemies.clear();
 
 		player.respawn();
 
