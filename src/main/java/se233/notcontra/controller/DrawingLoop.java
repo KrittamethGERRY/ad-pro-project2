@@ -47,6 +47,7 @@ public class DrawingLoop implements Runnable {
 				((PatrolEnemy) enemy).repaint();
 				((PatrolEnemy) enemy).checkReachHighest();
 				((PatrolEnemy) enemy).checkPlatformCollision(gameStage.getPlatforms());
+				((PatrolEnemy) enemy).checkReachGameWall();
 
 			}
 		}
@@ -70,6 +71,13 @@ public class DrawingLoop implements Runnable {
 			
 			// Enemies collision with bullet
 			for (Enemy enemy : gameStage.getEnemies()) {
+				if (enemy.isAlive() && enemy.getBoundsInParent().intersects(bullet.getBoundsInParent()) && bullet.getOwner() == BulletOwner.PLAYER) {
+					enemy.takeDamage(500);
+					shouldRemove = true;
+				}
+				
+				
+				// Boss' children enemy
 				if (enemy.isAlive() &&
 						gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
@@ -83,9 +91,7 @@ public class DrawingLoop implements Runnable {
 
 					Platform.runLater(this::updateScore);
 
-					if (enemy.getType() == EnemyType.WALL_SHOOTER) {
-
-					} else if (enemy.getType() == EnemyType.TURRET) {
+					if (enemy.getType() == EnemyType.TURRET) {
 						if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
 							Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
                             Platform.runLater(() -> {
@@ -211,19 +217,25 @@ public class DrawingLoop implements Runnable {
 	}
 	
 	private void updateEnemies() {
-		Iterator<Enemy> iterator = GameLoop.enemies.iterator();
-		while (iterator.hasNext()) {
-			Enemy enemy = iterator.next();
-			if (enemy.isAlive()) {
-				enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
-			} else if (!(enemy.getType() == EnemyType.TURRET) && !(enemy.getType() == EnemyType.WALL)){
-				// Kill remove enemy from the stage
-				iterator.remove();
-				javafx.application.Platform.runLater(() -> {
-					gameStage.getBoss().getChildren().remove(enemy);
-					GameLoop.enemies.remove(enemy);
-				});
-			} 
+		if (!GameLoop.isPaused) {
+			Iterator<Enemy> iterator = GameLoop.enemies.iterator();
+			while (iterator.hasNext()) {
+				Enemy enemy = iterator.next();
+				if (enemy.isAlive()) {
+					enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
+				} else if (!(enemy.getType() == EnemyType.TURRET)){
+					// Kill remove enemy from the stage
+					iterator.remove();
+					javafx.application.Platform.runLater(() -> {
+						gameStage.getBoss().getChildren().remove(enemy);
+						GameLoop.enemies.remove(enemy);
+					});
+					
+					if (enemy.getType() == EnemyType.PATROL) {
+						gameStage.getChildren().remove(enemy);
+					}
+				} 
+			}
 		}
 	}
 	
