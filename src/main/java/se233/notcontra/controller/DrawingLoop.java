@@ -145,7 +145,9 @@ public class DrawingLoop implements Runnable {
 				Bounds enemyBounds = gameStage.getBoss().localToParent(enemy.getBoundsInParent());
 
 				if (enemyBounds.intersects(playerBounds)) {
-					gameStage.getPlayer().die();
+					if (!CheatManager.getInstance().areCheatsActive()) {
+						gameStage.getPlayer().die();
+					}
 
 					clearAllEnemies();
 
@@ -208,9 +210,7 @@ public class DrawingLoop implements Runnable {
 
 	private void updateBoss() {
 		if (gameStage instanceof FirstStage) {
-			if (gameStage.getBoss().getChildren().isEmpty()) {
-
-			}
+			gameStage.getPlayer().isCollided(gameStage);
 		} else if (gameStage instanceof SecondStage) {
 			
 		}
