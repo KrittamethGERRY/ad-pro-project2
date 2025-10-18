@@ -106,7 +106,7 @@ public class DrawingLoop implements Runnable {
 					&& !gameStage.getPlayer().getTankBuster()
 					&& !gameStage.getPlayer().isDying()) {
 				if (Player.spawnProtectionTimer <= 0) {
-					gameStage.getPlayer().die();
+						gameStage.getPlayer().die();
 				}
 				shouldRemove = true;
 			}
@@ -213,7 +213,7 @@ public class DrawingLoop implements Runnable {
 			Enemy enemy = iterator.next();
 			if (enemy.isAlive()) {
 				enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
-			} else if (!(enemy.getType() == EnemyType.TURRET)){
+			} else if (!(enemy.getType() == EnemyType.TURRET) && !(enemy.getType() == EnemyType.WALL)){
 				// Kill remove enemy from the stage
 				iterator.remove();
 				javafx.application.Platform.runLater(() -> {

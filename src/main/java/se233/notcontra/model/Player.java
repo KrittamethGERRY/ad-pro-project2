@@ -35,6 +35,7 @@ public class Player extends Pane {
 	private KeyCode downKey;
 	private KeyCode shootKey;
 	private KeyCode jumpKey;
+	private KeyCode CheatKey;
 	
 	private int xPos;
 	private int yPos;
@@ -65,6 +66,7 @@ public class Player extends Pane {
 	private boolean isSpecialMag = false;
 	private boolean isTankBuster = false;
 	private boolean isDying = false;
+	private boolean CheatActive = true;
 	
 	public static int height;
 	public static int width;
@@ -96,6 +98,7 @@ public class Player extends Pane {
 		this.downKey = downKey;
 		this.shootKey = KeyCode.L;
 		this.jumpKey = KeyCode.K;
+		this.CheatKey = KeyCode.F1;
 		this.xPos = xPos;
 		this.yPos = yPos;
 		Player.height = 64;
@@ -426,7 +429,7 @@ public class Player extends Pane {
 			DrawingLoop.effects.add(explosion);
 			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
 			for (Enemy enemy: GameLoop.enemies) {
-				enemy.takeDamage(1000);
+				enemy.takeDamage(999999);
 			}
 			return;
 		} else if (xAxisCollision) {
@@ -486,6 +489,10 @@ public class Player extends Pane {
 		return jumpKey;
 	}
 
+	public KeyCode getCheatKey(){
+		return CheatKey;
+	}
+
 	public int getxPos() {
 		return xPos;
 	}
@@ -511,7 +518,10 @@ public class Player extends Pane {
 	}
 
 	public boolean isJumping() { return this.isJumping; }
-	
+
+	public boolean CheatOnandOff(KeyCode cheatKey) {
+		return CheatActive = !CheatActive;}
+
 	public void logPos() {
 		logger.info("Player - X: {}, Y: {}", xPos, yPos);
 	}
