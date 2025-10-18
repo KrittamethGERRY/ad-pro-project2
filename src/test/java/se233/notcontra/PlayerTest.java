@@ -35,8 +35,8 @@ import se233.notcontra.view.GameStages.GameStage;
 public class PlayerTest  {
 	Player player;
 	// Player fields
-    Field xVelocityField, yVelocityField, yAccelerationField, xPositionField
-    , yPositionField, isFallingField, canJumpField, isJumpingField
+    Field xVelocityField, yVelocityField, yAccelerationField, xPosField
+    , yPosField, isFallingField, canJumpField, isJumpingField
     , isMoveRightField, isMoveLeftField, livesField, isBuffedField
     , isSpecialMagField, isTankBusterField, bulletPerClipField, reloadTimerField
     , lastShotTimeField, widthField, heightField, isProningField
@@ -53,8 +53,8 @@ public class PlayerTest  {
         xVelocityField = player.getClass().getDeclaredField("xVelocity");
         yVelocityField = player.getClass().getDeclaredField("yVelocity");
         yAccelerationField = player.getClass().getDeclaredField("yAcceleration");
-        xPositionField = player.getClass().getDeclaredField("xPosition");
-        yPositionField = player.getClass().getDeclaredField("yPosition");
+        xPosField = player.getClass().getDeclaredField("xPos");
+        yPosField = player.getClass().getDeclaredField("yPos");
         isFallingField = player.getClass().getDeclaredField("isFalling");
         canJumpField = player.getClass().getDeclaredField("canJump");
         isJumpingField = player.getClass().getDeclaredField("isJumping");
@@ -77,8 +77,8 @@ public class PlayerTest  {
         xVelocityField.setAccessible(true);
         yVelocityField.setAccessible(true);
         yAccelerationField.setAccessible(true);
-        xPositionField.setAccessible(true);
-        yPositionField.setAccessible(true);
+        xPosField.setAccessible(true);
+        yPosField.setAccessible(true);
         isFallingField.setAccessible(true);
         canJumpField.setAccessible(true);
         isJumpingField.setAccessible(true);
@@ -103,41 +103,41 @@ public class PlayerTest  {
 	@Test
 	public void respawn_playerPositionIs0and0() {
 		player.respawn();
-		assertEquals(0, player.getXPosition(), "Start X should be 0");
-		assertEquals(0, player.getYPosition(), "Start Y shoud be 0");
+		assertEquals(0, player.getxPos(), "Start X should be 0");
+		assertEquals(0, player.getyPos(), "Start Y shoud be 0");
 	}
 	
 	@Test
-	public void moveRightOnce_xPositionIncreaseBy1() throws IllegalAccessException{
-		xPositionField.setInt(player, 0);
+	public void moveRightOnce_xPosIncreaseBy1() throws IllegalAccessException{
+		xPosField.setInt(player, 0);
 		player.moveRight();
 		player.moveX();
-		assertEquals(1, player.getXPosition(), "xPosition should be 1");
+		assertEquals(1, player.getxPos(), "xPos should be 1");
 	}
 	@Test
-	public void moveLeft_xPositionDecreaseByXVelocity() throws IllegalArgumentException, IllegalAccessException {
-		xPositionField.setInt(player, 0);
+	public void moveLeft_xPosDecreaseByXVelocity() throws IllegalArgumentException, IllegalAccessException {
+		xPosField.setInt(player, 0);
 		player.moveLeft();
 		player.moveX();
-		assertEquals(-1, player.getXPosition(), "xPosition should be -1");
+		assertEquals(-1, player.getxPos(), "xPos should be -1");
 	}
 	@Test
-	public void respawn_xPositionShouldBe0_moveToLeftBorder_thenCheckWallCollision() throws IllegalArgumentException, IllegalAccessException {
-		xPositionField.setInt(player, 0);
+	public void respawn_xPosShouldBe0_moveToLeftBorder_thenCheckWallCollision() throws IllegalArgumentException, IllegalAccessException {
+		xPosField.setInt(player, 0);
 		player.respawn();
 		player.moveLeft();
 		player.moveX();
 		player.checkStageBoundaryCollision();
-		assertEquals(0, player.getXPosition(), "xPosition should be 0");
+		assertEquals(0, player.getxPos(), "xPos should be 0");
 	}
 	@Test
-	public void respawn_xPositionShouldBe1280_moveToRightBorder_thenCheckWallCollision() throws IllegalArgumentException, IllegalAccessException {
+	public void respawn_xPosShouldBe1280_moveToRightBorder_thenCheckWallCollision() throws IllegalArgumentException, IllegalAccessException {
 		player.respawn();
-		xPositionField.setInt(player, GameStage.WIDTH + player.width); // Player width = 64, gameStage width = 1280
+		xPosField.setInt(player, GameStage.WIDTH + player.width); // Player width = 64, gameStage width = 1280
 		player.moveRight();
 		player.moveX();
 		player.checkStageBoundaryCollision();
-		assertEquals(GameStage.WIDTH-player.width, player.getXPosition(), "xPosition should be 1216");
+		assertEquals(GameStage.WIDTH-player.width, player.getxPos(), "xPos should be 1216");
 	}
 	
 	@Test
@@ -149,33 +149,33 @@ public class PlayerTest  {
 	
 	@Test
 	public void playerAtCoordinate0_0_moveRight_theCoordinateIncreaseByXVelocity() throws IllegalArgumentException, IllegalAccessException {
-		xPositionField.setInt(player, 0);
+		xPosField.setInt(player, 0);
 		xVelocityField.setInt(player, 10);
-		int previousXPosition = player.getXPosition();
+		int previousxPos = player.getxPos();
 		player.moveRight();
 		player.moveX();
-		int currentXPosition = player.getXPosition();
-		assertEquals(xPositionField.getInt(player), currentXPosition, "xPosition moved based on xVelocity.");
+		int currentxPos = player.getxPos();
+		assertEquals(xPosField.getInt(player), currentxPos, "xPos moved based on xVelocity.");
 	}
 	
 	@Test
 	public void playerAtCoordinate0_0_moveLeft_theCoordinateDecreaseByXVelocity() throws IllegalArgumentException, IllegalAccessException {
-		xPositionField.setInt(player, 0);
+		xPosField.setInt(player, 0);
 		xVelocityField.setInt(player, 10);
 		player.moveLeft();
 		player.moveX();
-		int currentXPosition = player.getXPosition();
-		assertEquals(xPositionField.getInt(player), currentXPosition, "xPosition moved based on yVelocity.");
+		int currentxPos = player.getxPos();
+		assertEquals(xPosField.getInt(player), currentxPos, "xPos moved based on yVelocity.");
 	}
 	
 	@Test
 	public void playerAtCoordinate0_10_jump_theCoordinateYDecreaseByYVelocity() throws IllegalArgumentException, IllegalAccessException {
-		yPositionField.setInt(player, 10);
+		yPosField.setInt(player, 10);
 		yVelocityField.setInt(player, 10);
 		player.jump();
 		player.moveY();
-		int currentYPosition = player.getYPosition();
-		assertEquals(yPositionField.getInt(player), currentYPosition, "Player position is decrease by yVelocity of 10");
+		int currentyPos = player.getyPos();
+		assertEquals(yPosField.getInt(player), currentyPos, "Player position is decrease by yVelocity of 10");
 	}
 	
 	@Test
@@ -205,7 +205,7 @@ public class PlayerTest  {
 	@Test
 	public void spawnSpecialMagazineAtRightSide_ofPlayer_movePlayerToRight_checkItemCollision() throws Exception {
 		GameStage mockGameStage = Mockito.mock(FirstStage.class);
-		SpecialMagazine specialMagazine = new SpecialMagazine(player.getXPosition() + player.width + 1,0,1,1);
+		SpecialMagazine specialMagazine = new SpecialMagazine(player.getxPos() + player.width + 1,0,1,1);
 		when(mockGameStage.getItem()).thenReturn(specialMagazine);
 		
 		player.moveRight();
@@ -218,7 +218,7 @@ public class PlayerTest  {
 	@Test
 	public void spawnTankBusterAtRightSide_ofPlayer_movePlayerToRight_checkItemCollision() throws Exception {
 		GameStage mockGameStage = Mockito.mock(FirstStage.class);
-		TankBuster tankBuster = new TankBuster(player.getXPosition() + player.width + 1,0,1,1);
+		TankBuster tankBuster = new TankBuster(player.getxPos() + player.width + 1,0,1,1);
 		when(mockGameStage.getItem()).thenReturn(tankBuster);
 		
 		player.moveRight();
@@ -230,7 +230,7 @@ public class PlayerTest  {
 	@Test
 	public void spawnTankBusterAtRightSide_ofPlayer_movePlayerToRight_checkItemCollision_thenCheckisMoveRight_alwaysTrue() throws Exception {
 		GameStage mockGameStage = Mockito.mock(FirstStage.class);
-		TankBuster tankBuster = new TankBuster(player.getXPosition() + player.width + 1,0,1,1);
+		TankBuster tankBuster = new TankBuster(player.getxPos() + player.width + 1,0,1,1);
 		when(mockGameStage.getItem()).thenReturn(tankBuster);
 		
 		player.moveRight();

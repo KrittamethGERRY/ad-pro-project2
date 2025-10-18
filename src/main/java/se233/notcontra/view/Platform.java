@@ -26,7 +26,7 @@ public class Platform extends Rectangle {
 	}
 	
 	public int getPaneWidth() { return this.width; }
-	public int getXPosition() { return this.xPos; }
-	public int getYPosition() { return this.yPos; }
+	public int getxPos() { return this.xPos; }
+	public int getyPos() { return this.yPos; }
 	public boolean getIsGround() { return this.isGround; }
 }

@@ -79,9 +79,9 @@ public class SecondStage extends GameStage {
 
 	@Override
 	public void logging() {
-		logger.info("Player spawned at X:{} Y:{}", player.getXPosition(), player.getYPosition());
+		logger.info("Player spawned at X:{} Y:{}", player.getxPos(), player.getyPos());
 		for (Platform platform : platforms) {
-			logger.info("Platform spawned at X:{} Y:{} Width:{}", platform.getXPosition(), platform.getYPosition(), platform.getPaneWidth());
+			logger.info("Platform spawned at X:{} Y:{} Width:{}", platform.getxPos(), platform.getyPos(), platform.getPaneWidth());
 		}
 		logger.info("Item spawned at X:{} Y:{}", item.getXPos(), item.getYPos());
 	}

@@ -48,7 +48,7 @@ public class FirstStage extends GameStage {
 		platforms.add(platform3);
 		platforms.add(platform4);
 		platforms.add(groundPlatform);
-		Enemy patrolEnemy = new PatrolEnemy(200, 200, 5, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 1000, EnemyType.PATROL);
+		Enemy patrolEnemy = new PatrolEnemy(200, 200, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 1000, EnemyType.PATROL);
 		GameLoop.enemies.add(patrolEnemy);
 		getChildren().addAll(background, boss, patrolEnemy, scoreBackground, livesBackground, livesLabel, scoreLabel, platform1, platform2, platform3, platform4, groundPlatform, item, player);
 		player.respawn();
@@ -87,9 +87,9 @@ public class FirstStage extends GameStage {
 	
 	@Override
 	public void logging() {
-		logger.info("Player spawned at X:{} Y:{}", player.getXPosition(), player.getYPosition());
+		logger.info("Player spawned at X:{} Y:{}", player.getxPos(), player.getyPos());
 		for (Platform platform : platforms) {
-			logger.info("Platform spawned at X:{} Y:{} Width:{}", platform.getXPosition(), platform.getYPosition(), platform.getPaneWidth());
+			logger.info("Platform spawned at X:{} Y:{} Width:{}", platform.getxPos(), platform.getyPos(), platform.getPaneWidth());
 		}
 		logger.info("Item spawned at X:{} Y:{}", item.getXPos(), item.getYPos());
 	}

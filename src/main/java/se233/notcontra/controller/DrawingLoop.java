@@ -37,10 +37,18 @@ public class DrawingLoop implements Runnable {
 		player.checkPlatformCollision(gameStage.getPlatforms());
 		player.checkItemCollision(gameStage);
 		player.isCollided(gameStage);
-		player.updateReloadTimer();
+		player.updateTimer();
 		player.resetHitBoxHeight();
-
 		checkPlayerEnemyCollision();
+		for (Enemy enemy: GameLoop.enemies) {
+			if (enemy.getType() == EnemyType.PATROL) {
+				((PatrolEnemy) enemy).updateAI(player);
+				((PatrolEnemy) enemy).repaint();
+				((PatrolEnemy) enemy).checkReachHighest();
+				((PatrolEnemy) enemy).checkPlatformCollision(gameStage.getPlatforms());
+
+			}
+		}
 	}
 
 	public void paint(Player player) {
@@ -64,7 +72,7 @@ public class DrawingLoop implements Runnable {
 				if (gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
 					// Add effect after the bullet hit the enemies
-					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bullet.getXPosition() - 16, bullet.getYPosition() - 16, 64, 64);
+					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bullet.getxPos() - 16, bullet.getyPos() - 16, 64, 64);
 					effects.add(explosion);
 					javafx.application.Platform.runLater(() -> {
 						gameStage.getChildren().add(explosion);

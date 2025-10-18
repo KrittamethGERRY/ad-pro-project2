@@ -12,7 +12,7 @@ import se233.notcontra.view.GameStages.GameStage;
 
 public class Enemy extends Pane {
     protected int xPos;
-	private int yPos;
+	protected int yPos;
 	protected int width;
 	protected int height;
     protected int health;
@@ -32,6 +32,8 @@ public class Enemy extends Pane {
     	this.getChildren().add(sprite);
     	this.setWidth(width);
     	this.setHeight(height);
+    	sprite.setFitHeight(48);
+    	sprite.setFitWidth(48);
     	this.health = health;
         this.xPos = xPos;
         this.yPos = yPos;
@@ -73,8 +75,8 @@ public class Enemy extends Pane {
 
         // Calculate centers
         Vector2D enemyCenter = new Vector2D(worldX + width / 2.0, worldY + height / 2.0);
-        Vector2D playerCenter = new Vector2D(player.getXPosition() + Player.width / 2.0,
-                player.getYPosition() + Player.height / 2.0);
+        Vector2D playerCenter = new Vector2D(player.getxPos() + Player.width / 2.0,
+                player.getyPos() + Player.height / 2.0);
 
         // Direction vector from enemy to player
         Vector2D direction = playerCenter.subtract(enemyCenter);
@@ -119,7 +121,7 @@ public class Enemy extends Pane {
         }
 
         Vector2D enemyCenter = new Vector2D(worldX + width / 2.0, worldY + height / 2.0);
-        Vector2D playerCenter = new Vector2D((double) (player.getXPosition() + Player.width / 2.0), (double) (player.getYPosition() + Player.height / 2.0));
+        Vector2D playerCenter = new Vector2D((double) (player.getxPos() + Player.width / 2.0), (double) (player.getyPos() + Player.height / 2.0));
         Vector2D directionToPlayer = playerCenter.subtract(enemyCenter);
 
         if (directionToPlayer.getLength() < 1 || directionToPlayer.getLength() > 1000) {

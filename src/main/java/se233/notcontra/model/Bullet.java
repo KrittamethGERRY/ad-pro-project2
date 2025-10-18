@@ -16,9 +16,9 @@ public class Bullet extends Pane {
 	private boolean Alive = true;
 	private ImageView sprite;
 
-    public Bullet(int xPosition, int yPosition, int speedX, int speedY, ShootingDirection direction , BulletOwner owner) {
+    public Bullet(int xPos, int yPos, int speedX, int speedY, ShootingDirection direction , BulletOwner owner) {
     	this.direction = direction;
-        this.position = new Vector2D(xPosition, yPosition);
+        this.position = new Vector2D(xPos, yPos);
 		this.velocity =  calculateVelocity(speedX, speedY, direction);
 		this.owner = owner;
 		setupBullet();
@@ -95,11 +95,11 @@ public class Bullet extends Pane {
 		this.velocity = newVelocity;
 	}
 
-	public int getXPosition() {
+	public int getxPos() {
 		return (int)position.x;
 	}
 
-	public int getYPosition() {
+	public int getyPos() {
 		return (int)position.y;
 	}
 

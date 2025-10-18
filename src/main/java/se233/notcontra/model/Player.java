@@ -8,9 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -21,7 +19,6 @@ import se233.notcontra.Launcher;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SpriteAnimation;
-import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.PlayerState;
 import se233.notcontra.model.Enums.ShootingDirection;
@@ -39,8 +36,8 @@ public class Player extends Pane {
 	private KeyCode shootKey;
 	private KeyCode jumpKey;
 	
-	private int xPosition;
-	private int yPosition;
+	private int xPos;
+	private int yPos;
 	private int startX;
 	private int startY;
 	private double xVelocity = 0;
@@ -80,31 +77,32 @@ public class Player extends Pane {
 	private int buffTimer = 0;
 	private int reloadTimer = 0;
 	public static int respawnTimer = 0;
+	public static int spawnProtectionTimer = 50;
 	
 	private PlayerState playerState;
 	
-	public Player(int xPosition, int yPosition, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
+	public Player(int xPos, int yPos, KeyCode leftKey, KeyCode rightKey, KeyCode upKey, KeyCode downKey) {
 		this.playerState = PlayerState.IDLE;
 		this.bulletPerClip = 3;
 		this.dropDownTimer = 0;
 		this.buffTimer = 0;
 		this.reloadTimer = 0;
 		respawnTimer = 0;
-		this.startX = xPosition;
-		this.startY = yPosition;
+		this.startX = xPos;
+		this.startY = yPos;
 		this.leftKey = leftKey;
 		this.rightKey = rightKey;
 		this.upKey = upKey;
 		this.downKey = downKey;
 		this.shootKey = KeyCode.L;
 		this.jumpKey = KeyCode.K;
-		this.xPosition = xPosition;
-		this.yPosition = yPosition;
+		this.xPos = xPos;
+		this.yPos = yPos;
 		Player.height = 64;
 		Player.width = 64;
 		this.hitBox = new Rectangle(width, height);
-		this.setTranslateX(xPosition);
-		this.setTranslateY(yPosition);
+		this.setTranslateX(xPos);
+		this.setTranslateY(yPos);
 		Image image = new Image(Launcher.class.getResourceAsStream("assets/Player/player_idle.png"));
 		this.sprite = new SpriteAnimation(image, 2, 2, 1, 0, 0, 64, 64);
 		this.sprite.setFitWidth(80);
@@ -122,6 +120,8 @@ public class Player extends Pane {
 	//					Starting of Movement Behaviors
 	public void moveLeft() {
 		if (isTankBuster) {
+			isMoveLeft = false;
+			isMoveRight = true;
 			return;
 		}
 		isMoveRight = false;
@@ -146,9 +146,10 @@ public class Player extends Pane {
 	}
 	
 	public void respawn() {
+		spawnProtectionTimer = 50;
 		enableKeys();
-		this.yPosition = this.startY;
-		this.xPosition = this.startX;
+		this.yPos = this.startY;
+		this.xPos = this.startX;
 		this.isMoveLeft = false;
 		this.isMoveRight = false;
 		this.isFalling = true;
@@ -220,15 +221,15 @@ public class Player extends Pane {
 		}
 
 		int xBulletPos = switch (direction) {
-			case UP -> xPosition + (width/2);
-			case RIGHT, UP_RIGHT, DOWN_RIGHT -> xPosition + width;
-			case LEFT, UP_LEFT, DOWN_LEFT -> xPosition;
+			case UP -> xPos + (width/2);
+			case RIGHT, UP_RIGHT, DOWN_RIGHT -> xPos + width;
+			case LEFT, UP_LEFT, DOWN_LEFT -> xPos;
 		};
 		
 		int yBulletPos = switch(direction) {
-			case RIGHT, LEFT -> yPosition;
-			case UP, UP_RIGHT, UP_LEFT -> yPosition - height;
-			case DOWN_RIGHT, DOWN_LEFT -> yPosition + height;
+			case RIGHT, LEFT -> yPos;
+			case UP, UP_RIGHT, UP_LEFT -> yPos - height;
+			case DOWN_RIGHT, DOWN_LEFT -> yPos + height;
 		};
 		
     	long now = System.currentTimeMillis();
@@ -242,7 +243,7 @@ public class Player extends Pane {
     			bulletPerClip = 3;
     		}
 
-            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPosition + height/2), 10, 10, direction , BulletOwner.PLAYER)
+            Bullet bullet = isProning ? new Bullet(xBulletPos, (yPos + height/2), 10, 10, direction , BulletOwner.PLAYER)
             		: new Bullet(xBulletPos, yBulletPos, 10, 10, direction , BulletOwner.PLAYER);
             if (isBuffed && isSpecialMag) {
             	bullet.setBulletSprite(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/Bullet_Sp.png")));
@@ -255,14 +256,19 @@ public class Player extends Pane {
     	}
 	}
 	
-	public void updateReloadTimer() {
+	public void updateTimer() {
 		if (reloadTimer > 0) {
 			reloadTimer--;
+		}
+		if (spawnProtectionTimer > 0) {
+			spawnProtectionTimer--;
 		}
 	}
 	
 	public void stop() {
 		if (isTankBuster) {
+			isMoveLeft = false;
+			isMoveRight = true;
 			return;
 		}
 		
@@ -287,25 +293,25 @@ public class Player extends Pane {
 	}
 	
 	public void moveX() {
-		setTranslateX(xPosition);
+		setTranslateX(xPos);
 		if (isMoveRight) {
 			xVelocity = xVelocity >= xMaxVelocity ? xMaxVelocity : xVelocity + xAcceleration;
-			xPosition += xVelocity;
+			xPos += xVelocity;
 		} 
 		if (isMoveLeft)	{
 			xVelocity = xVelocity >= xMaxVelocity ? xMaxVelocity : xVelocity + xAcceleration;
-			xPosition -= xVelocity;
+			xPos -= xVelocity;
 		}
 	}
 	
 	public void moveY() {
-		setTranslateY(yPosition);
+		setTranslateY(yPos);
 		if (isFalling) {
 			yVelocity = yVelocity >= yMaxVelocity ? yMaxVelocity : yVelocity + yAcceleration;
-			yPosition += yVelocity;
+			yPos += yVelocity;
 		} else if (isJumping) {
 			yVelocity = yVelocity <= 0 ? 0 : yVelocity - yAcceleration;
-			yPosition -= yVelocity;
+			yPos -= yVelocity;
 		}
 	}
 	
@@ -318,11 +324,11 @@ public class Player extends Pane {
 	}
 	
 	public void checkStageBoundaryCollision() {
-		if ((xPosition + width) >= GameStage.WIDTH) {
-			xPosition = GameStage.WIDTH - width;
+		if ((xPos + width) >= GameStage.WIDTH) {
+			xPos = GameStage.WIDTH - width;
 		}
-		if (xPosition <= 0) {
-			xPosition = 0;
+		if (xPos <= 0) {
+			xPos = 0;
 		}
 	}
 	
@@ -375,14 +381,14 @@ public class Player extends Pane {
 		boolean onAPlatformThisFrame = false;
 		
 			for (Platform platform : platforms) {
-				boolean isCollidedXAxis = (xPosition + width) > platform.getXPosition() && xPosition < platform.getXPosition() + platform.getPaneWidth();
-				boolean isLanding = isFalling && (yPosition + height) <= platform.getYPosition() && (yPosition + height + yVelocity) >= platform.getYPosition();
-				boolean isStanding = Math.abs((yPosition + height) - platform.getYPosition()) < 1;				
+				boolean isCollidedXAxis = (xPos + width) > platform.getxPos() && xPos < platform.getxPos() + platform.getPaneWidth();
+				boolean isLanding = isFalling && (yPos + height) <= platform.getyPos() && (yPos + height + yVelocity) >= platform.getyPos();
+				boolean isStanding = Math.abs((yPos + height) - platform.getyPos()) < 1;				
 				
 				if (isCollidedXAxis && (isLanding || (isOnPlatform && isStanding))) {
 					
 					if (isLanding) {
-						yPosition = platform.getYPosition() - height;
+						yPos = platform.getyPos() - height;
 						yVelocity = 0;
 						isFalling = false;
 					}
@@ -411,8 +417,8 @@ public class Player extends Pane {
 		int bossX = gameStage.getBoss().getXPos();
 		int bossY = gameStage.getBoss().getYPos();
 		
-		boolean xAxisCollision = this.xPosition + this.width >= bossX;
-		boolean yAxisCollision = this.yPosition + this.height >= bossY;
+		boolean xAxisCollision = this.xPos + this.width >= bossX;
+		boolean yAxisCollision = this.yPos + this.height >= bossY;
 		
 		if (xAxisCollision && yAxisCollision && isTankBuster && respawnTimer <= 0) {
 			die();
@@ -424,7 +430,7 @@ public class Player extends Pane {
 			}
 			return;
 		} else if (xAxisCollision) {
-			this.xPosition = bossX - width;
+			this.xPos = bossX - width;
 		}
 		//////////////////// 			PLAYER DIES WHEN CHARGING TO THE BOSS WITH TANK BUSTER AND THE BOSS TAKE DAMAGE
 
@@ -480,12 +486,12 @@ public class Player extends Pane {
 		return jumpKey;
 	}
 
-	public int getXPosition() {
-		return xPosition;
+	public int getxPos() {
+		return xPos;
 	}
 
-	public int getYPosition() {
-		return yPosition;
+	public int getyPos() {
+		return yPos;
 	}
 	
 	public boolean isProning() {
@@ -507,7 +513,7 @@ public class Player extends Pane {
 	public boolean isJumping() { return this.isJumping; }
 	
 	public void logPos() {
-		logger.info("Player - X: {}, Y: {}", xPosition, yPosition);
+		logger.info("Player - X: {}, Y: {}", xPos, yPos);
 	}
 	
 }
