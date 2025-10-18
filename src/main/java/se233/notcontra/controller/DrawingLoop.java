@@ -108,8 +108,8 @@ public class DrawingLoop implements Runnable {
 					&& !gameStage.getPlayer().isDying()) {
                 if (!CheatManager.getInstance().areCheatsActive()) {
                     if (Player.spawnProtectionTimer <= 0) {
-						    gameStage.getPlayer().die();
-                            shouldRemove = true;
+                        gameStage.getPlayer().die();
+                        shouldRemove = true;
                     }
                 }
 			}
