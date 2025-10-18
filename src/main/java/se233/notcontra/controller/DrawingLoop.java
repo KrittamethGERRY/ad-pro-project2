@@ -152,6 +152,14 @@ public class DrawingLoop implements Runnable {
 					Platform.runLater(this::updateLives);
 				}
 			}
+			
+			// Player Collided with PATROL enemy
+			if (enemy.isAlive() && (enemy.getType() == EnemyType.PATROL)) {
+				Bounds enemyBounds = enemy.localToParent(((PatrolEnemy) enemy).getBoundsInLocal());
+				if (enemyBounds.intersects(playerBounds) && Player.spawnProtectionTimer <= 0) {
+					gameStage.getPlayer().die();
+				}
+			}
 		}
 	}
 	
