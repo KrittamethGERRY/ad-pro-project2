@@ -1,6 +1,7 @@
 package se233.notcontra.model;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +11,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -164,20 +166,17 @@ public class Player extends Pane {
 		this.setState(PlayerState.DIE);
 		if (lives <= 0) {
 			javafx.application.Platform.runLater(() -> {
+				GameLoop.pause();
+				ButtonType retry = new ButtonType("Retry", ButtonBar.ButtonData.OK_DONE);
+				ButtonType quit = new ButtonType("Quit", ButtonBar.ButtonData.CANCEL_CLOSE);
 				Alert alert = new Alert(AlertType.CONFIRMATION, "Game Over!");
 				alert.setTitle("Game Over!");
-				alert.setHeaderText("SKILL ISSUE");
-
-				// Show the alert and wait for user response
-				alert.showAndWait().ifPresent(response -> {
-				if (response == ButtonType.OK) {
-					System.out.println("User clicked OK");
+				alert.setHeaderText("Retry?");
+				alert.getButtonTypes().setAll(retry, quit);
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == retry) {
+					Launcher.changeStage(Launcher.currentStageIndex);
 				} else {
-					System.out.println("User canceled the action");
-				}
-				});
-				GameLoop.pause();
-				if (alert.getResult() == ButtonType.OK) {
 					Launcher.exitToMenu();
 				}
 			});
