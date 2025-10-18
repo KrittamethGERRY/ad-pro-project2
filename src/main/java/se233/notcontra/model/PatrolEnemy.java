@@ -2,6 +2,8 @@ package se233.notcontra.model;
 
 import java.util.List;
 
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.view.Platform;
 import se233.notcontra.view.GameStages.GameStage;
@@ -23,9 +25,13 @@ public class PatrolEnemy extends Enemy {
     boolean canJump = false;
     boolean isJumping = false;
 	private boolean isOnPlatform;
+	Rectangle hitBox;
 	
 	public PatrolEnemy(int xPos, int yPos, double speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
 		super(xPos, yPos, speed, width, height, count, column, row, imgName, health, type);
+		hitBox = new Rectangle(width, height);
+		hitBox.setFill(Color.TRANSPARENT);
+		this.getChildren().add(hitBox);
 	}
 	
 	public void moveLeft() {
@@ -40,17 +46,7 @@ public class PatrolEnemy extends Enemy {
 		isMoveLeft = false;
 		this.setScaleX(-1);
 	}
-	
-	public void respawn() {
-		this.yPos = this.startY;
-		this.xPos = this.startX;
-		this.isMoveLeft = false;
-		this.isMoveRight = false;
-		this.isFalling = true;
-		this.canJump = false;
-		this.isJumping = false;
-	}
-	
+
 	public void checkStageBoundaryCollision() {
 		if ((xPos + width) >= GameStage.WIDTH) {
 			xPos = GameStage.WIDTH - width;
@@ -68,19 +64,18 @@ public class PatrolEnemy extends Enemy {
 				boolean isLanding = isFalling && (yPos + height) <= platform.getyPos() && (yPos + height + yVelocity) >= platform.getyPos();
 				boolean isStanding = Math.abs((yPos + height) - platform.getyPos()) < 1;				
 				
-				if (isCollidedXAxis && (isLanding || (isOnPlatform && isStanding))) {
-					
-					if (isLanding) {
-						yPos = platform.getyPos() - height;
-						yVelocity = 0;
-						isFalling = false;
-					}
-					
-					canJump = true;
-					isOnPlatform = true;
-					onAPlatformThisFrame = true;
-					
-					break;
+			if (isCollidedXAxis && (isLanding || (isOnPlatform && isStanding))) {
+				
+				if (isLanding) {
+					yPos = platform.getyPos() - height;
+					yVelocity = 0;
+					isFalling = false;
+				}
+				
+				canJump = true;
+				isOnPlatform = true;
+				onAPlatformThisFrame = true;
+				break;
 			}
 		}
 		
@@ -162,9 +157,7 @@ public class PatrolEnemy extends Enemy {
         }
     }
     
-    public void takeDamage(int dmg) {
-        health -= dmg;
-        if(health <= 0) isAlive = false;
-    }
+    
+    public Rectangle getHitBox() { return this.hitBox; }
 
 }

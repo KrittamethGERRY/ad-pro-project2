@@ -4,17 +4,12 @@ import java.util.List;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Enums.BulletOwner;
-import se233.notcontra.model.Enums.EnemyState;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
-import se233.notcontra.model.Turret;
 import se233.notcontra.view.GameStages.GameStage;
 
 public class WallBoss extends Boss {
@@ -24,7 +19,6 @@ public class WallBoss extends Boss {
     private Enemy core;
     private GameStage gameStage;
     private Enemy lastTurretFired = null;
-    private boolean coreRevealed = false;
     private Image sprite;
 
     private int enemyTimer = 0;

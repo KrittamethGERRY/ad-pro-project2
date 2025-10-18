@@ -46,6 +46,7 @@ public class DrawingLoop implements Runnable {
 				((PatrolEnemy) enemy).repaint();
 				((PatrolEnemy) enemy).checkReachHighest();
 				((PatrolEnemy) enemy).checkPlatformCollision(gameStage.getPlatforms());
+				((PatrolEnemy) enemy).checkReachGameWall();
 
 			}
 		}
@@ -69,6 +70,13 @@ public class DrawingLoop implements Runnable {
 			
 			// Enemies collision with bullet
 			for (Enemy enemy : gameStage.getEnemies()) {
+				if (enemy.isAlive() && enemy.getBoundsInParent().intersects(bullet.getBoundsInParent()) && bullet.getOwner() == BulletOwner.PLAYER) {
+					enemy.takeDamage(500);
+					shouldRemove = true;
+				}
+				
+				
+				// Boss' children enemy
 				if (enemy.isAlive() &&
 						gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
@@ -79,23 +87,21 @@ public class DrawingLoop implements Runnable {
 						gameStage.getChildren().add(explosion);
 					});
 					enemy.takeDamage(500);
-
-					Platform.runLater(this::updateScore);
-
-					if (enemy.getType() == EnemyType.WALL_SHOOTER) {
-
-					} else if (enemy.getType() == EnemyType.TURRET) {
+					
+					if (enemy.getType() == EnemyType.TURRET) {
 						if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
 							Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
                             Platform.runLater(() -> {
                                 GameLoop.enemies.add(core);
-                                    gameStage.getBoss().getWeakPoints().remove(core);
+                                gameStage.getBoss().getWeakPoints().remove(core);
                             });
 						}
 					}
 					shouldRemove = true;
 					break;
 				}
+
+				Platform.runLater(this::updateScore);
 			}
 			
 			// Player collisions with bullet
@@ -107,8 +113,8 @@ public class DrawingLoop implements Runnable {
 					&& !gameStage.getPlayer().isDying()) {
 				if (Player.spawnProtectionTimer <= 0) {
 					gameStage.getPlayer().die();
+					shouldRemove = true;
 				}
-				shouldRemove = true;
 			}
 			Platform.runLater(this::updateLives);
 			
@@ -132,7 +138,7 @@ public class DrawingLoop implements Runnable {
 		List<Enemy> enemiesCopy = new ArrayList<>(GameLoop.enemies);
 
 		for (Enemy enemy : enemiesCopy) {
-			if (enemy.isAlive() && enemy.getType() == EnemyType.FLYING) {
+			if (enemy.isAlive() && (enemy.getType() == EnemyType.FLYING)) {
 				Bounds enemyBounds = gameStage.getBoss().localToParent(enemy.getBoundsInParent());
 
 				if (enemyBounds.intersects(playerBounds)) {
@@ -141,6 +147,14 @@ public class DrawingLoop implements Runnable {
 					clearAllEnemies();
 
 					Platform.runLater(this::updateLives);
+				}
+			}
+			
+			// Player Collided with PATROL enemy
+			if (enemy.isAlive() && (enemy.getType() == EnemyType.PATROL)) {
+				Bounds enemyBounds = enemy.localToParent(((PatrolEnemy) enemy).getBoundsInLocal());
+				if (enemyBounds.intersects(playerBounds) && Player.spawnProtectionTimer <= 0) {
+					gameStage.getPlayer().die();
 				}
 			}
 		}
@@ -208,19 +222,25 @@ public class DrawingLoop implements Runnable {
 	}
 	
 	private void updateEnemies() {
-		Iterator<Enemy> iterator = GameLoop.enemies.iterator();
-		while (iterator.hasNext()) {
-			Enemy enemy = iterator.next();
-			if (enemy.isAlive()) {
-				enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
-			} else if (!(enemy.getType() == EnemyType.TURRET)){
-				// Kill remove enemy from the stage
-				iterator.remove();
-				javafx.application.Platform.runLater(() -> {
-					gameStage.getBoss().getChildren().remove(enemy);
-					GameLoop.enemies.remove(enemy);
-				});
-			} 
+		if (!GameLoop.isPaused) {
+			Iterator<Enemy> iterator = GameLoop.enemies.iterator();
+			while (iterator.hasNext()) {
+				Enemy enemy = iterator.next();
+				if (enemy.isAlive()) {
+					enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
+				} else if (!(enemy.getType() == EnemyType.TURRET)){
+					// Kill remove enemy from the stage
+					iterator.remove();
+					javafx.application.Platform.runLater(() -> {
+						gameStage.getBoss().getChildren().remove(enemy);
+						GameLoop.enemies.remove(enemy);
+					});
+					
+					if (enemy.getType() == EnemyType.PATROL) {
+						gameStage.getChildren().remove(enemy);
+					}
+				} 
+			}
 		}
 	}
 	
@@ -231,34 +251,40 @@ public class DrawingLoop implements Runnable {
 	@Override
 	public void run() {
 		while (running) {
+			float startTime = System.currentTimeMillis();
 			if (!GameLoop.isPaused) {
-				float time = System.currentTimeMillis();
-				checkAllCollisions(gameStage.getPlayer());
-				paint(gameStage.getPlayer());
-				paintEffects(effects);
-				paintBullet(GameLoop.bullets, GameLoop.shootingDir);
-				updateEnemies();
-				updateBoss();
-				if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
-					gameStage.getBoss().update();
+				javafx.application.Platform.runLater(() -> {
+					if (GameLoop.isPaused || !running) {
+						return;
+					}
+					checkAllCollisions(gameStage.getPlayer());
+					paint(gameStage.getPlayer());
+					paintEffects(effects);
+					paintBullet(GameLoop.bullets, GameLoop.shootingDir);
+					updateEnemies();
+					updateBoss();
+					if (gameStage.getBoss() != null && gameStage.getBoss().isAlive()) {
+						gameStage.getBoss().update();
+					}
+				});
+				
+				float elapsedTime = System.currentTimeMillis() - startTime;
+				if (elapsedTime < interval) {
+					try {
+						Thread.sleep((long) (interval - elapsedTime));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						Thread.sleep((long) (interval - (interval % elapsedTime)));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			
-			float time = System.currentTimeMillis();
-			time = System.currentTimeMillis() - time;
-			if (time < interval) {
-				try {
-					Thread.sleep((long) (interval - time));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					Thread.sleep((long) (interval - (interval % time)));
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+
 		}
 	}
 }

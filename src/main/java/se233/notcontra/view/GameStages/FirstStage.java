@@ -48,7 +48,7 @@ public class FirstStage extends GameStage {
 		platforms.add(platform3);
 		platforms.add(platform4);
 		platforms.add(groundPlatform);
-		Enemy patrolEnemy = new PatrolEnemy(200, 200, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 1000, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy = new PatrolEnemy(700, 200, 1, 32, 32, 3, 3, 1, "assets/Enemy/enemy_wall_shooter.png", 500, EnemyType.PATROL);
 		GameLoop.enemies.add(patrolEnemy);
 		getChildren().addAll(background, boss, patrolEnemy, scoreBackground, livesBackground, livesLabel, scoreLabel, platform1, platform2, platform3, platform4, groundPlatform, item, player);
 		player.respawn();
