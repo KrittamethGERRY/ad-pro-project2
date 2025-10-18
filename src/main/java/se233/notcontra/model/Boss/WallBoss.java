@@ -25,6 +25,7 @@ public class WallBoss extends Boss {
     private GameStage gameStage;
     private Enemy lastTurretFired = null;
     private boolean coreRevealed = false;
+    private Image sprite;
 
     private int enemyTimer = 0;
     public static int totalTurret = 2;
@@ -62,37 +63,28 @@ public class WallBoss extends Boss {
 
         if (turretLeft.isAlive() && !turretRight.isAlive()) {
             shootFromTurret(turretLeft);
-            turretLeft.setState(EnemyState.ATTACKING);
-            turretLeft.setState(EnemyState.IDLE);
             shootTimer = 100;
         }
         else if (!turretLeft.isAlive() && turretRight.isAlive()) {
             shootFromTurret(turretRight);
-            turretRight.setState(EnemyState.ATTACKING);
-            turretRight.setState(EnemyState.IDLE);
             shootTimer = 100;
         }
         else if (turretLeft.isAlive() && turretRight.isAlive()) {
             if (lastTurretFired == null || lastTurretFired == turretRight) {
                 shootFromTurret(turretLeft);
                 lastTurretFired = turretLeft;
-                turretLeft.setState(EnemyState.ATTACKING);
             } else {
                 shootFromTurret(turretRight);
                 lastTurretFired = turretRight;
-                turretRight.setState(EnemyState.ATTACKING);
             }
-            turretRight.setState(EnemyState.IDLE);
-            turretLeft.setState(EnemyState.IDLE);
             shootTimer = 100;
         }
-
         spawnEnemy();
 
     }
 
     private void shootFromTurret(Enemy turret) {
-
+        int time = 0;
         ShootingDirection[] leftDirections = {
                 ShootingDirection.LEFT,
                 ShootingDirection.DOWN_LEFT
@@ -102,14 +94,23 @@ public class WallBoss extends Boss {
 
         int turretXPos = (int) (this.getXPos() + turret.getXPos());
         int turretYPos = (int) (this.getYPos() + turret.getYPos());
-        
-        int speedX = 5;
-        int speedY = (randomDirection == ShootingDirection.UP_LEFT ||
-                randomDirection == ShootingDirection.DOWN_LEFT) ? 3 : 0;
+
+
+        int speedX = -8;
+
+        int speedY;
+
+        if (randomDirection == ShootingDirection.DOWN_LEFT) {
+            speedY = -3;
+        } else {
+            speedY = -6;
+        }
 
         Bullet bullet = new Bullet(turretXPos, turretYPos,speedX, speedY, randomDirection , BulletOwner.ENEMY);
 
-        //turret.setShootingAnimationTimer(20);
+        bullet.setGravityEnabled(true);
+
+        turret.setShootingAnimationTimer(20);
 
         GameLoop.bullets.add(bullet);
         Platform.runLater(() -> {

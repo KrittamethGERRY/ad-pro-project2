@@ -35,7 +35,7 @@ public class RDBoss extends Boss{
 
         getWeakPoints().add(Rdhead);
         javafx.application.Platform.runLater(() -> {
-            this.getChildren().addAll( Rdlefthand, Rdrighthand, RdleftEye, RdrightEye);
+            this.getChildren().addAll(Rdhead ,Rdlefthand, Rdrighthand, RdleftEye, RdrightEye);
         });
 
     }

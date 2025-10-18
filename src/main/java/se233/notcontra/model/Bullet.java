@@ -15,14 +15,25 @@ public class Bullet extends Pane {
 	private BulletOwner owner;
 	private boolean Alive = true;
 	private ImageView sprite;
+	private boolean gravityEnabled = false;
+	private double velocityX;
+	private double velocityY;
+	private static final double GRAVITY = 0.3;
 
     public Bullet(int xPos, int yPos, int speedX, int speedY, ShootingDirection direction , BulletOwner owner) {
     	this.direction = direction;
         this.position = new Vector2D(xPos, yPos);
 		this.velocity =  calculateVelocity(speedX, speedY, direction);
 		this.owner = owner;
+
+		this.velocityX = speedX;
+		this.velocityY = speedY;
 		setupBullet();
     }
+
+	public void setGravityEnabled(boolean enabled) {
+		this.gravityEnabled = enabled;
+	}
 
 	public Bullet(Vector2D startPos, Vector2D directionVector, double speed, BulletOwner owner) {
 		this.position = new Vector2D(startPos.x, startPos.y);
@@ -70,9 +81,15 @@ public class Bullet extends Pane {
 	}
 
 	public void move() {
-		position = position.add(velocity);
-		setTranslateX((int)position.x);
-		setTranslateY((int)position.y);
+		if (gravityEnabled) {
+			velocityY += GRAVITY; // Apply gravity
+			setTranslateX(getTranslateX() + velocityX);
+			setTranslateY(getTranslateY() + velocityY);
+		} else {
+			position = position.add(velocity);
+			setTranslateX((int) position.x);
+			setTranslateY((int) position.y);
+		}
 	}
 
 	public void move(float deltaTime) {
