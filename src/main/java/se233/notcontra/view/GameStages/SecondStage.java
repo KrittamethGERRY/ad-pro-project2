@@ -26,6 +26,7 @@ import se233.notcontra.model.Enums.EnemyType;
 public class SecondStage extends GameStage {
 
 	public SecondStage() {
+		GameLoop.enemies.clear();
 		SoundController.getInstance().stopAllSounds();
 		SoundController.getInstance().playSecondStageMusic();
 		ImageView scoreBackground = drawScore();
@@ -47,7 +48,6 @@ public class SecondStage extends GameStage {
 		GameLoop.enemies.clear();
 
 		boss = new JavaBoss(1010, 20,128,256,this);
-
 
 		bossPhase = false;
 		totalMinions = 4;

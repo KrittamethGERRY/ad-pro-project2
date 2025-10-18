@@ -26,6 +26,7 @@ import se233.notcontra.model.Enums.EnemyType;
 public class FirstStage extends GameStage {
 	
 	public FirstStage() {
+		GameLoop.enemies.clear();
 		SoundController.getInstance().stopAllSounds();
 		SoundController.getInstance().playFirstStageMusic();
 		ImageView scoreBackground = drawScore();

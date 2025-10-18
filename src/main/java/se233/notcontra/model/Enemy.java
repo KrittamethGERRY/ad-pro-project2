@@ -188,12 +188,15 @@ public class Enemy extends Pane {
     	case TURRET: SoundController.getInstance().playMetalHitSound(); break;
     	case FLYING: break;
     	case WALL: SoundController.getInstance().playMetalHitSound2(); break;
+        case RDEYES: SoundController.getInstance().playMetalHitSound(); break;
+        case RDHAND: SoundController.getInstance().playMetalHitSound2(); break;
+        case RDHEAD: SoundController.getInstance().playMetalHitSound(); break;
     	}
     	System.out.println("Health: " + this.health);
     	if (health <= 0) {
     		switch (type) {
     		case PATROL: GameLoop.addScore(300); SoundController.getInstance().playDieSound(); GameStage.totalMinions--; break;
-    		case WALL_SHOOTER: GameLoop.addScore(100); break;
+    		case WALL_SHOOTER: GameLoop.addScore(100); SoundController.getInstance().playDieSound(); break;
     		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--;  break;
     		case FLYING: GameLoop.addScore(150); break;
     		case WALL: GameLoop.addScore(1000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
@@ -201,7 +204,6 @@ public class Enemy extends Pane {
             case RDEYES: GameLoop.addScore(500); break;
             case RDHAND: GameLoop.addScore(500); break;
             case RDHEAD: GameLoop.addScore(3000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
-
 			default: 
 				break;
     		}

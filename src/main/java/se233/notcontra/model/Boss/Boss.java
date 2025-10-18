@@ -49,8 +49,6 @@ public class Boss extends Pane {
         updateWeakPointsPosition();
     }
 
-    // These methods are protected so subclasses can override them
-
 
     protected void handleIdleState() {
         if (idleTimer > 0) {

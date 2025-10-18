@@ -248,6 +248,7 @@ public class DrawingLoop implements Runnable {
 				alert.setHeaderText("You Win!");
 				alert.setContentText("Continue to the next stage?");
 				alert.showAndWait();
+				SoundController.getInstance().playWinSound();
 				if (alert.getResult() == ButtonType.OK) {
 					Launcher.changeStage(1);
 				} else {
@@ -270,6 +271,7 @@ public class DrawingLoop implements Runnable {
 				alert.setHeaderText("You Win!");
 				alert.setContentText("Continue to the next stage?");
 				alert.showAndWait();
+				SoundController.getInstance().playWinSound();
 				if (alert.getResult() == ButtonType.OK) {
 					Launcher.changeStage(2);
 				} else {
@@ -293,6 +295,7 @@ public class DrawingLoop implements Runnable {
 				alert.setHeaderText("CONGRATULATIONS!");
 				alert.setContentText("YOU WIN THE GAME AND GET GRAD 'A' ADPRO");
 				alert.showAndWait();
+				
 				if (alert.getResult() == ButtonType.OK) {
 					Launcher.exitToMenu();
 				}

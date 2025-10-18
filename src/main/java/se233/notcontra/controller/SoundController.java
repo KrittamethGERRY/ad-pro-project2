@@ -16,8 +16,11 @@ public class SoundController {
 	private AudioClip cannonSound;
 	private AudioClip firstStageMusic;
 	private AudioClip secondStageMusic;
+	private AudioClip thirdStageMusic;
 	private AudioClip playerDieSound;
 	private AudioClip proneSound;
+	private AudioClip winSound;
+	
     public void stopAllSounds() {
         if (shootSound != null) shootSound.stop();
         if (jumpSound != null) jumpSound.stop();
@@ -27,10 +30,13 @@ public class SoundController {
         if (metalSound2 != null) metalSound2.stop();
         if (pickUpItemSound != null) pickUpItemSound.stop();
         if (cannonSound != null) cannonSound.stop();
+        if (screamingSound != null) screamingSound.stop();
         if (firstStageMusic != null) firstStageMusic.stop();
         if (secondStageMusic != null) secondStageMusic.stop();
+        if (thirdStageMusic != null) thirdStageMusic.stop();
         if (playerDieSound != null) playerDieSound.stop();
         if (proneSound != null) proneSound.stop();
+        if (winSound != null) winSound.stop();
 
     }
 	private SoundController() {
@@ -45,15 +51,18 @@ public class SoundController {
 		cannonSound = new AudioClip(Launcher.class.getResource("assets/Sounds/cannonSound.mp3").toString());
 		firstStageMusic = new AudioClip(Launcher.class.getResource("assets/Sounds/marioTheme.mp3").toString());
 		secondStageMusic = new AudioClip(Launcher.class.getResource("assets/Sounds/undergroundTheme.mp3").toString());
+		thirdStageMusic = new AudioClip(Launcher.class.getResource("assets/Sounds/lastBattleTheme.mp3").toString());
 		playerDieSound = new AudioClip(Launcher.class.getResource("assets/Sounds/playerDieSound.mp3").toString());
 		proneSound = new AudioClip(Launcher.class.getResource("assets/Sounds/proneSound.mp3").toString());
-
+		winSound = new AudioClip(Launcher.class.getResource("assets/Sounds/winSound.mp3").toString());
 
 		metalSound.setVolume(0.2);
 		metalSound2.setVolume(0.2);
 		shootSound.setVolume(0.25);
 		firstStageMusic.setVolume(0.35);
 		secondStageMusic.setVolume(0.35);
+		thirdStageMusic.setVolume(0.20);
+
 		jumpSound.setVolume(0.1);
 		playerDieSound.setVolume(0.35);
 	}
@@ -87,7 +96,6 @@ public class SoundController {
 	public void playScreamingSound() {
 		screamingSound.play();
 	}
-	
 	public void playCannonSound() {
 		cannonSound.play();
 	}
@@ -97,16 +105,19 @@ public class SoundController {
 	public void playSecondStageMusic() {
 		secondStageMusic.play();
 	}
+	public void playThirdStageMusic() {
+		thirdStageMusic.play();
+	}
 	public void playPlayerDieSound() {
 		playerDieSound.play();
 	}
-	
 	public void playProneSound() {
 		proneSound.play();
 	}
 	
-
-    
+	public void playWinSound() {
+		winSound.play();
+	}
 	public static SoundController getInstance() {
 		if (instance == null) return new SoundController(); 
 		return instance;

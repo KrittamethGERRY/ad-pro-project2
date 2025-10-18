@@ -24,7 +24,9 @@ import se233.notcontra.model.Boss.Boss;
 public class ThirdStage extends GameStage {
 
 	public ThirdStage() {
+		GameLoop.enemies.clear();
 		SoundController.getInstance().stopAllSounds();
+		SoundController.getInstance().playThirdStageMusic();
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
 		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/thirdStage.png")));
