@@ -174,8 +174,22 @@ public class GameLoop implements Runnable{
 	}
 
 	public void updateEnemyAnimation(Enemy enemy){
-		if(!enemy.isAlive() && enemy.getType() == EnemyType.TURRET){
-			enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Turret.png"), 2, 1,2);
+		if (enemy.getType() == EnemyType.TURRET) {
+			if (!enemy.isAlive()) {
+				enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Turret_dead.png"), 2, 2, 1);
+			} else {
+				// Update shooting animation timer
+				enemy.updateShootingAnimation();
+
+				// Check if turret is currently shooting
+				if (enemy.getShootingAnimationTimer() > 0) {
+					// Shooting sprite - column 2, row 1
+					enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Turret_IDEL.png"), 1, 1, 1);
+				} else {
+					// Idle sprite - column 1, row 1
+					enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Turret_fire.png"), 1, 1, 1);
+				}
+			}
 		}
 
 		enemy.getSprite().tick();

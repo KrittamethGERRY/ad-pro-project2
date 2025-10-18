@@ -19,6 +19,7 @@ public class Enemy extends Pane {
     private int shootTimer = 75;
     private SpriteAnimation sprite;
     private EnemyState enemyState;
+    private int shootingAnimationTimer = 0;
 
     public Enemy(int xPos, int yPos, double speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
     	setTranslateX(xPos);
@@ -130,6 +131,7 @@ public class Enemy extends Pane {
         double bulletSpeed = 0.007;
 
         shootTimer = 75;
+        shootingAnimationTimer = 20;
 
         return new Bullet(
                 enemyCenter,
@@ -176,6 +178,20 @@ public class Enemy extends Pane {
     		kill();
             setState(EnemyState.DEAD);
     	}
+    }
+
+    public int getShootingAnimationTimer() {
+        return shootingAnimationTimer;
+    }
+
+    public void updateShootingAnimation() {
+        if (shootingAnimationTimer > 0) {
+            shootingAnimationTimer--;
+        }
+    }
+
+    public void setShootingAnimationTimer(int timer) {
+        this.shootingAnimationTimer = timer;
     }
 
     public double getXPos() { return xPos; }

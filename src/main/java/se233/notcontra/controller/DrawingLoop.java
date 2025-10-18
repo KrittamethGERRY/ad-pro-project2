@@ -135,7 +135,8 @@ public class DrawingLoop implements Runnable {
 			}
 		}
 	}
-	
+
+
 	private void paintEffects(List<Effect> effects) {
         Iterator<Effect> iterator = effects.iterator();
         while (iterator.hasNext()) {
@@ -203,13 +204,19 @@ public class DrawingLoop implements Runnable {
 			Enemy enemy = iterator.next();
 			if (enemy.isAlive()) {
 				enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
+
+				if (enemy.getType() == EnemyType.TURRET) {
+					enemy.updateShootingAnimation();
+				}
 			} else {
 				// Kill remove enemy from the stage
-				iterator.remove();
-				javafx.application.Platform.runLater(() -> {
-					gameStage.getBoss().getChildren().remove(enemy);
-					GameLoop.enemies.remove(enemy);
-				});
+				if (enemy.getType() != EnemyType.TURRET) {
+					iterator.remove();
+					javafx.application.Platform.runLater(() -> {
+						gameStage.getBoss().getChildren().remove(enemy);
+						GameLoop.enemies.remove(enemy);
+					});
+				}
 			} 
 		}
 	}

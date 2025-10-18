@@ -36,8 +36,8 @@ public class WallBoss extends Boss {
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
         this.phaseChangeHealth = this.getMaxHealth() / 2;
-        turretLeft = new Enemy(0, 0, 0, 32, 32, 1, 1, 1,"assets/Boss/Boss1/Turret.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
-        turretRight = new Enemy(100, 0, 0, 32, 32, 1, 1, 1,"assets/Boss/Boss1/Turret.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        turretLeft = new Enemy(-35, -10, 0, 64, 32, 2, 2, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        turretRight = new Enemy(90, -10, 0, 64, 32, 2, 2, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         int coreX = (int) ((turretLeft.getXPos() + turretRight.getXPos()) / 2 + 16);
         core = new Enemy(coreX, 0, 0, 128, 128, 2, 1, 1, "assets/Boss/Boss1/core.png", this.getMaxHealth()/2, EnemyType.WALL);
 
@@ -104,6 +104,8 @@ public class WallBoss extends Boss {
                 randomDirection == ShootingDirection.DOWN_LEFT) ? 3 : 0;
 
         Bullet bullet = new Bullet(turretXPos, turretYPos,speedX, speedY, randomDirection , BulletOwner.ENEMY);
+
+        //turret.setShootingAnimationTimer(20);
 
         GameLoop.bullets.add(bullet);
         Platform.runLater(() -> {

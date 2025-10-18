@@ -2,6 +2,7 @@ package se233.notcontra.model.Boss;
 
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Enemy;
+import se233.notcontra.model.Enums.EnemyState;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.view.GameStages.GameStage;
 
@@ -15,7 +16,7 @@ public class JavaBoss extends Boss{
 
     public JavaBoss(int xPos, int yPos , int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 7000);
-        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 3, 3, 1,"assets/Boss/Boss2/JAVA.png", 7000, EnemyType.Head);
+        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA.png", 7000, EnemyType.WALL);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
@@ -31,9 +32,11 @@ public class JavaBoss extends Boss{
 
     @Override
     protected void handleAttackingState() {
-        spawnEnemy();
-
-
+        if (Head.isAlive()) {
+            spawnEnemy();
+            Head.setState(EnemyState.ATTACKING);
+        }
+        Head.setState(EnemyState.IDLE);
     }
 
     private void spawnEnemy() {
