@@ -289,13 +289,11 @@ public class DrawingLoop implements Runnable {
 			}
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setHeaderText("You Win!");
-				alert.setContentText("Continue to the next stage?");
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setHeaderText("CONGRATULATIONS!");
+				alert.setContentText("YOU WIN THE GAME AND GET GRAD 'A' ADPRO");
 				alert.showAndWait();
 				if (alert.getResult() == ButtonType.OK) {
-					Launcher.changeStage(1);
-				} else {
 					Launcher.exitToMenu();
 				}
 			}

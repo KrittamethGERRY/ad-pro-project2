@@ -74,7 +74,7 @@ public class ThirdStage extends GameStage {
 	public void spawnItem() {
 		boolean itemType = new Random().nextBoolean();
 		int randX = new Random().nextInt(0, 1280);
-		item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
+		item = new SpecialMagazine(64,64,randX,100);
 		this.getChildren().add(item);
 	}
 	

@@ -62,6 +62,15 @@ public class Enemy extends Pane {
             }
             setState(EnemyState.ATTACKING);
         }
+        if (type == EnemyType.RDEYES){
+            Bullet bullet = shootAtPlayer(player);
+            if (bullet != null) {
+                GameLoop.bullets.add(bullet);
+                Platform.runLater(() -> {
+                    gameStage.getChildren().add(bullet);
+                });
+            }
+        }
     }
 
     private void flyTowardsPlayer(Player player) {
@@ -188,6 +197,11 @@ public class Enemy extends Pane {
     		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--;  break;
     		case FLYING: GameLoop.addScore(150); break;
     		case WALL: GameLoop.addScore(1000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
+            case JAVAHEAD: GameLoop.addScore(2500); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
+            case RDEYES: GameLoop.addScore(500); break;
+            case RDHAND: GameLoop.addScore(500); break;
+            case RDHEAD: GameLoop.addScore(3000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
+
 			default: 
 				break;
     		}

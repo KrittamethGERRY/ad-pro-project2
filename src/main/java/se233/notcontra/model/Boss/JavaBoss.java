@@ -16,14 +16,14 @@ public class JavaBoss extends Boss{
 
     public JavaBoss(int xPos, int yPos , int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 20000);
-        this.Head = new Enemy(xPos, yPos, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA.png", this.getMaxHealth(), EnemyType.JAVAHEAD);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
+        Head = new Enemy(xPos, yPos, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA.png", this.getMaxHealth(), EnemyType.JAVAHEAD);
         Head.getSprite().setFitHeight(Height);
         Head.getSprite().setFitWidth(Width);
         this.gameStage = gameStage;
-        getWeakPoints().add(Head);
 
+        getWeakPoints().add(Head);
         GameLoop.enemies.add(Head);
         javafx.application.Platform.runLater(() -> {
             this.getChildren().addAll(Head);
@@ -37,6 +37,10 @@ public class JavaBoss extends Boss{
             Head.setState(EnemyState.ATTACKING);
         }
         Head.setState(EnemyState.IDLE);
+
+        if (!Head.isAlive()) {
+            getWeakPoints().clear();
+        }
     }
 
     private void spawnEnemy() {
