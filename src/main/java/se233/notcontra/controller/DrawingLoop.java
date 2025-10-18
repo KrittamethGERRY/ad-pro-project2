@@ -310,7 +310,9 @@ public class DrawingLoop implements Runnable {
 				Enemy enemy = iterator.next();
 				if (enemy.isAlive()) {
 					enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
-				} else if (!(enemy.getType() == EnemyType.TURRET)){
+				} else if (!(enemy.getType() == EnemyType.TURRET) && !(enemy.getType() == EnemyType.WALL)
+					&& !(enemy.getType() == EnemyType.JAVAHEAD) && !(enemy.getType() == EnemyType.RDHAND)
+				&& !(enemy.getType() == EnemyType.RDEYES && !(enemy.getType() == EnemyType.RDHEAD))){
 					// Kill remove enemy from the stage
 					iterator.remove();
 					javafx.application.Platform.runLater(() -> {

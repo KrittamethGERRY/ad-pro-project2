@@ -27,9 +27,9 @@ public class RDBoss extends Boss{
         super(xPos, yPos, Width, Height, 25000);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
-        Rdhead = new Enemy(-130, -50, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/boss3_head.png", this.getMaxHealth(), EnemyType.WALL);
-        Rdlefthand = new Enemy( -210, -45, 0, Width, Height, 2, 1, 1,"assets/Boss/Boss3/boss3_left_hand.png", 7000, EnemyType.RDHAND);
-        Rdrighthand = new Enemy( +100, -45, 0, Width, Height, 2, 1, 1,"assets/Boss/Boss3/boss3_right_hand.png", 7000, EnemyType.RDHAND);
+        Rdhead = new Enemy(-130, -50, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/boss3_head.png", 25000, EnemyType.RDHEAD);
+        Rdlefthand = new Enemy( -210, -45, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/RD_leftHand_IDLE.png", 7000, EnemyType.RDHAND);
+        Rdrighthand = new Enemy( +100, -45, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/RD_rightHand_IDLE.png", 7000, EnemyType.RDHAND);
         RdleftEye = new Enemy(-45, -2, 0, 32,32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_left_eye.png", 2500,EnemyType.RDEYES);
         RdrightEye = new Enemy(-22, -2, 0, 32,32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_right_eye.png", 2500,EnemyType.RDEYES);
         this.gameStage = gameStage;
@@ -139,5 +139,21 @@ public class RDBoss extends Boss{
                 enemyTimer = 500;
             }
         }
+    }
+
+    public Enemy getRdrightEye() {
+        return RdrightEye;
+    }
+
+    public Enemy getRdleftEye() {
+        return RdleftEye;
+    }
+
+    public Enemy getRdlefthand() {
+        return Rdlefthand;
+    }
+
+    public  Enemy getRdrighthand() {
+        return Rdrighthand;
     }
 }

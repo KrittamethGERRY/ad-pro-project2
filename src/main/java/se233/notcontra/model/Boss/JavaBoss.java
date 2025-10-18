@@ -18,7 +18,7 @@ public class JavaBoss extends Boss{
         super(xPos, yPos, Width, Height, 20000);
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
-        Head = new Enemy(xPos, yPos, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA.png", this.getMaxHealth(), EnemyType.JAVAHEAD);
+        Head = new Enemy(xPos, yPos, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA_IDEL.png", this.getMaxHealth(), EnemyType.JAVAHEAD);
         Head.getSprite().setFitHeight(Height);
         Head.getSprite().setFitWidth(Width);
         this.gameStage = gameStage;
@@ -70,6 +70,7 @@ public class JavaBoss extends Boss{
             });
 
             enemyTimer = 80;
+            Head.setSpawnAnimationTimer(100);
 
             if (aliveCount == maxEnemies) {
                 enemyTimer = 500;
