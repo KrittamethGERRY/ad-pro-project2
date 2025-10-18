@@ -6,7 +6,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -160,11 +163,24 @@ public class Player extends Pane {
 		isDying = true;
 		this.setState(PlayerState.DIE);
 		if (lives <= 0) {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setHeaderText("SKILL ISSUE");
-			alert.setContentText("YOU SUCK!");
-			alert.showAndWait();
-			Launcher.exitToMenu();
+			javafx.application.Platform.runLater(() -> {
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Game Over!");
+				alert.setTitle("Game Over!");
+				alert.setHeaderText("SKILL ISSUE");
+
+				// Show the alert and wait for user response
+				alert.showAndWait().ifPresent(response -> {
+				if (response == ButtonType.OK) {
+					System.out.println("User clicked OK");
+				} else {
+					System.out.println("User canceled the action");
+				}
+				});
+				GameLoop.pause();
+				if (alert.getResult() == ButtonType.OK) {
+					Launcher.exitToMenu();
+				}
+			});
 		}
 	}
 	

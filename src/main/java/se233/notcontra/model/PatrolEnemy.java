@@ -136,10 +136,10 @@ public class PatrolEnemy extends Enemy {
 	
 	
     public void updateAI(Player player) {
-        if (xPos > player.getXPosition() + (player.getWidth()/2)) {
+        if (xPos > player.getXPosition()) {
             this.getSprite().tick();
             this.moveLeft();
-        } else if (xPosition < player.getXPosition() - (player.getWidth()/2) ) {
+        } else if (xPosition < player.getXPosition()) {
             this.getSprite().tick();
             this.moveRight();
         } else {
@@ -147,6 +147,7 @@ public class PatrolEnemy extends Enemy {
         }
         if (yPosition < player.getYPosition() - player.getHeight() - 5) {
             this.jump();
+            System.out.println("JUMP");
         }
     }
 
