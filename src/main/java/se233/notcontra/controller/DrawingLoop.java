@@ -45,6 +45,14 @@ public class DrawingLoop implements Runnable {
 
 	public void paint(Player player) {
 		player.repaint();
+		for (Enemy enemy : GameLoop.enemies) {
+			if (enemy.getType() == EnemyType.PATROL) {
+				((PatrolEnemy) enemy).repaint();
+				((PatrolEnemy) enemy).checkPlatformCollision(gameStage.getPlatforms());
+				((PatrolEnemy) enemy).checkStageBoundaryCollision();
+				((PatrolEnemy) enemy).updateAI(player);
+			}
+		}
 	}
 
 	private void paintBullet(List<Bullet> bullets, ShootingDirection direction) {
@@ -78,10 +86,9 @@ public class DrawingLoop implements Runnable {
 					} else if (enemy.getType() == EnemyType.TURRET) {
 						if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
 							Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
+							GameLoop.enemies.add(core);
                             Platform.runLater(() -> {
-                                GameLoop.enemies.add(core);
-                                    gameStage.getBoss().getChildren().add(core);
-                                    gameStage.getBoss().getWeakPoints().remove(core);
+                                gameStage.getBoss().getWeakPoints().remove(core);
                             });
 						}
 					}
@@ -208,7 +215,6 @@ public class DrawingLoop implements Runnable {
 				iterator.remove();
 				javafx.application.Platform.runLater(() -> {
 					gameStage.getBoss().getChildren().remove(enemy);
-					GameLoop.enemies.remove(enemy);
 				});
 			} 
 		}

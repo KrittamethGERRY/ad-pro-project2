@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -158,6 +160,10 @@ public class Player extends Pane {
 		isDying = true;
 		this.setState(PlayerState.DIE);
 		if (lives <= 0) {
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setHeaderText("SKILL ISSUE");
+			alert.setContentText("YOU SUCK!");
+			alert.showAndWait();
 			Launcher.exitToMenu();
 		}
 	}

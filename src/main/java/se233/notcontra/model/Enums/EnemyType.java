@@ -6,4 +6,5 @@ public enum EnemyType {
     TURRET,
     WALL,
     Head,
+    PATROL
 }
