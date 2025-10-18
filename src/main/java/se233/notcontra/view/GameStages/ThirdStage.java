@@ -14,6 +14,7 @@ import se233.notcontra.model.Items.SpecialMagazine;
 import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.view.Platform;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Keys;
@@ -23,6 +24,7 @@ import se233.notcontra.model.Boss.Boss;
 public class ThirdStage extends GameStage {
 
 	public ThirdStage() {
+		SoundController.getInstance().stopAllSounds();
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
 		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/thirdStage.png")));

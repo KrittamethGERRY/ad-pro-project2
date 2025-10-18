@@ -7,6 +7,7 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SoundController;
 import se233.notcontra.view.CheatManager;
 import se233.notcontra.view.MainMenu;
 import se233.notcontra.view.GameStages.FirstStage;
@@ -39,6 +40,7 @@ public class Launcher extends Application {
     
     public static void changeStage(int index) {
     	javafx.application.Platform.runLater(() -> {
+    		SoundController.getInstance().stopAllSounds();
     		if (GameLoop.isPaused) GameLoop.pause(); // unpause the game
     		if (currentGameLoop != null) {
     			currentGameLoop.stop();
@@ -95,6 +97,7 @@ public class Launcher extends Application {
     
     public static void exitToMenu() {
     	javafx.application.Platform.runLater(() -> {
+    		SoundController.getInstance().stopAllSounds();
         	primaryStage.setScene(menuScene);
         	if (GameLoop.isPaused) GameLoop.pause(); // Unpause the game
     		if (currentGameLoop != null) {

@@ -13,6 +13,7 @@ import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.view.Platform;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Keys;
@@ -25,6 +26,8 @@ import se233.notcontra.model.Enums.EnemyType;
 public class SecondStage extends GameStage {
 
 	public SecondStage() {
+		SoundController.getInstance().stopAllSounds();
+		SoundController.getInstance().playSecondStageMusic();
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
 		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/secondStage.png")));
@@ -44,6 +47,7 @@ public class SecondStage extends GameStage {
 		GameLoop.enemies.clear();
 
 		boss = new JavaBoss(1010, 20,128,256,this);
+
 
 		bossPhase = false;
 		totalMinions = 4;

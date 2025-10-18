@@ -4,6 +4,7 @@ import java.util.List;
 
 import javafx.application.Platform;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Enums.BulletOwner;
@@ -96,7 +97,7 @@ public class WallBoss extends Boss {
         }
 
         Bullet bullet = new Bullet(turretXPos, turretYPos,speedX, speedY, randomDirection , BulletOwner.ENEMY);
-
+        SoundController.getInstance().playCannonSound();
         bullet.setGravityEnabled(true);
 
         turret.setShootingAnimationTimer(20);

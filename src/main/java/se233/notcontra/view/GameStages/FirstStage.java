@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Items.SpecialMagazine;
 import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.TankBuster;
@@ -25,6 +26,8 @@ import se233.notcontra.model.Enums.EnemyType;
 public class FirstStage extends GameStage {
 	
 	public FirstStage() {
+		SoundController.getInstance().stopAllSounds();
+		SoundController.getInstance().playFirstStageMusic();
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
 		platforms = new ArrayList<Platform>();

@@ -18,6 +18,7 @@ import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SoundController;
 import se233.notcontra.controller.SpriteAnimation;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.PlayerState;
@@ -141,6 +142,7 @@ public class Player extends Pane {
 	
 	public void jump() {
 		if (canJump) {
+			SoundController.getInstance().playJumpSound();
 			yVelocity = yMaxVelocity;
 			canJump = false;
 			isJumping = true;
@@ -168,6 +170,7 @@ public class Player extends Pane {
 		lives--;
 		isDying = true;
 		this.setState(PlayerState.DIE);
+		SoundController.getInstance().playPlayerDieSound();
 		if (lives <= 0) {
 			javafx.application.Platform.runLater(() -> {
 				GameLoop.pause();
@@ -215,6 +218,7 @@ public class Player extends Pane {
 			isFalling = true;
 			isJumping = false;
 			canDropDown = false;
+			SoundController.getInstance().playProneSound();
 		}
 	}
 	
@@ -251,6 +255,7 @@ public class Player extends Pane {
             if (isBuffed && isSpecialMag) {
             	bullet.setBulletSprite(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/Bullet_Sp.png")));
             }
+            SoundController.getInstance().playShootSound();
             GameLoop.bullets.add(bullet);
 
             javafx.application.Platform.runLater(() -> {
@@ -359,6 +364,7 @@ public class Player extends Pane {
 					fireDelay = 0;
 					bulletPerClip = Integer.MAX_VALUE;
 				} else {
+					SoundController.getInstance().playScreamingSound();
 					this.isTankBuster = true;
 					this.isSpecialMag = false;
 					bulletPerClip = 3;
@@ -368,6 +374,7 @@ public class Player extends Pane {
 					stop();
 				}
 
+				SoundController.getInstance().playPickItemSound();
 				javafx.application.Platform.runLater(() -> {
 					gameStage.removeItem();
 				});
@@ -431,6 +438,7 @@ public class Player extends Pane {
 			for (Enemy enemy: GameLoop.enemies) {
 				enemy.takeDamage(5000, null);
 			}
+			SoundController.getInstance().playExplosionSound();
 			if (lives > 0) gameStage.getBoss().getWeakPoints().clear();
 			return;
 		} else if (xAxisCollision) {
