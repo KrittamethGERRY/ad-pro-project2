@@ -1,5 +1,7 @@
 package se233.notcontra.model.Boss;
 
+import javafx.scene.image.Image;
+import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Enums.EnemyState;
@@ -13,6 +15,7 @@ public class JavaBoss extends Boss{
     private int enemyTimer = 0;
     private GameStage gameStage;
     private final Enemy Head;
+    private int spawnAnimationTimer = 0;
 
     public JavaBoss(int xPos, int yPos , int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 20000);
@@ -34,13 +37,14 @@ public class JavaBoss extends Boss{
     protected void handleAttackingState() {
         if (Head.isAlive()) {
             spawnEnemy();
-            Head.setState(EnemyState.ATTACKING);
+            if (getSpawnAnimationTimer() > 0) {
+                updateSpawnAnimation();
+                Head.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss2/JAVA_SpawnF.png")), 1, 1, 1);
+            }  else {
+                Head.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss2/JAVA_IDEL.png")), 1, 1, 1);
+            }
         }
-        Head.setState(EnemyState.IDLE);
 
-        if (!Head.isAlive()) {
-            getWeakPoints().clear();
-        }
     }
 
     private void spawnEnemy() {
@@ -70,11 +74,21 @@ public class JavaBoss extends Boss{
             });
 
             enemyTimer = 80;
-            Head.setSpawnAnimationTimer(100);
+            spawnAnimationTimer = 20;
 
             if (aliveCount == maxEnemies) {
                 enemyTimer = 500;
             }
+        }
+    }
+
+    public int getSpawnAnimationTimer() {
+        return spawnAnimationTimer;
+    }
+
+    public void updateSpawnAnimation() {
+        if (spawnAnimationTimer > 0) {
+            spawnAnimationTimer--;
         }
     }
 }

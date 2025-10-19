@@ -16,11 +16,14 @@ public class RDBoss extends Boss{
     private Enemy Rdhead;
     private Enemy Rdlefthand;
     private Enemy Rdrighthand;
-    private Enemy RdleftEye;
-    private Enemy RdrightEye;
+    private static Enemy RdleftEye;
+    private static Enemy RdrightEye;
+    public static int totalEYES = 2;
 
     private Enemy lastHandspawn = null;
     private Enemy lasteyesShoot = null;
+
+    private int spawnAnimationTimer = 0;
 
 
     public RDBoss(int xPos, int yPos, int Height, int Width, GameStage gameStage) {
@@ -28,8 +31,8 @@ public class RDBoss extends Boss{
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         Rdhead = new Enemy(-130, -50, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/boss3_head.png", 25000, EnemyType.RDHEAD);
-        Rdlefthand = new Enemy( -210, -45, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/RD_leftHand_IDLE.png", 7000, EnemyType.RDHAND);
-        Rdrighthand = new Enemy( +100, -45, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/RD_rightHand_IDLE.png", 7000, EnemyType.RDHAND);
+        Rdlefthand = new Enemy( -210, -45, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/RD_leftHand_IDEL.png", 7000, EnemyType.RDHAND);
+        Rdrighthand = new Enemy( +100, -45, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss3/RD_rightHand_IDEL.png", 7000, EnemyType.RDHAND);
         RdleftEye = new Enemy(-45, -2, 0, 32,32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_left_eye.png", 2500,EnemyType.RDEYES);
         RdrightEye = new Enemy(-22, -2, 0, 32,32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_right_eye.png", 2500,EnemyType.RDEYES);
         this.gameStage = gameStage;
@@ -64,18 +67,41 @@ public class RDBoss extends Boss{
     protected void handleAttackingState() {
         if (Rdlefthand.isAlive() && !Rdrighthand.isAlive()) {
             spawnEnemy(Rdlefthand);
+            if (spawnAnimationTimer > 0){
+                updateSpawnAnimation();
+                Rdlefthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_leftHand_Spawn.png")),1,1,1);
+            }else {
+                Rdlefthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_leftHand_IDEL.png")),1,1,1);
+            }
         }
         else if (!Rdlefthand.isAlive() && Rdrighthand.isAlive()) {
             spawnEnemy(Rdrighthand);
+            if (spawnAnimationTimer > 0) {
+                updateSpawnAnimation();
+                Rdrighthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_rightHand_Spawn.png")),1,1,1);
+            }else {
+                Rdrighthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_rightHand_IDEL.png")),1,1,1);
+            }
         }
         else if (Rdlefthand.isAlive() && Rdrighthand.isAlive()) {
             if (lastHandspawn == null || lastHandspawn == Rdrighthand) {
                 spawnEnemy(Rdlefthand);
                 lastHandspawn = Rdlefthand;
+                if (spawnAnimationTimer > 0) {
+                    updateSpawnAnimation();
+                    Rdlefthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_leftHand_Spawn.png")),1,1,1);
+                }else {
+                    Rdlefthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_leftHand_IDEL.png")),1,1,1);
+                }
             } else {
                 spawnEnemy(Rdrighthand);
                 lastHandspawn = Rdrighthand;
-
+                if (spawnAnimationTimer > 0) {
+                    updateSpawnAnimation();
+                    Rdrighthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_rightHand_Spawn.png")),1,1,1);
+                }else {
+                    Rdrighthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_rightHand_IDEL.png")),1,1,1);
+                }
             }
         }
 
@@ -95,8 +121,12 @@ public class RDBoss extends Boss{
             }
         }
 
-        if (!RdrightEye.isAlive() && !RdleftEye.isAlive()) {
-            GameLoop.enemies.add(Rdhead);
+        if(!Rdlefthand.isAlive()) {
+            Rdlefthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_leftHand_DEAD.png")), 2,2,1);
+        }
+
+        if(!Rdrighthand.isAlive()) {
+            Rdrighthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_rightHand_DEAD.png")), 2,2,1);
         }
     }
 
@@ -134,6 +164,7 @@ public class RDBoss extends Boss{
             });
 
             enemyTimer = 80;
+            spawnAnimationTimer = 20;
 
             if (aliveCount == maxEnemies) {
                 enemyTimer = 500;
@@ -156,4 +187,16 @@ public class RDBoss extends Boss{
     public  Enemy getRdrighthand() {
         return Rdrighthand;
     }
+
+    public int getSpawnAnimationTimer() {
+        return spawnAnimationTimer;
+    }
+
+    public void updateSpawnAnimation() {
+        if (spawnAnimationTimer > 0) {
+            spawnAnimationTimer--;
+        }
+    }
+
+    public static List<Enemy> getEYES() { return List.of(RdleftEye, RdrightEye); }
 }

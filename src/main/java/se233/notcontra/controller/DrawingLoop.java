@@ -2,6 +2,7 @@ package se233.notcontra.controller;
 
 import java.util.List;
 
+import se233.notcontra.model.Boss.RDBoss;
 import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
@@ -108,9 +109,14 @@ public class DrawingLoop implements Runnable {
                             });
 						}
 					}
-					
-					if (enemy.getType() == EnemyType.WALL) {
-						
+
+					if (enemy.getType() == EnemyType.RDEYES) {
+						if (RDBoss.totalEYES <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
+							Enemy rdhead = gameStage.getBoss().getWeakPoints().getFirst();
+							Platform.runLater(() -> {
+								GameLoop.enemies.add(rdhead);
+							});
+						}
 					}
 					shouldRemove = true;
 					
@@ -174,7 +180,9 @@ public class DrawingLoop implements Runnable {
 			if (enemy.isAlive() && (enemy.getType() == EnemyType.PATROL)) {
 				Bounds enemyBounds = enemy.localToParent(((PatrolEnemy) enemy).getBoundsInLocal());
 				if (enemyBounds.intersects(playerBounds) && Player.spawnProtectionTimer <= 0) {
-					gameStage.getPlayer().die();
+					if (!CheatManager.getInstance().areCheatsActive()) {
+						gameStage.getPlayer().die();
+					}
 				}
 			}
 		}
@@ -312,7 +320,7 @@ public class DrawingLoop implements Runnable {
 					enemy.updateWithPlayer(gameStage.getPlayer(), gameStage);
 				} else if (!(enemy.getType() == EnemyType.TURRET) && !(enemy.getType() == EnemyType.WALL)
 					&& !(enemy.getType() == EnemyType.JAVAHEAD) && !(enemy.getType() == EnemyType.RDHAND)
-				&& !(enemy.getType() == EnemyType.RDEYES && !(enemy.getType() == EnemyType.RDHEAD))){
+				&& !(enemy.getType() == EnemyType.RDEYES) && !(enemy.getType() == EnemyType.RDHEAD)){
 					// Kill remove enemy from the stage
 					iterator.remove();
 					javafx.application.Platform.runLater(() -> {

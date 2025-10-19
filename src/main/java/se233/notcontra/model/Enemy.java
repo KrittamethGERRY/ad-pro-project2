@@ -8,6 +8,7 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.controller.SpriteAnimation;
 import se233.notcontra.model.Boss.Boss;
+import se233.notcontra.model.Boss.RDBoss;
 import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Enums.*;
 import se233.notcontra.view.GameStages.GameStage;
@@ -25,7 +26,7 @@ public class Enemy extends Pane {
     private SpriteAnimation sprite;
     private EnemyState enemyState;
     private int shootingAnimationTimer = 0;
-    private int spawnAnimationTimer = 0;
+
 
     public Enemy(int xPos, int yPos, double speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
     	setTranslateX(xPos);
@@ -202,7 +203,7 @@ public class Enemy extends Pane {
     		case FLYING: GameLoop.addScore(150); break;
     		case WALL: GameLoop.addScore(1000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
             case JAVAHEAD: GameLoop.addScore(2500); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
-            case RDEYES: GameLoop.addScore(500); break;
+            case RDEYES: GameLoop.addScore(500); RDBoss.totalEYES--; break;
             case RDHAND: GameLoop.addScore(500); break;
             case RDHEAD: GameLoop.addScore(3000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
 			default: 
@@ -217,9 +218,7 @@ public class Enemy extends Pane {
         return shootingAnimationTimer;
     }
 
-    public int getSpawnAnimationTimer() {
-        return spawnAnimationTimer;
-    }
+
 
     public void updateShootingAnimation() {
         if (shootingAnimationTimer > 0) {
@@ -227,19 +226,12 @@ public class Enemy extends Pane {
         }
     }
 
-    public void updateSpawnAnimation() {
-        if (spawnAnimationTimer > 0) {
-            spawnAnimationTimer--;
-        }
-    }
+
 
     public void setShootingAnimationTimer(int timer) {
         this.shootingAnimationTimer = timer;
     }
 
-    public void setSpawnAnimationTimer(int timer) {
-        this.spawnAnimationTimer = timer;
-    }
 
     public double getXPos() { return xPos; }
     public double getYPos() { return yPos; }

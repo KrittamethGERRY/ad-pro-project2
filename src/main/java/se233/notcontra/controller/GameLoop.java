@@ -194,27 +194,21 @@ public class GameLoop implements Runnable{
 		if (enemy.getType() == EnemyType.JAVAHEAD){
 			if (!enemy.isAlive()){
 				enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss2/JAVA_DEAD.png"), 1, 1, 1);
-			} else if(enemy.isAlive()){
-				enemy.updateSpawnAnimation();
-				if (enemy.getSpawnAnimationTimer() > 0) {
-					enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss2/JAVA_SpawnF.png"), 1, 1, 1);
-				} else {
-					enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss2/JAVA_IDEL.png"), 1, 1, 1);
-				}
 			}
 		}
 
 		if (enemy.getType() == EnemyType.RDHEAD){
-			enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_head_DEAD.png"), 2, 2, 1);
+			if (!enemy.isAlive()) {
+				enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_head_DEAD.png"), 2, 2, 1);
+			}
 		}
 
 		if (enemy.getType() == EnemyType.RDEYES){
-			// Get the RDBoss to check which eye this is
 			RDBoss boss = findRDBoss();
 			if (boss != null) {
 				if (!enemy.isAlive()) {
 					if (enemy == boss.getRdleftEye()) {
-						enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_lefteyes.png"), 1, 1, 1);
+						enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_lefteyes_DEAD.png"), 1, 1, 1);
 					} else if (enemy == boss.getRdrightEye()) {
 						enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_righteyes_DEAD.png"), 1, 1, 1);
 					}
@@ -222,18 +216,6 @@ public class GameLoop implements Runnable{
 			}
 		}
 
-		if (enemy.getType() == EnemyType.RDHAND){
-			RDBoss boss = findRDBoss();
-			if (boss != null) {
-				if (!enemy.isAlive()) {
-					if(enemy == boss.getRdlefthand()) {
-						enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_leftHand_DEAD.png"), 2, 2, 1);
-					} else if (enemy ==  boss.getRdrighthand()) {
-						enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_rightHand_DEAD.png"), 2, 2, 1);
-					}
-				}
-			}
-		}
 		enemy.getSprite().tick();
 	}
 
