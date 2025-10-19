@@ -20,6 +20,8 @@ public class SoundController {
 	private AudioClip playerDieSound;
 	private AudioClip proneSound;
 	private AudioClip winSound;
+	private AudioClip javaDieSound;
+	private AudioClip canDieSound;
 	
     public void stopAllSounds() {
         if (shootSound != null) shootSound.stop();
@@ -37,6 +39,8 @@ public class SoundController {
         if (playerDieSound != null) playerDieSound.stop();
         if (proneSound != null) proneSound.stop();
         if (winSound != null) winSound.stop();
+        if (javaDieSound != null) javaDieSound.stop();
+        if (canDieSound != null) canDieSound.stop();
 
     }
 	private SoundController() {
@@ -55,9 +59,11 @@ public class SoundController {
 		playerDieSound = new AudioClip(Launcher.class.getResource("assets/Sounds/playerDieSound.mp3").toString());
 		proneSound = new AudioClip(Launcher.class.getResource("assets/Sounds/proneSound.mp3").toString());
 		winSound = new AudioClip(Launcher.class.getResource("assets/Sounds/winSound.mp3").toString());
+		javaDieSound = new AudioClip(Launcher.class.getResource("assets/Sounds/javaDieSound.mp3").toString());
+		canDieSound = new AudioClip(Launcher.class.getResource("assets/Sounds/flyingDieSound.mp3").toString());
 
-		metalSound.setVolume(0.2);
-		metalSound2.setVolume(0.2);
+		metalSound.setVolume(0.1);
+		metalSound2.setVolume(0.1);
 		shootSound.setVolume(0.25);
 		firstStageMusic.setVolume(0.35);
 		secondStageMusic.setVolume(0.35);
@@ -117,6 +123,14 @@ public class SoundController {
 	
 	public void playWinSound() {
 		winSound.play();
+	}
+	
+	public void playJavaDieSound() {
+		javaDieSound.play();
+	}
+	
+	public void playCanDieSound() {
+		canDieSound.play();
 	}
 	public static SoundController getInstance() {
 		if (instance == null) return new SoundController(); 

@@ -40,6 +40,8 @@ public class FirstStage extends GameStage {
 		player.respawn();
 
 		boss = new WallBoss(660, 350, 500, 750, this);
+		WallBoss.totalTurret = 2;
+		
 		Platform platform1 = new Platform(165, 0, 300, false);
 		Platform platform2 = new Platform(160, 175, 390, false);
 		Platform platform3 = new Platform(150, 335, 475, false);
@@ -86,10 +88,12 @@ public class FirstStage extends GameStage {
 	
 	@Override
 	public void spawnItem() {
-		boolean itemType = new Random().nextBoolean();
-		int randX = new Random().nextInt(0, 600);
-		item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
-		this.getChildren().add(item);
+		if (item == null) {
+			boolean itemType = new Random().nextBoolean();
+			int randX = new Random().nextInt(0, 600);
+			item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
+			this.getChildren().add(item);
+		}
 	}
 	
 	@Override

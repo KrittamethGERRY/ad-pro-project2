@@ -28,7 +28,7 @@ public class PatrolEnemy extends Enemy {
 	Rectangle hitBox;
 	
 	public PatrolEnemy(int xPos, int yPos, double speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
-		super(xPos, yPos, speed, width, height, count, column, row, imgName, health, type);
+		super(xPos, yPos, speed, width, height, 64, 64, count, column, row, imgName, health, type);
 		hitBox = new Rectangle(width, height);
 		hitBox.setFill(Color.TRANSPARENT);
 		this.getChildren().add(hitBox);

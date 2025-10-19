@@ -65,9 +65,9 @@ public class Bullet extends Pane {
 				return new Vector2D(-speedX, 0);
 			case RIGHT:
 				return new Vector2D(speedX, 0);
-			case UP: this.setRotate(90);
+			case UP: this.setRotate(270);
 				return new Vector2D(0, -speedY);
-			case UP_LEFT: this.setRotate(45);
+			case UP_LEFT: this.setRotate(225);
 				return new Vector2D(-speedX - 2, -speedY + 2);
 			case UP_RIGHT: this.setRotate(-45);
 				return new Vector2D(speedX + 2, -speedY - 2);

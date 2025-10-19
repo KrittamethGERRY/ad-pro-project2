@@ -25,13 +25,13 @@ public class WallBoss extends Boss {
 
     public WallBoss(int xPos, int yPos, int width, int height, GameStage gameStage) {
         super(xPos, yPos, width, height, 30000);
-        this.getWeakPoints().clear();
+    	getWeakPoints().clear();
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
-        turretLeft = new Enemy(-35, -10, 0, 64, 32, 1, 1, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
-        turretRight = new Enemy(90, -10, 0, 64, 32, 1, 1, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
-        core = new Enemy(0, 0, 100, 64, 64, 2, 3, 1, "assets/Boss/Boss1/core.png", this.getMaxHealth()/2, EnemyType.WALL);
+        turretLeft = new Enemy(-35, -10, 0, 64, 32, 64, 32, 1, 1, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        turretRight = new Enemy(90, -10, 0, 64, 32, 64, 32, 1, 1, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        core = new Enemy(0, 0, 100, 64, 64, 64, 64, 2, 3, 1, "assets/Boss/Boss1/core.png", this.getMaxHealth()/2, EnemyType.WALL);
         core.getSprite().setLayoutY(60);
         core.getSprite().setLayoutX(-23);
         core.getSprite().setFitHeight(192);
@@ -74,7 +74,6 @@ public class WallBoss extends Boss {
     }
 
     private void shootFromTurret(Enemy turret) {
-        int time = 0;
         ShootingDirection[] leftDirections = {
                 ShootingDirection.LEFT,
                 ShootingDirection.DOWN_LEFT
@@ -121,11 +120,11 @@ public class WallBoss extends Boss {
         }
 
         if (aliveCount < maxEnemies) {
-            int spawnX = 100;
+            int spawnX = 0;
             int spawnY = -200;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, 2, 5, 1,"assets/Enemy/Wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, 64, 64, 2, 5, 1,"assets/Enemy/Wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);

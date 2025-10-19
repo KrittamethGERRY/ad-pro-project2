@@ -20,7 +20,9 @@ import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.controller.SpriteAnimation;
+import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Enums.BulletOwner;
+import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.PlayerState;
 import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.model.Items.SpecialMagazine;
@@ -423,26 +425,26 @@ public class Player extends Pane {
 		}
 	}
 	
-	public void isCollided(GameStage gameStage) {
+	public void isCollided(GameStage gameStage, int xOffset) {
 		int bossX = gameStage.getBoss().getXPos();
 		int bossY = gameStage.getBoss().getYPos();
 		
-		boolean xAxisCollision = this.xPos + this.width >= bossX;
+		boolean xAxisCollision = this.xPos + this.width >= bossX - xOffset;
 		boolean yAxisCollision = this.yPos + this.height >= bossY;
 		
 		if (xAxisCollision && yAxisCollision && isTankBuster && respawnTimer <= 0) {
 			die();
-			Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX, 300, 128, 128);
+			Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX - 500, 100, 512, 512);
 			DrawingLoop.effects.add(explosion);
 			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
 			for (Enemy enemy: GameLoop.enemies) {
-				enemy.takeDamage(5000, null);
+				Boss boss = gameStage.getBoss();
+				enemy.takeDamage(10000, boss);
 			}
+			System.out.println(gameStage.getBoss().getWeakPoints());
 			SoundController.getInstance().playExplosionSound();
-			if (lives > 0) gameStage.getBoss().getWeakPoints().clear();
-			return;
 		} else if (xAxisCollision) {
-			this.xPos = bossX - width;
+			this.xPos = bossX - width - xOffset;
 		}
 
 	}

@@ -1,7 +1,7 @@
 package se233.notcontra.controller;
 
-import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -33,8 +33,8 @@ public class GameLoop implements Runnable{
 	
 	public static boolean isPaused = false;
 
-	public static List<Bullet> bullets = new ArrayList<>();
-	public static List<Enemy> enemies = new ArrayList<>();
+	public static List<Bullet> bullets = Collections.synchronizedList(new ArrayList<>());
+	public static List<Enemy> enemies = Collections.synchronizedList(new ArrayList<>());
 
 	public GameLoop(GameStage gameStage) {
 		score = 0;

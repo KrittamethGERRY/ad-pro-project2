@@ -28,16 +28,16 @@ public class Enemy extends Pane {
     private int shootingAnimationTimer = 0;
 
 
-    public Enemy(int xPos, int yPos, double speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
+    public Enemy(int xPos, int yPos, double speed, int width, int height, int spriteWidth, int spriteHeight, int count, int column, int row, String imgName, int health, EnemyType type) {
     	setTranslateX(xPos);
     	setTranslateY(yPos);
     	Image image = new Image(Launcher.class.getResourceAsStream(imgName));
-    	sprite = new SpriteAnimation(image, count, column, row, 0, 0, width, height);
+    	sprite = new SpriteAnimation(image, count, column, row, 0, 0, spriteWidth, spriteWidth);
     	this.getChildren().add(sprite);
     	this.setWidth(width);
     	this.setHeight(height);
-    	sprite.setFitHeight(48);
-    	sprite.setFitWidth(48);
+    	sprite.setFitHeight(height + 16);
+    	sprite.setFitWidth(width + 16);
     	this.health = health;
         this.xPos = xPos;
         this.yPos = yPos;
@@ -48,6 +48,7 @@ public class Enemy extends Pane {
     }
 
     public void updateWithPlayer(Player player, GameStage gameStage) {
+    	if (health <= 0) kill();
         if (!alive) return;
 
         if (type == EnemyType.FLYING) {
@@ -149,7 +150,7 @@ public class Enemy extends Pane {
 
         shootTimer = 100;
         shootingAnimationTimer = 20;
-
+        SoundController.getInstance().playCannonSound();
         return new Bullet(
                 enemyCenter,
                 directionToPlayer,
@@ -200,9 +201,9 @@ public class Enemy extends Pane {
     		case PATROL: GameLoop.addScore(300); SoundController.getInstance().playDieSound(); GameStage.totalMinions--; break;
     		case WALL_SHOOTER: GameLoop.addScore(100); SoundController.getInstance().playDieSound(); break;
     		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--;  break;
-    		case FLYING: GameLoop.addScore(150); break;
-    		case WALL: GameLoop.addScore(1000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
-            case JAVAHEAD: GameLoop.addScore(2500); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
+    		case FLYING: GameLoop.addScore(150); SoundController.getInstance().playCanDieSound(); break;
+    		case WALL: GameLoop.addScore(1000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().clear(); break;
+            case JAVAHEAD: GameLoop.addScore(2500); SoundController.getInstance().playJavaDieSound(); boss.getWeakPoints().clear(); break;
             case RDEYES: GameLoop.addScore(500); RDBoss.totalEYES--; break;
             case RDHAND: GameLoop.addScore(500); break;
             case RDHEAD: GameLoop.addScore(3000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
@@ -218,16 +219,12 @@ public class Enemy extends Pane {
         return shootingAnimationTimer;
     }
 
-
-
     public void updateShootingAnimation() {
         if (shootingAnimationTimer > 0) {
             shootingAnimationTimer--;
         }
     }
-
-
-
+    
     public void setShootingAnimationTimer(int timer) {
         this.shootingAnimationTimer = timer;
     }

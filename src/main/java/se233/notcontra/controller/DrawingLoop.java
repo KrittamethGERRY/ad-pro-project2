@@ -93,7 +93,7 @@ public class DrawingLoop implements Runnable {
 						gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
 					// Add effect after the bullet hit the enemies
-					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bullet.getxPos() - 16, bullet.getyPos() - 16, 64, 64);
+					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 7, 7, 1, bullet.getxPos() - 128, bullet.getyPos() - 128, 256, 256);
 					effects.add(explosion);
 					javafx.application.Platform.runLater(() -> {
 						gameStage.getChildren().add(explosion);
@@ -208,10 +208,10 @@ public class DrawingLoop implements Runnable {
 				// Add explosion effect for each removed enemy
 				Bounds enemyBounds = gameStage.getBoss().localToParent(enemy.getBoundsInParent());
 				Effect explosion = new Effect(
-						ImageAssets.EXPLOSION_IMG, 8, 8, 1,
-						(int) enemyBounds.getCenterX() - 32,
-						(int) enemyBounds.getCenterY() - 32,
-						64, 64
+						ImageAssets.EXPLOSION_IMG, 7, 7, 1,
+						(int) enemyBounds.getCenterX() - 64,
+						(int) enemyBounds.getCenterY() - 64,
+						256, 256
 				);
 				effects.add(explosion);
 				Platform.runLater(() -> {gameStage.getChildren().add(explosion);});
@@ -240,7 +240,6 @@ public class DrawingLoop implements Runnable {
 	// Update boss in each stage
 	private void updateBoss() {
 		if (gameStage instanceof FirstStage) {
-			gameStage.getPlayer().isCollided(gameStage);
 			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
 				GameLoop.enemies.addAll(WallBoss.getTurrets());
 				GameStage.bossPhase = true;
@@ -263,8 +262,10 @@ public class DrawingLoop implements Runnable {
 					Launcher.exitToMenu();
 				}
 			}
+
+			gameStage.getPlayer().isCollided(gameStage, 0);
 		} else if (gameStage instanceof SecondStage) {
-			gameStage.getPlayer().isCollided(gameStage);
+			gameStage.getPlayer().isCollided(gameStage, 85);
 			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
 				GameStage.bossPhase = true;
 			}

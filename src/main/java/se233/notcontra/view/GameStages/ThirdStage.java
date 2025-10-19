@@ -74,10 +74,11 @@ public class ThirdStage extends GameStage {
 	
 	@Override
 	public void spawnItem() {
-		boolean itemType = new Random().nextBoolean();
-		int randX = new Random().nextInt(0, 1280);
-		item = new SpecialMagazine(64,64,randX,100);
-		this.getChildren().add(item);
+		if (item == null) {
+			int randX = new Random().nextInt(0, 1280);
+			item = new SpecialMagazine(64,64,randX,100);
+			this.getChildren().add(item);
+		}
 	}
 	
 	

@@ -14,5 +14,5 @@ public class ImageAssets {
 	public static final Image PLAYER_SHOOT_UP = new Image(Launcher.class.getResourceAsStream("assets/Player/player_walk_shoot_up.png"));
 	public static final Image PLAYER_IDLE_IMG = new Image(Launcher.class.getResourceAsStream("assets/Player/player_idle.png"));
 
-	public static final Image EXPLOSION_IMG = new Image(Launcher.class.getResourceAsStream("assets/Effects/Explosion.png"));
+	public static final Image EXPLOSION_IMG = new Image(Launcher.class.getResourceAsStream("assets/Effects/explosionSprite.png"));
 }

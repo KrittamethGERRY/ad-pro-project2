@@ -51,7 +51,7 @@ public class SecondStage extends GameStage {
 
 		bossPhase = false;
 		totalMinions = 4;
-		PatrolEnemy patrolEnemy1 = new PatrolEnemy(695, 175, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy1 = new PatrolEnemy(565, 175, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
 		PatrolEnemy patrolEnemy2 = new PatrolEnemy(700, 200, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
 		PatrolEnemy patrolEnemy3 = new PatrolEnemy(645, 215, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
 		PatrolEnemy patrolEnemy4 = new PatrolEnemy(1000, 210, 1, 64, 64, 2, 2, 1, "assets/Enemy/Patrol_E.png", 500, EnemyType.PATROL);
@@ -84,10 +84,12 @@ public class SecondStage extends GameStage {
 	
 	@Override
 	public void spawnItem() {
-		boolean itemType = new Random().nextBoolean();
-		int randX = new Random().nextInt(0, 900);
-		item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
-		this.getChildren().add(item);
+		if (item == null) {
+			boolean itemType = new Random().nextBoolean();
+			int randX = new Random().nextInt(0, 600);
+			item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
+			this.getChildren().add(item);
+		}
 	}
 	
 	@Override

@@ -19,9 +19,10 @@ public class JavaBoss extends Boss{
 
     public JavaBoss(int xPos, int yPos , int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 20000);
+    	getWeakPoints().clear();
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
-        Head = new Enemy(xPos, yPos, 0, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA_IDEL.png", this.getMaxHealth(), EnemyType.JAVAHEAD);
+        Head = new Enemy(xPos, yPos, 0, Width, Height, Width, Height, 1, 1, 1,"assets/Boss/Boss2/JAVA_IDEL.png", this.getMaxHealth(), EnemyType.JAVAHEAD);
         Head.getSprite().setFitHeight(Height);
         Head.getSprite().setFitWidth(Width);
         this.gameStage = gameStage;
@@ -65,7 +66,7 @@ public class JavaBoss extends Boss{
             int spawnY = +100;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 2, 64, 82, 5, 5, 1,"assets/Enemy/FlyingEnemy.png", 50, EnemyType.FLYING);
+            Enemy enemy = new Enemy(spawnX, spawnY, 2, 64, 64, 64, 64, 4, 4, 1,"assets/Enemy/FlyingEnemy.png", 50, EnemyType.FLYING);
             // NOTE: Get children's global position do not touch!!!!
             //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);
