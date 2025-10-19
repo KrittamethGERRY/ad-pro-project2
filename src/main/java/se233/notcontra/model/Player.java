@@ -439,7 +439,9 @@ public class Player extends Pane {
 			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
 			for (Enemy enemy: GameLoop.enemies) {
 				Boss boss = gameStage.getBoss();
-				enemy.takeDamage(10000, boss);
+				if (enemy.getType() != EnemyType.WALL) {
+					enemy.takeDamage(10000, boss);
+				}
 			}
 			System.out.println(gameStage.getBoss().getWeakPoints());
 			SoundController.getInstance().playExplosionSound();

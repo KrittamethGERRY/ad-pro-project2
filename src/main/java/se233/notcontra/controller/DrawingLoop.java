@@ -240,6 +240,9 @@ public class DrawingLoop implements Runnable {
 	// Update boss in each stage
 	private void updateBoss() {
 		if (gameStage instanceof FirstStage) {
+			if (!WallBoss.getCore().isAlive()) {
+				gameStage.getBoss().getWeakPoints().clear();
+			}
 			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
 				GameLoop.enemies.addAll(WallBoss.getTurrets());
 				GameStage.bossPhase = true;

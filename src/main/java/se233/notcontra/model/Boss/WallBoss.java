@@ -15,7 +15,7 @@ import se233.notcontra.view.GameStages.GameStage;
 public class WallBoss extends Boss {
     private static Enemy turretLeft;
     private static Enemy turretRight;
-    private Enemy core;
+    private static Enemy core;
     private GameStage gameStage;
     private Enemy lastTurretFired = null;
 
@@ -133,5 +133,6 @@ public class WallBoss extends Boss {
         }
     }
     
+    public static Enemy getCore() { return core; }
     public static List<Enemy> getTurrets() { return List.of(turretLeft, turretRight); }
 }

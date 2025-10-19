@@ -18,7 +18,7 @@ public class Enemy extends Pane {
 	protected int yPos;
 	protected int width;
 	protected int height;
-    protected int health;
+    int health;
     private double speed;
     boolean alive = true;
     private EnemyType  type;
