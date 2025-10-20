@@ -2,6 +2,7 @@ package se233.notcontra.model;
 
 import java.util.List;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.model.Enums.EnemyType;
@@ -27,8 +28,8 @@ public class PatrolEnemy extends Enemy {
 	private boolean isOnPlatform;
 	Rectangle hitBox;
 	
-	public PatrolEnemy(int xPos, int yPos, double speed, int width, int height, int count, int column, int row, String imgName, int health, EnemyType type) {
-		super(xPos, yPos, speed, width, height, 64, 64, count, column, row, imgName, health, type);
+	public PatrolEnemy(int xPos, int yPos, double speed, int width, int height, int count, int column, int row, Image image, int health, EnemyType type) {
+		super(xPos, yPos, speed, width, height, 64, 64, count, column, row, image, health, type);
 		hitBox = new Rectangle(width, height);
 		hitBox.setFill(Color.TRANSPARENT);
 		this.getChildren().add(hitBox);

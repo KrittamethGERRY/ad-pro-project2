@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Enemy;
+import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.view.GameStages.GameStage;
 
@@ -28,19 +29,20 @@ public class RDBoss extends Boss{
 
     public RDBoss(int xPos, int yPos, int Height, int Width, GameStage gameStage) {
         super(xPos, yPos, Width, Height, 25000);
+        getWeakPoints().clear();
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
-        Rdhead = new Enemy(-130, -50, 0, Width, Height, Width, Height, 1, 1, 1,"assets/Boss/Boss3/boss3_head.png", 25000, EnemyType.RDHEAD);
-        Rdlefthand = new Enemy( -210, -45, 0, Width, Height, Width, Height, 1, 1, 1,"assets/Boss/Boss3/RD_leftHand_IDEL.png", 7000, EnemyType.RDHAND);
-        Rdrighthand = new Enemy( +100, -45, 0, Width, Height, Width, Height, 1, 1, 1,"assets/Boss/Boss3/RD_rightHand_IDEL.png", 7000, EnemyType.RDHAND);
-        RdleftEye = new Enemy(-45, -2, 0, 32,32, 32, 32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_left_eye.png", 2500,EnemyType.RDEYES);
-        RdrightEye = new Enemy(-22, -2, 0, 32,32, 32, 32, 1, 1 ,1 ,  "assets/Boss/Boss3/boss3_right_eye.png", 2500,EnemyType.RDEYES);
+        Rdhead = new Enemy(-130, -50, 0, Width, Height, Width, Height, 1, 1, 1, ImageAssets.RD_HEAD, 25000, EnemyType.RDHEAD);
+        Rdlefthand = new Enemy( -210, -45, 0, Width, Height, Width, Height, 1, 1, 1, ImageAssets.RD_LEFTHAND, 7000, EnemyType.RDHAND);
+        Rdrighthand = new Enemy( +100, -45, 0, Width, Height, Width, Height, 1, 1, 1, ImageAssets.RD_RIGHTHAND, 7000, EnemyType.RDHAND);
+        RdleftEye = new Enemy(-45, -2, 0, 32,32, 32, 32, 1, 1 ,1 ,  ImageAssets.RD_LEFTEYE, 2500,EnemyType.RDEYES);
+        RdrightEye = new Enemy(-22, -2, 0, 32,32, 32, 32, 1, 1 ,1 ,  ImageAssets.RD_RIGHTEYE, 2500,EnemyType.RDEYES);
         this.gameStage = gameStage;
 
         Rdhead.getSprite().setFitHeight(192);
         Rdhead.getSprite().setFitWidth(192);
-        Rdhead.getSprite().setLayoutX(Rdhead.getXPos());
-        Rdhead.getSprite().setLayoutY(Rdhead.getYPos());
+        Rdhead.getSprite().setLayoutX(-130);
+        Rdhead.getSprite().setLayoutY(-50);
         Rdlefthand.getSprite().setFitHeight(128);
         Rdlefthand.getSprite().setFitWidth(128);
         Rdlefthand.getSprite().setLayoutX(Rdlefthand.getXPos());
@@ -154,7 +156,7 @@ public class RDBoss extends Boss{
                 spawnY = ((int) Hand.getYPos()) + 50;
             }
 
-            Enemy enemy = new Enemy(spawnX, spawnY, 2, 64, 82, 64, 82, 4, 4, 1,"assets/Enemy/FlyingEnemy.png", 50, EnemyType.FLYING);
+            Enemy enemy = new Enemy(spawnX, spawnY, 2, 64, 82, 64, 82, 4, 4, 1, ImageAssets.FLYING_ENEMY, 50, EnemyType.FLYING);
 
             // NOTE: Get children's global position do not touch!!!!
             //System.out.print("Enemy Bound: " + getLocalToParentTransform());

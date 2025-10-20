@@ -17,6 +17,7 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
+import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Boss.Boss;
@@ -29,7 +30,7 @@ public class ThirdStage extends GameStage {
 		SoundController.getInstance().playThirdStageMusic();
 		ImageView scoreBackground = drawScore();
 		ImageView livesBackground = drawLives();
-		ImageView background = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/thirdStage.png")));
+		ImageView background = new ImageView(ImageAssets.THIRD_STAGE);
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
 		platforms = new ArrayList<Platform>();

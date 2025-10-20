@@ -7,6 +7,7 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Enemy;
+import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
@@ -29,9 +30,9 @@ public class WallBoss extends Boss {
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
         this.gameStage = gameStage;
-        turretLeft = new Enemy(-35, -10, 0, 64, 32, 64, 32, 1, 1, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
-        turretRight = new Enemy(90, -10, 0, 64, 32, 64, 32, 1, 1, 1,"assets/Boss/Boss1/Turret_IDEL.png", this.getMaxHealth()/4 + 100, EnemyType.TURRET);
-        core = new Enemy(0, 0, 100, 64, 64, 64, 64, 2, 3, 1, "assets/Boss/Boss1/core.png", this.getMaxHealth()/2, EnemyType.WALL);
+        turretLeft = new Enemy(-35, -10, 0, 64, 32, 64, 32, 1, 1, 1, ImageAssets.IDLE_TURRET, this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        turretRight = new Enemy(90, -10, 0, 64, 32, 64, 32, 1, 1, 1, ImageAssets.IDLE_TURRET, this.getMaxHealth()/4 + 100, EnemyType.TURRET);
+        core = new Enemy(0, 0, 100, 64, 64, 64, 64, 2, 3, 1, ImageAssets.IDLE_CORE, this.getMaxHealth()/2, EnemyType.WALL);
         core.getSprite().setLayoutY(60);
         core.getSprite().setLayoutX(-23);
         core.getSprite().setFitHeight(192);
@@ -124,7 +125,7 @@ public class WallBoss extends Boss {
             int spawnY = -200;
 
             // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, 64, 64, 2, 5, 1,"assets/Enemy/Wall_shooter.png", 1, EnemyType.WALL_SHOOTER);
+            Enemy enemy = new Enemy(spawnX, spawnY, 0, 64, 64, 64, 64, 2, 5, 1, ImageAssets.WALL_ENEMY, 1, EnemyType.WALL_SHOOTER);
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);

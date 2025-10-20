@@ -14,6 +14,7 @@ import se233.notcontra.view.GameStages.SecondStage;
 import se233.notcontra.view.GameStages.ThirdStage;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import javafx.application.Platform;
@@ -69,6 +70,7 @@ public class DrawingLoop implements Runnable {
 	}
 
 	private void paintBullet(List<Bullet> bullets, ShootingDirection direction) {
+
 		Iterator<Bullet> iterator = bullets.iterator();
 		while (iterator.hasNext()) {
 			Bullet bullet = iterator.next();
@@ -86,7 +88,6 @@ public class DrawingLoop implements Runnable {
 					enemy.takeDamage(500, gameStage.getBoss());
 					shouldRemove = true;
 				}
-				
 				
 				// Boss' children enemy
 				if (enemy.isAlive() &&
@@ -138,15 +139,18 @@ public class DrawingLoop implements Runnable {
                     }
                 }
 			}
-			Platform.runLater(this::updateLives);
 			
 			// Remove bullet
-			if (shouldRemove) {
+			try {
+				if (shouldRemove) {
 				iterator.remove();
 				Platform.runLater(() -> gameStage.getChildren().remove(bullet));
+				}
+			} catch (ConcurrentModificationException e) {
+				System.err.println("Remove bullet from the list failed: " + e.getMessage());
 			}
-
 			Platform.runLater(this::updateScore);
+			Platform.runLater(this::updateLives);
 		}
 	}
 
@@ -254,16 +258,19 @@ public class DrawingLoop implements Runnable {
 			}
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setHeaderText("You Win!");
-				alert.setContentText("Continue to the next stage?");
-				alert.showAndWait();
-				SoundController.getInstance().playWinSound();
-				if (alert.getResult() == ButtonType.OK) {
-					Launcher.changeStage(1);
-				} else {
-					Launcher.exitToMenu();
-				}
+				Platform.runLater(() -> {
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setHeaderText("You Win!");
+					alert.setContentText("Continue to the next stage?");
+					alert.showAndWait();
+					SoundController.getInstance().playWinSound();
+					if (alert.getResult() == ButtonType.OK) {
+						Launcher.changeStage(1);
+					} else {
+						Launcher.exitToMenu();
+					}
+				});
+
 			}
 
 			gameStage.getPlayer().isCollided(gameStage, 0);
@@ -279,16 +286,18 @@ public class DrawingLoop implements Runnable {
 			}
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
-				Alert alert = new Alert(AlertType.CONFIRMATION);
-				alert.setHeaderText("You Win!");
-				alert.setContentText("Continue to the next stage?");
-				alert.showAndWait();
-				SoundController.getInstance().playWinSound();
-				if (alert.getResult() == ButtonType.OK) {
-					Launcher.changeStage(2);
-				} else {
-					Launcher.exitToMenu();
-				}
+				Platform.runLater(() -> {
+					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setHeaderText("You Win!");
+					alert.setContentText("Continue to the next stage?");
+					alert.showAndWait();
+					SoundController.getInstance().playWinSound();
+					if (alert.getResult() == ButtonType.OK) {
+						Launcher.changeStage(2);
+					} else {
+						Launcher.exitToMenu();
+					}
+				});
 			}
 		} else if (gameStage instanceof ThirdStage) {
 			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
@@ -303,14 +312,16 @@ public class DrawingLoop implements Runnable {
 			}
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setHeaderText("CONGRATULATIONS!");
-				alert.setContentText("YOU WIN THE GAME AND GET GRAD 'A' ADPRO");
-				alert.showAndWait();
-				
-				if (alert.getResult() == ButtonType.OK) {
-					Launcher.exitToMenu();
-				}
+				Platform.runLater(() -> {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setHeaderText("CONGRATULATIONS!");
+					alert.setContentText("YOU WIN THE GAME AND GET GRAD 'A' ADPRO");
+					alert.showAndWait();
+					
+					if (alert.getResult() == ButtonType.OK) {
+						Launcher.exitToMenu();
+					}
+				});
 			}
 		}
 	}

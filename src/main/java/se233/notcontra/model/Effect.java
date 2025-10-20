@@ -16,7 +16,7 @@ public class Effect extends Pane {
         int width = (int) spriteSheet.getWidth() / columns;
         int height = (int) spriteSheet.getHeight() / rows;
 
-        this.sprite = new SpriteAnimation(spriteSheet, 8, 8, 1, 5, 0, width, height);
+        this.sprite = new SpriteAnimation(spriteSheet, 7, 7, 1, 0, 0, width, height);
 
         setTranslateX(x);
         setTranslateY(y);

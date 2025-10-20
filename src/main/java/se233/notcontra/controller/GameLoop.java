@@ -3,6 +3,7 @@ package se233.notcontra.controller;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +12,7 @@ import javafx.scene.image.Image;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Boss.RDBoss;
 import se233.notcontra.model.Bullet;
+import se233.notcontra.model.Effect;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.ImageAssets;
@@ -33,9 +35,8 @@ public class GameLoop implements Runnable{
 	
 	public static boolean isPaused = false;
 
-	public static List<Bullet> bullets = Collections.synchronizedList(new ArrayList<>());
-	public static List<Enemy> enemies = Collections.synchronizedList(new ArrayList<>());
-
+	public static List<Bullet> bullets = new ArrayList<Bullet>();
+	public static List<Enemy> enemies = new ArrayList<Enemy>();
 	public GameLoop(GameStage gameStage) {
 		score = 0;
 		pauseMenu = new PauseMenu();
@@ -170,36 +171,36 @@ public class GameLoop implements Runnable{
 		} 
 		player.getImageView().tick();
 	}
-
+	
 	public void updateEnemyAnimation(Enemy enemy){
 		if (enemy.getType() == EnemyType.TURRET) {
 			if (!enemy.isAlive()) {
-				enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Turret_dead.png"), 1, 1, 1);
+				enemy.getSprite().changeSpriteSheet(ImageAssets.DESTROYED_TURRET, 1, 1, 1);
 			} else if (enemy.isAlive()){
 				enemy.updateShootingAnimation();
 				if(enemy.getShootingAnimationTimer() > 0) {
-					enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Turret_fire.png"), 1, 1, 1);
+					enemy.getSprite().changeSpriteSheet(ImageAssets.FIRING_TURRET, 1, 1, 1);
 				} else {
-					enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Turret_IDEL.png"), 1, 1, 1);
+					enemy.getSprite().changeSpriteSheet(ImageAssets.IDLE_TURRET, 1, 1, 1);
 				}
 			}
 		}
 
 		if (enemy.getType() == EnemyType.WALL){
 			if (!enemy.isAlive()){
-				enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss1/Core_dead.png"), 1, 1, 1);
+				enemy.getSprite().changeSpriteSheet(ImageAssets.DESTROYED_CORE, 1, 1, 1);
 			}
 		}
 
 		if (enemy.getType() == EnemyType.JAVAHEAD){
 			if (!enemy.isAlive()){
-				enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss2/JAVA_DEAD.png"), 1, 1, 1);
+				enemy.getSprite().changeSpriteSheet(ImageAssets.DESTROYED_JAVA, 1, 1, 1);
 			}
 		}
 
 		if (enemy.getType() == EnemyType.RDHEAD){
 			if (!enemy.isAlive()) {
-				enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_head_DEAD.png"), 2, 2, 1);
+				enemy.getSprite().changeSpriteSheet(ImageAssets.DESTROYED_RDHEAD, 2, 2, 1);
 			}
 		}
 
@@ -208,9 +209,9 @@ public class GameLoop implements Runnable{
 			if (boss != null) {
 				if (!enemy.isAlive()) {
 					if (enemy == boss.getRdleftEye()) {
-						enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_lefteyes_DEAD.png"), 1, 1, 1);
+						enemy.getSprite().changeSpriteSheet(ImageAssets.DESTROYED_RD_LEFTEYE, 1, 1, 1);
 					} else if (enemy == boss.getRdrightEye()) {
-						enemy.getSprite().changeSpriteSheet(getimage("assets/Boss/Boss3/RD_righteyes_DEAD.png"), 1, 1, 1);
+						enemy.getSprite().changeSpriteSheet(ImageAssets.DESTROYED_RD_RIGHTEYE, 1, 1, 1);
 					}
 				}
 			}

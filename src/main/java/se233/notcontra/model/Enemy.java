@@ -28,10 +28,9 @@ public class Enemy extends Pane {
     private int shootingAnimationTimer = 0;
 
 
-    public Enemy(int xPos, int yPos, double speed, int width, int height, int spriteWidth, int spriteHeight, int count, int column, int row, String imgName, int health, EnemyType type) {
+    public Enemy(int xPos, int yPos, double speed, int width, int height, int spriteWidth, int spriteHeight, int count, int column, int row, Image image, int health, EnemyType type) {
     	setTranslateX(xPos);
     	setTranslateY(yPos);
-    	Image image = new Image(Launcher.class.getResourceAsStream(imgName));
     	sprite = new SpriteAnimation(image, count, column, row, 0, 0, spriteWidth, spriteWidth);
     	this.getChildren().add(sprite);
     	this.setWidth(width);
