@@ -58,7 +58,8 @@ public abstract class GameStage extends Pane {
 	public ImageView drawLives() {
 		livesLabel = new Label("Lives: 3");
 		livesLabel.setStyle("-fx-font-weight: bold;"
-				+ "-fx-font-size: 2em;");
+				+ "-fx-font-size: 2em;"
+				+ "-fx-fill: red;");
 		ImageView livesBackground = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Paper.png")));
 		livesBackground.setFitWidth(150);
 		livesBackground.setFitHeight(60);

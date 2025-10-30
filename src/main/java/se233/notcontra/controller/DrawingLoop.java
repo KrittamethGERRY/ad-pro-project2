@@ -137,7 +137,7 @@ public class DrawingLoop implements Runnable {
 				Platform.runLater(() -> gameStage.getChildren().remove(bullet));
 				}
 			} catch (ConcurrentModificationException e) {
-				System.err.println("Remove bullet from the list failed: " + e.getMessage());
+				System.err.println("The bullet deletion is duplicated: " + e.getMessage());
 			}
 			Platform.runLater(this::updateScore);
 			Platform.runLater(this::updateLives);
@@ -209,8 +209,9 @@ public class DrawingLoop implements Runnable {
 						256, 256
 				);
 				effects.add(explosion);
-				Platform.runLater(() -> {gameStage.getChildren().add(explosion);});
-
+				Platform.runLater(() -> {
+					gameStage.getChildren().add(explosion);
+				});
 				enemiesToRemove.add(enemy);
 			}
 		}
@@ -284,7 +285,7 @@ public class DrawingLoop implements Runnable {
 					gameStage.getBoss().update();
 				}
 			}
-			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
+			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin && !gameStage.getPlayer().isDying()) {
 				isWin = true;
 				Platform.runLater(() -> {
 					SoundController.getInstance().playWinSound();

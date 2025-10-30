@@ -273,11 +273,15 @@ public class GameLoop implements Runnable{
 	public void run() {
 		while (running) {
 			float startTime = System.currentTimeMillis();
-			update(gameStage.getPlayer());
-			updateAnimation(gameStage.getPlayer());
-			for (Enemy e : new ArrayList<>(gameStage.getEnemies())) {
-			    updateEnemyAnimation(e);
-			}
+			Platform.runLater(() -> {
+				if (isPaused) return;
+				update(gameStage.getPlayer());
+				updateAnimation(gameStage.getPlayer());
+				for (Enemy e : new ArrayList<>(gameStage.getEnemies())) {
+				    updateEnemyAnimation(e);
+				}
+			});
+
 			float elapsedTime = System.currentTimeMillis() - startTime;
 			if (elapsedTime < interval) {
 				try {
