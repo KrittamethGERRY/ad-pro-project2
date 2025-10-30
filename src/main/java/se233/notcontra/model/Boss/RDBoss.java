@@ -32,29 +32,15 @@ public class RDBoss extends Boss{
         getWeakPoints().clear();
         this.setTranslateX(xPos);
         this.setTranslateY(yPos);
-        Rdhead = new Enemy(-130, -50, 0, Width, Height, Width, Height, 1, 1, 1, ImageAssets.RD_HEAD, 25000, EnemyType.RDHEAD);
-        Rdlefthand = new Enemy( -210, -45, 0, Width, Height, Width, Height, 1, 1, 1, ImageAssets.RD_LEFTHAND, 7000, EnemyType.RDHAND);
-        Rdrighthand = new Enemy( +100, -45, 0, Width, Height, Width, Height, 1, 1, 1, ImageAssets.RD_RIGHTHAND, 7000, EnemyType.RDHAND);
-        RdleftEye = new Enemy(-45, -2, 0, 32,32, 32, 32, 1, 1 ,1 ,  ImageAssets.RD_LEFTEYE, 2500,EnemyType.RDEYES);
-        RdrightEye = new Enemy(-22, -2, 0, 32,32, 32, 32, 1, 1 ,1 ,  ImageAssets.RD_RIGHTEYE, 2500,EnemyType.RDEYES);
+        Rdhead = new Enemy(xPos, yPos, 0, Width, Height, 128, 128, 1, 1, 1, ImageAssets.RD_HEAD, 25000, EnemyType.RDHEAD);
+        Rdlefthand = new Enemy( -300, -38, 0, 164, 128, 164, 128, 1, 1, 1, ImageAssets.RD_LEFTHAND, 7000, EnemyType.RDHAND);
+        Rdrighthand = new Enemy( +330, -38, 0, 164, 128, 164, 128, 1, 1, 1, ImageAssets.RD_RIGHTHAND, 7000, EnemyType.RDHAND);
+        RdleftEye = new Enemy(40, 50, 0, 32,32, 32, 32, 1, 1 ,1 ,  ImageAssets.RD_LEFTEYE, 2500,EnemyType.RDEYES);
+        RdrightEye = new Enemy(85, 50, 0, 32,32, 32, 32, 1, 1 ,1 ,  ImageAssets.RD_RIGHTEYE, 2500,EnemyType.RDEYES);
         this.gameStage = gameStage;
 
         Rdhead.getSprite().setFitHeight(192);
         Rdhead.getSprite().setFitWidth(192);
-        Rdhead.getSprite().setLayoutX(-130);
-        Rdhead.getSprite().setLayoutY(-50);
-        Rdlefthand.getSprite().setFitHeight(128);
-        Rdlefthand.getSprite().setFitWidth(128);
-        Rdlefthand.getSprite().setLayoutX(Rdlefthand.getXPos());
-        Rdlefthand.getSprite().setLayoutY(Rdlefthand.getYPos());
-        Rdrighthand.getSprite().setFitHeight(128);
-        Rdrighthand.getSprite().setFitWidth(128);
-        Rdrighthand.getSprite().setLayoutX(Rdrighthand.getXPos());
-        Rdrighthand.getSprite().setLayoutY(Rdrighthand.getYPos());
-        RdleftEye.getSprite().setLayoutX(RdleftEye.getXPos());
-        RdleftEye.getSprite().setLayoutY(RdleftEye.getYPos());
-        RdrightEye.getSprite().setLayoutX(RdrightEye.getXPos());
-        RdrightEye.getSprite().setLayoutY(RdrightEye.getYPos());
 
         GameLoop.enemies.addAll(List.of(Rdlefthand, Rdrighthand, RdleftEye, RdrightEye));
 
@@ -149,10 +135,10 @@ public class RDBoss extends Boss{
 
         if (aliveCount < maxEnemies) {
             if(Hand ==  Rdlefthand) {
-                spawnX = ((int) Hand.getXPos())-180;
+                spawnX = ((int) Hand.getXPos());
                 spawnY = ((int) Hand.getYPos())+50;
             }else {
-                spawnX = ((int) Hand.getXPos()) + 180;
+                spawnX = ((int) Hand.getXPos()) + 50;
                 spawnY = ((int) Hand.getYPos()) + 50;
             }
 

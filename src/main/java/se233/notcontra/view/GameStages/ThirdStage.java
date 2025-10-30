@@ -49,7 +49,7 @@ public class ThirdStage extends GameStage {
 
 		platforms.addAll(List.of(groundPlatform, platform1, platform2, platform3, platform4));
 
-		boss = new RDBoss(1280/2, 100, 128, 128 , this);
+		boss = new RDBoss(510, 55, 128, 128 , this);
 		getChildren().addAll(background, scoreBackground, livesBackground, livesLabel, scoreLabel, groundPlatform, platform1, platform2, platform3, platform4, player, boss);
 	}
 	
