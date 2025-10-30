@@ -190,16 +190,16 @@ public class Enemy extends Pane {
     public void takeDamage(int damage, Boss boss) {
     	health -= damage;
     	switch (type) {
-    	case PATROL: break;
-    	case WALL_SHOOTER: break;
-    	case TURRET: SoundController.getInstance().playMetalHitSound(); break;
-    	case FLYING: break;
-    	case WALL: SoundController.getInstance().playMetalHitSound2(); break;
-        case RDEYES: SoundController.getInstance().playMetalHitSound(); break;
-        case RDHAND: SoundController.getInstance().playMetalHitSound2(); break;
-        case RDHEAD: SoundController.getInstance().playMetalHitSound(); break;
+	    	case PATROL: break;
+	    	case WALL_SHOOTER: break;
+	    	case TURRET: SoundController.getInstance().playMetalHitSound(); break;
+	    	case FLYING: break;
+	    	case WALL: SoundController.getInstance().playMetalHitSound2(); break;
+	        case RDEYES: SoundController.getInstance().playMetalHitSound(); break;
+	        case RDHAND: SoundController.getInstance().playMetalHitSound2(); break;
+	        case RDHEAD: SoundController.getInstance().playMetalHitSound(); break;
     	}
-    	System.out.println("Health: " + this.health);
+    	
     	if (health <= 0) {
     		switch (type) {
     		case PATROL: GameLoop.addScore(300); SoundController.getInstance().playDieSound(); GameStage.totalMinions--; break;
