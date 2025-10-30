@@ -93,16 +93,23 @@ public class Enemy extends Pane {
         double distance = direction.getLength();
 
         // Ignore invalid distances
-        if (distance < 1 || distance > 1000) return;
+        if (distance > 1000) return;
+        if (distance < 0.1) return ;
 
         // Normalize and move
         direction = direction.normalize();
 
-        speed = 3.0; // tweak this for faster/slower movement
+        if (Double.isNaN(direction.x) || Double.isNaN(direction.y)) {
+            return;
+        }
+
+        double actualSpeed = (this.speed > 0 && this.speed < 100) ? this.speed : 3.0;
 
         // Apply movement in that direction
-        double moveX = direction.x * speed;
-        double moveY = direction.y * speed;
+        double moveX = direction.x * actualSpeed;
+        double moveY = direction.y * actualSpeed;
+
+        if (Double.isNaN(moveX) || Double.isNaN(moveY)) return;
 
         // Update enemy position
         setTranslateX(getTranslateX() + moveX);

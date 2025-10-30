@@ -67,8 +67,8 @@ public class JavaBoss extends Boss{
             int spawnX = -50;
             int spawnY = +100;
 
-            // Create wall shooter (stands still and shoots)
-            Enemy enemy = new Enemy(spawnX, spawnY, 2, 64, 64, 64, 64, 4, 4, 1, ImageAssets.FLYING_ENEMY, 50, EnemyType.FLYING);
+
+            Enemy enemy = new Enemy(spawnX, spawnY, 3, 64, 64, 64, 64, 4, 4, 1, ImageAssets.FLYING_ENEMY, 50, EnemyType.FLYING);
             // NOTE: Get children's global position do not touch!!!!
             //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);
