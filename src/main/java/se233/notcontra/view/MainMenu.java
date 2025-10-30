@@ -10,6 +10,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import se233.notcontra.Launcher;
+import se233.notcontra.controller.SoundController;
+import se233.notcontra.model.ImageAssets;
 import se233.notcontra.view.GameStages.GameStage;
 
 public class MainMenu extends AnchorPane {
@@ -19,7 +21,7 @@ public class MainMenu extends AnchorPane {
 	public MainMenu() {
 		Label title = new Label("NotContra");
 		VBox buttonBox = new VBox(20);
-		ImageView background = new ImageView();
+		ImageView background = new ImageView(ImageAssets.MAIN_MENU);
 		title.setId("title");
 		title.setLayoutX(50);
 		title.setLayoutY(35);
@@ -61,6 +63,7 @@ public class MainMenu extends AnchorPane {
 			}
 		});
 		getChildren().addAll(background, title, buttonBox, list);
+		SoundController.getInstance().playStartTheme();
 	}
 	
 	public Button drawStartButton() {

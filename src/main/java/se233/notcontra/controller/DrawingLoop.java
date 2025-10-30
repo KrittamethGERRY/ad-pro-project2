@@ -7,7 +7,6 @@ import se233.notcontra.model.Boss.WallBoss;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
-import se233.notcontra.view.CheatManager;
 import se233.notcontra.view.GameStages.FirstStage;
 import se233.notcontra.view.GameStages.GameStage;
 import se233.notcontra.view.GameStages.SecondStage;
@@ -186,6 +185,8 @@ public class DrawingLoop implements Runnable {
 				if (enemyBounds.intersects(playerBounds) && Player.spawnProtectionTimer <= 0) {
 					if (!CheatManager.getInstance().areCheatsActive()) {
 						gameStage.getPlayer().die();
+						
+						Platform.runLater(this::updateLives);
 					}
 				}
 			}
@@ -203,7 +204,6 @@ public class DrawingLoop implements Runnable {
             }
         }
     }
-
 	private void clearAllEnemies() {
 		List<Enemy> enemiesToRemove = new ArrayList<>();
 
@@ -301,8 +301,6 @@ public class DrawingLoop implements Runnable {
 			}
 		} else if (gameStage instanceof ThirdStage) {
 			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
-				//
-				//
 				GameStage.bossPhase = true;
 			}
 			if (GameStage.bossPhase) {
@@ -376,10 +374,10 @@ public class DrawingLoop implements Runnable {
                     }
                     checkAllCollisions(gameStage.getPlayer());
                     paint(gameStage.getPlayer());
-                    paintEffects(effects);
                     paintBullet(GameLoop.bullets, GameLoop.shootingDir);
                     updateEnemies();
                     updateBoss();
+                    paintEffects(DrawingLoop.effects);
                     updateItemSpawnTimer();
                 });
 

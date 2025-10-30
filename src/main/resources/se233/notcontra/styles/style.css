@@ -4,6 +4,7 @@
 }
 
 #title {
+	-fx-font-color: WHITE;
 	-fx-font-size: 3em;
 	-fx-font-weight: bold;
 }

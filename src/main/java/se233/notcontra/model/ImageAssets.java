@@ -39,6 +39,7 @@ public class ImageAssets {
 
 	public static final Image EXPLOSION_IMG = new Image(Launcher.class.getResourceAsStream("assets/Effects/explosionSprite.png"));
 	
+	public static final Image MAIN_MENU = new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/MainMenu.png"));
 	public static final Image FIRST_STAGE = new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/firstStage.png"));
 	public static final Image SECOND_STAGE = new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/secondStage.png"));
 	public static final Image THIRD_STAGE = new Image(Launcher.class.getResourceAsStream("assets/Backgrounds/thirdStage.png"));

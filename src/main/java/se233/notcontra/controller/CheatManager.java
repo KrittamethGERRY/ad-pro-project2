@@ -1,4 +1,4 @@
-package se233.notcontra.view;
+package se233.notcontra.controller;
 
 public class CheatManager {
 

@@ -3,6 +3,7 @@ package se233.notcontra.model.Boss;
 import javafx.scene.image.Image;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
+import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Enemy;
 import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Enums.EnemyState;
@@ -71,6 +72,7 @@ public class JavaBoss extends Boss{
             // NOTE: Get children's global position do not touch!!!!
             //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);
+            SoundController.getInstance().playJavaAttackSound();
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);
             });

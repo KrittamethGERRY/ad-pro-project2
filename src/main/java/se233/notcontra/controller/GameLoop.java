@@ -2,12 +2,14 @@ package se233.notcontra.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Boss.RDBoss;
@@ -220,6 +222,7 @@ public class GameLoop implements Runnable{
 		enemy.getSprite().tick();
 	}
 
+
 	private RDBoss findRDBoss() {
 		if (gameStage.getBoss() instanceof RDBoss) {
 			return (RDBoss) gameStage.getBoss();
@@ -252,7 +255,8 @@ public class GameLoop implements Runnable{
 	
 	public static void tracePlayerAction(String action) {
 		logger.debug("Player {}", action);
-	}
+	}	
+
 
 
 	@Override

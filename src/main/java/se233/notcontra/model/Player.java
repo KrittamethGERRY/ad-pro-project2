@@ -189,6 +189,10 @@ public class Player extends Pane {
 					Launcher.exitToMenu();
 				}
 			});
+
+			SoundController.getInstance().stopAllSounds();
+			SoundController.getInstance().playPlayerDieSound();
+			SoundController.getInstance().playLoseSound();
 		}
 	}
 	

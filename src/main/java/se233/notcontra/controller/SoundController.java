@@ -22,6 +22,9 @@ public class SoundController {
 	private AudioClip winSound;
 	private AudioClip javaDieSound;
 	private AudioClip canDieSound;
+	private AudioClip javaAttackSound;
+	private AudioClip startTheme;
+	private AudioClip loseSound;
 	
     public void stopAllSounds() {
         if (shootSound != null) shootSound.stop();
@@ -41,6 +44,9 @@ public class SoundController {
         if (winSound != null) winSound.stop();
         if (javaDieSound != null) javaDieSound.stop();
         if (canDieSound != null) canDieSound.stop();
+        if (javaAttackSound != null) javaAttackSound.stop();
+        if (startTheme != null) startTheme.stop();
+        if (loseSound != null) loseSound.stop();
 
     }
 	private SoundController() {
@@ -61,13 +67,18 @@ public class SoundController {
 		winSound = new AudioClip(Launcher.class.getResource("assets/Sounds/winSound.mp3").toString());
 		javaDieSound = new AudioClip(Launcher.class.getResource("assets/Sounds/javaDieSound.mp3").toString());
 		canDieSound = new AudioClip(Launcher.class.getResource("assets/Sounds/flyingDieSound.mp3").toString());
+		javaAttackSound = new AudioClip(Launcher.class.getResource("assets/Sounds/javaAttackSound.mp3").toString());
+		startTheme = new AudioClip(Launcher.class.getResource("assets/Sounds/startingTheme.mp3").toString());
+		loseSound = new AudioClip(Launcher.class.getResource("assets/Sounds/loseSound.mp3").toString());
 
+		
 		metalSound.setVolume(0.1);
 		metalSound2.setVolume(0.1);
 		shootSound.setVolume(0.25);
 		firstStageMusic.setVolume(0.35);
 		secondStageMusic.setVolume(0.35);
 		thirdStageMusic.setVolume(0.20);
+		startTheme.setVolume(0.15);
 
 		jumpSound.setVolume(0.1);
 		playerDieSound.setVolume(0.35);
@@ -131,6 +142,17 @@ public class SoundController {
 	
 	public void playCanDieSound() {
 		canDieSound.play();
+	}
+	
+	public void playJavaAttackSound() {
+		javaAttackSound.play();
+	}
+	
+	public void playStartTheme() {
+		startTheme.play();
+	}
+	public void playLoseSound() {
+		loseSound.play();
 	}
 	public static SoundController getInstance() {
 		if (instance == null) return new SoundController(); 

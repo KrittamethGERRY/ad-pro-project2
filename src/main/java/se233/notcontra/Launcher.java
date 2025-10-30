@@ -3,12 +3,11 @@ package se233.notcontra;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
-import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
-import se233.notcontra.view.CheatManager;
+import se233.notcontra.controller.CheatManager;
 import se233.notcontra.view.MainMenu;
 import se233.notcontra.view.GameStages.FirstStage;
 import se233.notcontra.view.GameStages.GameStage;
@@ -35,6 +34,7 @@ public class Launcher extends Application {
     	stage.setScene(menuScene);
     	stage.setTitle("Not Contra");
     	stage.show();
+    	stage.setResizable(false);
     	primaryStage = stage;
     }
     
