@@ -36,7 +36,7 @@ public class WallBoss extends Boss {
         core.setLayoutY(60);
         core.setLayoutX(-23);
         getWeakPoints().add(core);
-        javafx.application.Platform.runLater(() -> {
+        Platform.runLater(() -> {
             this.getChildren().addAll(turretLeft, turretRight, core);        	
         });
     }

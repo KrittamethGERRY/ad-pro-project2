@@ -1,6 +1,7 @@
 package se233.notcontra.model.Boss;
 
 import javafx.scene.layout.Pane;
+import se233.notcontra.controller.GameLoop;
 import se233.notcontra.model.Enemy;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class Boss extends Pane {
     }
 
     public void update() {
-        if (!isAlive) {
+        if (!isAlive || GameLoop.isPaused) {
             return;
         }
         switch (currentState) {

@@ -52,15 +52,15 @@ public class Launcher extends Application {
             fadeOverlay.setFill(Color.BLACK);
             fadeOverlay.setOpacity(0);
 
-            if (currentStage instanceof Pane) {
+            if (currentScene.getRoot() instanceof Pane) {
                 ((Pane) currentScene.getRoot()).getChildren().add(fadeOverlay);
-            	
             }
             FadeTransition fadeOut = new FadeTransition(Duration.millis(500), fadeOverlay);
             fadeOut.setFromValue(0);
             fadeOut.setToValue(1);
             
             fadeOut.setOnFinished(event -> {
+            	((Pane)currentScene.getRoot()).getChildren().remove(fadeOverlay);
         		if (GameLoop.isPaused) GameLoop.pause(); // unpause the game
         		if (currentGameLoop != null) {
         			currentGameLoop.stop();
@@ -112,6 +112,22 @@ public class Launcher extends Application {
         		currentGameThread.start();
         		currentDrawingThread.start();
         		
+        		Rectangle fadeInOverlay = new Rectangle(0, 0, GameStage.WIDTH, GameStage.HEIGHT);
+                fadeInOverlay.setFill(Color.BLACK);
+                fadeInOverlay.setOpacity(0);
+
+                if (gameStage instanceof Pane) {
+                    ((Pane) currentScene.getRoot()).getChildren().add(fadeInOverlay);
+                }
+                FadeTransition fadeIn = new FadeTransition(Duration.millis(500), fadeInOverlay);
+                fadeIn.setFromValue(1);
+                fadeIn.setToValue(0);
+                fadeIn.setOnFinished(e -> {
+                    if (gameStage instanceof Pane) {
+                        ((Pane) currentScene.getRoot()).getChildren().remove(fadeInOverlay);
+                    }
+                });
+                fadeIn.play();
             });
             fadeOut.play();
     	});
@@ -119,18 +135,52 @@ public class Launcher extends Application {
     
     public static void exitToMenu() {
     	Platform.runLater(() -> {
-    		SoundController.getInstance().stopAllSounds();
-    		((Pane) menuScene.getRoot()).getChildren().remove(fadeOverlay);
-            primaryStage.setScene(menuScene);
-            if (GameLoop.isPaused) GameLoop.pause(); // Unpause the game
-        	if (currentGameLoop != null) {
-        		currentGameLoop.stop();
-        		currentGameThread = null;
-        	}
-        	if (currentDrawingLoop != null) {
-        		currentDrawingLoop.stop();
-        		currentDrawingThread = null;
-        	}
+    		fadeOverlay = new Rectangle(0, 0, GameStage.WIDTH, GameStage.HEIGHT);
+            fadeOverlay.setFill(Color.BLACK);
+            fadeOverlay.setOpacity(0);
+            
+            if (currentScene != null && currentScene.getRoot() instanceof Pane) {
+                ((Pane) currentScene.getRoot()).getChildren().add(fadeOverlay);
+            }
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(500), fadeOverlay);
+            fadeOut.setFromValue(0);
+            fadeOut.setToValue(1);
+
+            fadeOut.setOnFinished(e -> {
+
+        		SoundController.getInstance().stopAllSounds();
+                if (GameLoop.isPaused) GameLoop.pause(); // Unpause the game
+            	if (currentGameLoop != null) {
+            		currentGameLoop.stop();
+            		currentGameThread = null;
+            	}
+            	if (currentDrawingLoop != null) {
+            		currentDrawingLoop.stop();
+            		currentDrawingThread = null;
+            	}
+            	
+            	currentStage = null;
+                primaryStage.setScene(menuScene);
+                currentScene = menuScene;
+                
+        		Rectangle fadeInOverlay = new Rectangle(0, 0, GameStage.WIDTH, GameStage.HEIGHT);
+                fadeInOverlay.setFill(Color.BLACK);
+                fadeInOverlay.setOpacity(0);
+
+                if (currentScene.getRoot() instanceof Pane) {
+                    ((Pane) currentScene.getRoot()).getChildren().add(fadeInOverlay);
+                }
+                FadeTransition fadeIn = new FadeTransition(Duration.millis(500), fadeInOverlay);
+                fadeIn.setFromValue(1);
+                fadeIn.setToValue(0);
+                fadeIn.setOnFinished(event -> {
+                    if (currentScene.getRoot() instanceof Pane) {
+                        ((Pane) currentScene.getRoot()).getChildren().remove(fadeInOverlay);
+                    }
+                });
+                fadeIn.play();
+            });
+        	fadeOut.play();
     	});
     }
     

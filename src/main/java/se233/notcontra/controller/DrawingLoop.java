@@ -93,7 +93,7 @@ public class DrawingLoop implements Runnable {
 						gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
 					// Add effect after the bullet hit the enemies
-					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 7, 7, 1, bullet.getxPos() - 128, bullet.getyPos() - 128, 256, 256);
+					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 7, 7, 1, bullet.getxPos() - 64, bullet.getyPos() - 128, 256, 256);
 					effects.add(explosion);
 					Platform.runLater(() -> {
 						gameStage.getChildren().add(explosion);
@@ -258,11 +258,12 @@ public class DrawingLoop implements Runnable {
 			if (!((WallBoss) gameStage.getBoss()).getCore().isAlive() && !isWin) {
 				isWin = true;
 				Platform.runLater(() -> {
+					SoundController.getInstance().playWinSound();
 					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("CONGRATULATION!");
 					alert.setHeaderText("You Win!");
 					alert.setContentText("Continue to the next stage?");
 					alert.showAndWait();
-					SoundController.getInstance().playWinSound();
 					if (alert.getResult() == ButtonType.OK) {
 						Launcher.changeStage(1);
 					} else {
@@ -286,11 +287,12 @@ public class DrawingLoop implements Runnable {
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
 				Platform.runLater(() -> {
+					SoundController.getInstance().playWinSound();
 					Alert alert = new Alert(AlertType.CONFIRMATION);
+					alert.setTitle("CONGRATULATION!");
 					alert.setHeaderText("You Win!");
 					alert.setContentText("Continue to the next stage?");
 					alert.showAndWait();
-					SoundController.getInstance().playWinSound();
 					if (alert.getResult() == ButtonType.OK) {
 						Launcher.changeStage(2);
 					} else {
@@ -310,7 +312,9 @@ public class DrawingLoop implements Runnable {
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
 				Platform.runLater(() -> {
+					SoundController.getInstance().playWinSound();
 					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("CONGRATULATION!");
 					alert.setHeaderText("CONGRATULATIONS!");
 					alert.setContentText("YOU WIN THE GAME AND GET GRAD 'A' ADPRO");
 					alert.showAndWait();
@@ -366,34 +370,31 @@ public class DrawingLoop implements Runnable {
     public void run() {
         while (running) {
             float startTime = System.currentTimeMillis();
-
-                javafx.application.Platform.runLater(() -> {
-                    if (GameLoop.isPaused || !running) {
-                        return;
-                    }
-                    checkAllCollisions(gameStage.getPlayer());
-                    paint(gameStage.getPlayer());
-                    paintBullet(GameLoop.bullets, GameLoop.shootingDir);
-                    updateEnemies();
-                    updateBoss();
-                    paintEffects(DrawingLoop.effects);
-                    updateItemSpawnTimer();
-                });
-
-                float elapsedTime = System.currentTimeMillis() - startTime;
-                if (elapsedTime < interval) {
-                    try {
-                        Thread.sleep((long) (interval - elapsedTime));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        Thread.sleep((long) (interval - (interval % elapsedTime)));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                
+            Platform.runLater(() -> {
+            	if (GameLoop.isPaused || !running) {
+                    return;
+                }
+                checkAllCollisions(gameStage.getPlayer());
+                paint(gameStage.getPlayer());
+                paintBullet(GameLoop.bullets, GameLoop.shootingDir);
+                updateEnemies();
+                updateBoss();
+                paintEffects(DrawingLoop.effects);
+                updateItemSpawnTimer();
+            });
+            float elapsedTime = System.currentTimeMillis() - startTime;
+            if (elapsedTime < interval) {
+            	try {
+            		Thread.sleep((long) (interval - elapsedTime));
+            	} catch (InterruptedException e) {
+            		e.printStackTrace();
+            	}
+            } else {
+            	try {
+            		Thread.sleep((long) (interval - (interval % elapsedTime)));
+            	} catch (InterruptedException e) {
+            		e.printStackTrace();
+            	}
             }
         }
     }

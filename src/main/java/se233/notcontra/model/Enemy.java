@@ -3,7 +3,6 @@ package se233.notcontra.model;
 import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.controller.SpriteAnimation;
@@ -26,7 +25,6 @@ public class Enemy extends Pane {
     private SpriteAnimation sprite;
     private EnemyState enemyState;
     private int shootingAnimationTimer = 0;
-
 
     public Enemy(int xPos, int yPos, double speed, int width, int height, int spriteWidth, int spriteHeight, int count, int column, int row, Image image, int health, EnemyType type) {
     	setTranslateX(xPos);
@@ -56,7 +54,7 @@ public class Enemy extends Pane {
 
         } else if (type == EnemyType.WALL_SHOOTER) {
             Bullet bullet = shootAtPlayer(player);
-            if (bullet != null) {
+            if (bullet != null && !GameLoop.isPaused) {
                 GameLoop.bullets.add(bullet);
                 Platform.runLater(() -> {
                     gameStage.getChildren().add(bullet);
@@ -115,7 +113,7 @@ public class Enemy extends Pane {
 
     public Bullet shootAtPlayer(Player player) {
 
-        if (type == EnemyType.FLYING) {
+        if (type == EnemyType.FLYING || GameLoop.isPaused) {
             return null;
         }
 

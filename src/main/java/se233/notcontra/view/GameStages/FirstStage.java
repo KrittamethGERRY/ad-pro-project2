@@ -88,7 +88,7 @@ public class FirstStage extends GameStage {
 	
 	@Override
 	public void spawnItem() {
-		if (item == null) {
+		if (item == null && !GameLoop.isPaused) {
 			boolean itemType = new Random().nextBoolean();
 			int randX = new Random().nextInt(0, 600);
 			item = itemType ? new SpecialMagazine(64,64,randX,100) : new TankBuster(64,64,randX,100);
