@@ -48,7 +48,7 @@ public class Enemy extends Pane {
 
     public void updateWithPlayer(Player player, GameStage gameStage) {
     	if (health <= 0) kill();
-        if (!alive) return;
+        if (!alive || GameLoop.isPaused) return;
 
         if (type == EnemyType.FLYING) {
             flyTowardsPlayer(player);
@@ -199,12 +199,12 @@ public class Enemy extends Pane {
     		switch (type) {
     		case PATROL: GameLoop.addScore(300); SoundController.getInstance().playDieSound(); GameStage.totalMinions--; break;
     		case WALL_SHOOTER: GameLoop.addScore(100); SoundController.getInstance().playDieSound(); break;
-    		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--;  break;
+    		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--; System.out.println("Total turret = " + WallBoss.totalTurret);  break;
     		case FLYING: GameLoop.addScore(150); SoundController.getInstance().playCanDieSound(); break;
     		case WALL: GameLoop.addScore(1000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().clear(); break;
             case JAVAHEAD: GameLoop.addScore(2500); SoundController.getInstance().playJavaDieSound(); boss.getWeakPoints().clear(); break;
-            case RDEYES: GameLoop.addScore(500); RDBoss.totalEYES--; break;
-            case RDHAND: GameLoop.addScore(500); break;
+            case RDEYES: GameLoop.addScore(500); RDBoss.totalEYES--; SoundController.getInstance().playRDEyeDestroyedSound(); break;
+            case RDHAND: GameLoop.addScore(500); SoundController.getInstance().playRDArmDestroyedSound(); break;
             case RDHEAD: GameLoop.addScore(3000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().remove(0); break;
 			default: 
 				break;

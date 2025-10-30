@@ -32,13 +32,9 @@ public class WallBoss extends Boss {
         this.gameStage = gameStage;
         turretLeft = new Enemy(-35, -10, 0, 64, 32, 64, 32, 1, 1, 1, ImageAssets.IDLE_TURRET, this.getMaxHealth()/4 + 100, EnemyType.TURRET);
         turretRight = new Enemy(90, -10, 0, 64, 32, 64, 32, 1, 1, 1, ImageAssets.IDLE_TURRET, this.getMaxHealth()/4 + 100, EnemyType.TURRET);
-        core = new Enemy(0, 0, 100, 64, 64, 64, 64, 2, 3, 1, ImageAssets.IDLE_CORE, this.getMaxHealth()/2, EnemyType.WALL);
-        core.getSprite().setLayoutY(60);
-        core.getSprite().setLayoutX(-23);
-        core.getSprite().setFitHeight(192);
-        core.getSprite().setFitWidth(192);
-
-        //System.out.println(this.localToParent(core.getBoundsInParent()));
+        core = new Enemy(0, 0, 0, 192, 192, 64, 64, 2, 3, 1, ImageAssets.IDLE_CORE, this.getMaxHealth()/2, EnemyType.WALL);
+        core.setLayoutY(60);
+        core.setLayoutX(-23);
         getWeakPoints().add(core);
         javafx.application.Platform.runLater(() -> {
             this.getChildren().addAll(turretLeft, turretRight, core);        	

@@ -36,6 +36,7 @@ public class GameLoop implements Runnable{
 	private static int score;
 	
 	public static boolean isPaused = false;
+	public static boolean canPlayProneSound = true;
 
 	public static List<Bullet> bullets = new ArrayList<Bullet>();
 	public static List<Enemy> enemies = new ArrayList<Enemy>();
@@ -81,6 +82,10 @@ public class GameLoop implements Runnable{
 		} else if (downPressed) {
 			player.prone();
 			tracePlayerAction("Prone");
+			if (canPlayProneSound) {
+				SoundController.getInstance().playProneSound();
+				canPlayProneSound = false;
+			}
 			player.setState(PlayerState.PRONE);
 		} else {
 			player.setProning(false);
@@ -123,7 +128,6 @@ public class GameLoop implements Runnable{
 			if (player.isProning()) {
 				player.setState(PlayerState.PRONE);
 			}
-
 			tracePlayerAction("Shoot");
 		}
 		
@@ -134,6 +138,12 @@ public class GameLoop implements Runnable{
 			player.jump();
 			tracePlayerAction("Jump");
 		} 
+		
+		if (player.isProning()) {
+			canPlayProneSound = false;
+		} else {
+			canPlayProneSound = true;
+		}
 
 		gameStage.getKeys().clear();
 	}

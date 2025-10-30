@@ -225,7 +225,7 @@ public class Player extends Pane {
 			isFalling = true;
 			isJumping = false;
 			canDropDown = false;
-			SoundController.getInstance().playProneSound();
+			SoundController.getInstance().playDropDownSound();
 		}
 	}
 	
@@ -241,7 +241,7 @@ public class Player extends Pane {
 		};
 		
 		int yBulletPos = switch(direction) {
-			case RIGHT, LEFT -> yPos;
+			case RIGHT, LEFT -> yPos + 32;
 			case UP, UP_RIGHT, UP_LEFT -> yPos - height;
 			case DOWN_RIGHT, DOWN_LEFT -> yPos + height;
 		};
@@ -363,6 +363,10 @@ public class Player extends Pane {
 		if (gameStage.getItem() != null) {
 			if (gameStage.getItem().getBoundsInParent().intersects(this.getBoundsInParent())) {
 				boolean isSpecialMag = gameStage.getItem() instanceof SpecialMagazine;
+				SoundController.getInstance().playPickItemSound();
+				javafx.application.Platform.runLater(() -> {
+					gameStage.removeItem();
+				});
 				isBuffed = true;
 				if (isSpecialMag) {
 					this.isSpecialMag = true;
@@ -380,11 +384,6 @@ public class Player extends Pane {
 					this.setState(PlayerState.CHARGING);
 					stop();
 				}
-
-				SoundController.getInstance().playPickItemSound();
-				javafx.application.Platform.runLater(() -> {
-					gameStage.removeItem();
-				});
 			}
 		}
 
@@ -439,7 +438,7 @@ public class Player extends Pane {
 		
 		if (xAxisCollision && yAxisCollision && isTankBuster && respawnTimer <= 0) {
 			die();
-			Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX - 500, 100, 512, 512);
+			Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX - 250, 100, 512, 512);
 			DrawingLoop.effects.add(explosion);
 			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
 			for (Enemy enemy: GameLoop.enemies) {

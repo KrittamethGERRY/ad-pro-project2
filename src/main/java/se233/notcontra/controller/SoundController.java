@@ -26,6 +26,9 @@ public class SoundController {
 	private AudioClip startTheme;
 	private AudioClip loseSound;
 	private AudioClip respawnSound;
+	private AudioClip dropDownSound;
+	private AudioClip rdArmDestroyedSound;
+	private AudioClip rdEyeDestroyedSound;
 	
     public void stopAllSounds() {
         if (shootSound != null) shootSound.stop();
@@ -49,7 +52,9 @@ public class SoundController {
         if (startTheme != null) startTheme.stop();
         if (loseSound != null) loseSound.stop();
         if (respawnSound != null) respawnSound.stop();
-
+        if (dropDownSound != null) dropDownSound.stop();
+        if (rdArmDestroyedSound != null) rdArmDestroyedSound.stop();
+        if (rdEyeDestroyedSound != null) rdEyeDestroyedSound.stop();
     }
 	private SoundController() {
 		shootSound = new AudioClip(Launcher.class.getResource("assets/Sounds/gunshot.mp3").toString());
@@ -73,10 +78,14 @@ public class SoundController {
 		startTheme = new AudioClip(Launcher.class.getResource("assets/Sounds/startingTheme.mp3").toString());
 		loseSound = new AudioClip(Launcher.class.getResource("assets/Sounds/loseSound.mp3").toString());
 		respawnSound = new AudioClip(Launcher.class.getResource("assets/Sounds/respawnSound.mp3").toString());
+		dropDownSound = new AudioClip(Launcher.class.getResource("assets/Sounds/dropDownSound.mp3").toString());
+		rdEyeDestroyedSound = new AudioClip(Launcher.class.getResource("assets/Sounds/rdEyeDestroyedSound.mp3").toString());
+		rdArmDestroyedSound = new AudioClip(Launcher.class.getResource("assets/Sounds/rdArmDestroyedSound.mp3").toString());
 
-		
 		metalSound.setVolume(0.1);
 		metalSound2.setVolume(0.1);
+		rdEyeDestroyedSound.setVolume(0.5);
+		rdArmDestroyedSound.setVolume(0.5);
 		shootSound.setVolume(0.25);
 		firstStageMusic.setVolume(0.35);
 		secondStageMusic.setVolume(0.35);
@@ -161,6 +170,18 @@ public class SoundController {
 	
 	public void playRespawnSound() {
 		respawnSound.play();
+	}
+	
+	public void playDropDownSound() {
+		dropDownSound.play();
+	}
+	
+	public void playRDEyeDestroyedSound() {
+		rdEyeDestroyedSound.play();
+	}
+	
+	public void playRDArmDestroyedSound() {
+		rdArmDestroyedSound.play();
 	}
 	public static SoundController getInstance() {
 		if (instance == null) return new SoundController(); 

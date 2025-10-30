@@ -31,6 +31,7 @@ public class Launcher extends Application {
 	private static Thread currentGameThread = null;
 	private static GameLoop currentGameLoop = null;
 	private static DrawingLoop currentDrawingLoop = null;
+	private static Rectangle fadeOverlay = null;
 	
     @Override
     public void start(Stage stage) {
@@ -47,18 +48,17 @@ public class Launcher extends Application {
     public static void changeStage(int index) {
     	Platform.runLater(() -> {
     		SoundController.getInstance().stopAllSounds();
-            Rectangle fadeOverlay = new Rectangle(0, 0, GameStage.WIDTH, GameStage.HEIGHT);
+    		fadeOverlay = new Rectangle(0, 0, GameStage.WIDTH, GameStage.HEIGHT);
             fadeOverlay.setFill(Color.BLACK);
-            fadeOverlay.setOpacity(0.0);
-            
-            
-            if (currentScene != null && currentScene.getRoot() instanceof Pane) {
+            fadeOverlay.setOpacity(0);
+
+            if (currentStage instanceof Pane) {
                 ((Pane) currentScene.getRoot()).getChildren().add(fadeOverlay);
+            	
             }
-            
             FadeTransition fadeOut = new FadeTransition(Duration.millis(500), fadeOverlay);
-            fadeOut.setFromValue(0.0);
-            fadeOut.setToValue(1.0);
+            fadeOut.setFromValue(0);
+            fadeOut.setToValue(1);
             
             fadeOut.setOnFinished(event -> {
         		if (GameLoop.isPaused) GameLoop.pause(); // unpause the game
@@ -118,20 +118,20 @@ public class Launcher extends Application {
     }
     
     public static void exitToMenu() {
-    	javafx.application.Platform.runLater(() -> {
+    	Platform.runLater(() -> {
     		SoundController.getInstance().stopAllSounds();
-        	primaryStage.setScene(menuScene);
-        	if (GameLoop.isPaused) GameLoop.pause(); // Unpause the game
-    		if (currentGameLoop != null) {
-    			currentGameLoop.stop();
-    			currentGameThread = null;
-    		}
-    		if (currentDrawingLoop != null) {
-    			currentDrawingLoop.stop();
-    			currentDrawingThread = null;
-    		}
+    		((Pane) menuScene.getRoot()).getChildren().remove(fadeOverlay);
+            primaryStage.setScene(menuScene);
+            if (GameLoop.isPaused) GameLoop.pause(); // Unpause the game
+        	if (currentGameLoop != null) {
+        		currentGameLoop.stop();
+        		currentGameThread = null;
+        	}
+        	if (currentDrawingLoop != null) {
+        		currentDrawingLoop.stop();
+        		currentDrawingThread = null;
+        	}
     	});
-
     }
     
     public static GameStage getCurrentStage() {

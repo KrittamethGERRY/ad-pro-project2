@@ -95,20 +95,11 @@ public class DrawingLoop implements Runnable {
 					// Add effect after the bullet hit the enemies
 					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 7, 7, 1, bullet.getxPos() - 128, bullet.getyPos() - 128, 256, 256);
 					effects.add(explosion);
-					javafx.application.Platform.runLater(() -> {
+					Platform.runLater(() -> {
 						gameStage.getChildren().add(explosion);
 					});
 					enemy.takeDamage(500, gameStage.getBoss());
 
-
-					if (enemy.getType() == EnemyType.TURRET) {
-						if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
-							Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
-                            Platform.runLater(() -> {
-                            	GameLoop.enemies.add(core);
-                            });
-						}
-					}
 
 					if (enemy.getType() == EnemyType.RDEYES) {
 						if (RDBoss.totalEYES <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
@@ -247,6 +238,14 @@ public class DrawingLoop implements Runnable {
 			if (!WallBoss.getCore().isAlive()) {
 				gameStage.getBoss().getWeakPoints().clear();
 			}
+			if (WallBoss.totalTurret <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
+				Enemy core = gameStage.getBoss().getWeakPoints().getFirst();
+				gameStage.getBoss().getWeakPoints().clear();
+                Platform.runLater(() -> {
+                	GameLoop.enemies.add(core);
+                	System.out.println("Core added");
+                });
+			}
 			if (GameStage.totalMinions <= 0 && !GameStage.bossPhase) {
 				GameLoop.enemies.addAll(WallBoss.getTurrets());
 				GameStage.bossPhase = true;
@@ -256,7 +255,7 @@ public class DrawingLoop implements Runnable {
                     gameStage.getBoss().update();
                 }
 			}
-			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
+			if (!((WallBoss) gameStage.getBoss()).getCore().isAlive() && !isWin) {
 				isWin = true;
 				Platform.runLater(() -> {
 					Alert alert = new Alert(AlertType.CONFIRMATION);
