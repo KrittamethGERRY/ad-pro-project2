@@ -1,9 +1,15 @@
 package se233.notcontra;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
@@ -39,59 +45,75 @@ public class Launcher extends Application {
     }
     
     public static void changeStage(int index) {
-    	javafx.application.Platform.runLater(() -> {
+    	Platform.runLater(() -> {
     		SoundController.getInstance().stopAllSounds();
-    		if (GameLoop.isPaused) GameLoop.pause(); // unpause the game
-    		if (currentGameLoop != null) {
-    			currentGameLoop.stop();
-    			currentGameThread = null;
-    		}
-    		if (currentDrawingLoop != null) {
-    			currentDrawingLoop.stop();
-    			currentDrawingThread = null;
-    		}
-    		
-    		currentStageIndex = index;
-    		GameStage gameStage = switch (index) {
-	    		case 0 -> new FirstStage();
-	    		case 1 -> new SecondStage();
-	    		case 2 -> new ThirdStage();
-				default -> throw new IllegalArgumentException("Unexpected value: " + index);
-    		};
-    		currentScene = new Scene(gameStage, GameStage.WIDTH, GameStage.HEIGHT);
-    		currentScene.setOnKeyPressed(e -> {
-    			if (e.getCode() == KeyCode.ESCAPE) {
-    				GameLoop.pause();
-    			}
-    			if (e.getCode() != gameStage.getPlayer().getShootKey()) {
-        			gameStage.getKeys().add(e.getCode());
-    			} else {
-    				if (!gameStage.getKeys().isPressed(e.getCode())) {
-    					gameStage.getKeys().add(e.getCode());
-    					gameStage.getKeys().addPressed(e.getCode());
+            Rectangle fadeOverlay = new Rectangle(0, 0, GameStage.WIDTH, GameStage.HEIGHT);
+            fadeOverlay.setFill(Color.BLACK);
+            fadeOverlay.setOpacity(0.0);
+            
+            
+            if (currentScene != null && currentScene.getRoot() instanceof Pane) {
+                ((Pane) currentScene.getRoot()).getChildren().add(fadeOverlay);
+            }
+            
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(500), fadeOverlay);
+            fadeOut.setFromValue(0.0);
+            fadeOut.setToValue(1.0);
+            
+            fadeOut.setOnFinished(event -> {
+        		if (GameLoop.isPaused) GameLoop.pause(); // unpause the game
+        		if (currentGameLoop != null) {
+        			currentGameLoop.stop();
+        			currentGameThread = null;
+        		}
+        		if (currentDrawingLoop != null) {
+        			currentDrawingLoop.stop();
+        			currentDrawingThread = null;
+        		}
+        		
+        		currentStageIndex = index;
+        		GameStage gameStage = switch (index) {
+    	    		case 0 -> new FirstStage();
+    	    		case 1 -> new SecondStage();
+    	    		case 2 -> new ThirdStage();
+    				default -> throw new IllegalArgumentException("Unexpected value: " + index);
+        		};
+        		currentScene = new Scene(gameStage, GameStage.WIDTH, GameStage.HEIGHT);
+        		currentScene.setOnKeyPressed(e -> {
+        			if (e.getCode() == KeyCode.ESCAPE) {
+        				GameLoop.pause();
+        			}
+        			if (e.getCode() != gameStage.getPlayer().getShootKey()) {
+            			gameStage.getKeys().add(e.getCode());
+        			} else {
+        				if (!gameStage.getKeys().isPressed(e.getCode())) {
+        					gameStage.getKeys().add(e.getCode());
+        					gameStage.getKeys().addPressed(e.getCode());
+        				}
+        			}
+    				if (e.getCode() == gameStage.getPlayer().getCheatKey()) {
+    					CheatManager.getInstance().toggleCheats();
     				}
-    			}
-				if (e.getCode() == gameStage.getPlayer().getCheatKey()) {
-					CheatManager.getInstance().toggleCheats();
-				}
-    		});
-    		currentScene.setOnKeyReleased(e -> {
-    			gameStage.getKeys().remove(e.getCode());
+        		});
+        		currentScene.setOnKeyReleased(e -> {
+        			gameStage.getKeys().remove(e.getCode());
 
-    		});
-    		currentGameLoop = new GameLoop(gameStage);
-    		currentDrawingLoop = new DrawingLoop(gameStage);
-    		
-    		currentGameThread = new Thread(currentGameLoop, "GameLoopThread");
-    		currentDrawingThread = new Thread(currentDrawingLoop, "DrawingLoopThread");
+        		});
+        		currentGameLoop = new GameLoop(gameStage);
+        		currentDrawingLoop = new DrawingLoop(gameStage);
+        		
+        		currentGameThread = new Thread(currentGameLoop, "GameLoopThread");
+        		currentDrawingThread = new Thread(currentDrawingLoop, "DrawingLoopThread");
 
 
-    		primaryStage.setScene(currentScene);
-    		currentStage = gameStage;
-    		
-    		currentGameThread.start();
-    		currentDrawingThread.start();
-    		
+        		primaryStage.setScene(currentScene);
+        		currentStage = gameStage;
+        		
+        		currentGameThread.start();
+        		currentDrawingThread.start();
+        		
+            });
+            fadeOut.play();
     	});
     }
     

@@ -38,7 +38,6 @@ public class FirstStage extends GameStage {
 		background.setFitWidth(WIDTH);
 		background.setFitHeight(HEIGHT);
 		player = new Player(30, 0 ,KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
-		player.respawn();
 
 		boss = new WallBoss(660, 350, 500, 750, this);
 		WallBoss.totalTurret = 2;

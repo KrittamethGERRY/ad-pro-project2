@@ -163,6 +163,7 @@ public class Player extends Pane {
 		this.isJumping = false;
 		this.isDying = false;
 		this.setState(PlayerState.IDLE);
+		SoundController.getInstance().playRespawnSound();
 	}
 	
 	

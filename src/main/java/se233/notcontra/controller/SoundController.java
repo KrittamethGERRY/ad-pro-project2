@@ -25,6 +25,7 @@ public class SoundController {
 	private AudioClip javaAttackSound;
 	private AudioClip startTheme;
 	private AudioClip loseSound;
+	private AudioClip respawnSound;
 	
     public void stopAllSounds() {
         if (shootSound != null) shootSound.stop();
@@ -47,6 +48,7 @@ public class SoundController {
         if (javaAttackSound != null) javaAttackSound.stop();
         if (startTheme != null) startTheme.stop();
         if (loseSound != null) loseSound.stop();
+        if (respawnSound != null) respawnSound.stop();
 
     }
 	private SoundController() {
@@ -70,6 +72,7 @@ public class SoundController {
 		javaAttackSound = new AudioClip(Launcher.class.getResource("assets/Sounds/javaAttackSound.mp3").toString());
 		startTheme = new AudioClip(Launcher.class.getResource("assets/Sounds/startingTheme.mp3").toString());
 		loseSound = new AudioClip(Launcher.class.getResource("assets/Sounds/loseSound.mp3").toString());
+		respawnSound = new AudioClip(Launcher.class.getResource("assets/Sounds/respawnSound.mp3").toString());
 
 		
 		metalSound.setVolume(0.1);
@@ -80,6 +83,7 @@ public class SoundController {
 		thirdStageMusic.setVolume(0.20);
 		startTheme.setVolume(0.15);
 
+		respawnSound.setVolume(0.15);
 		jumpSound.setVolume(0.1);
 		playerDieSound.setVolume(0.35);
 	}
@@ -153,6 +157,10 @@ public class SoundController {
 	}
 	public void playLoseSound() {
 		loseSound.play();
+	}
+	
+	public void playRespawnSound() {
+		respawnSound.play();
 	}
 	public static SoundController getInstance() {
 		if (instance == null) return new SoundController(); 
