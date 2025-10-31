@@ -42,7 +42,7 @@ public class PauseMenu extends VBox {
 		continueButton.setPrefSize(200, 50);
 		restartButton.setPrefSize(200, 50);
 		exitButton.setPrefSize(200, 50);
-		this.getStylesheets().add(Launcher.class.getResource("Styles/pausemenu.css").toString());
+		this.getStylesheets().add(Launcher.class.getResource("styles/pausemenu.css").toString());
 
 		getChildren().addAll(text, continueButton, restartButton, exitButton);
 	}

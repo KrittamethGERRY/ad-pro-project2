@@ -204,7 +204,7 @@ public class Enemy extends Pane {
     		switch (type) {
     		case PATROL: GameLoop.addScore(300); SoundController.getInstance().playDieSound(); GameStage.totalMinions--; break;
     		case WALL_SHOOTER: GameLoop.addScore(100); SoundController.getInstance().playDieSound(); break;
-    		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--; System.out.println("Total turret = " + WallBoss.totalTurret);  break;
+    		case TURRET: GameLoop.addScore(500); WallBoss.totalTurret--; SoundController.getInstance().playTurretDestroyedSound();  break;
     		case FLYING: GameLoop.addScore(150); SoundController.getInstance().playCanDieSound(); break;
     		case WALL: GameLoop.addScore(1000); SoundController.getInstance().playExplosionSound(); boss.getWeakPoints().clear(); break;
             case JAVAHEAD: GameLoop.addScore(2500); SoundController.getInstance().playJavaDieSound(); boss.getWeakPoints().clear(); break;

@@ -48,7 +48,7 @@ public class Bullet extends Pane {
 	private void setupBullet() {
 		setTranslateX((int)position.x);
 		setTranslateY((int)position.y);
-		sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/bullet.png")));
+		sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/Bullet.png")));
 		if (this.owner != BulletOwner.PLAYER) {
 			sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/Cannonball.png")));
 		}
