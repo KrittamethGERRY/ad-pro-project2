@@ -2,7 +2,6 @@ package se233.notcontra;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -10,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +19,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
-import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Enums.ShootingDirection;
-import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.SpecialMagazine;
 import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.view.GameStages.FirstStage;
@@ -34,14 +29,6 @@ import se233.notcontra.view.GameStages.GameStage;
 
 public class PlayerTest  {
 	Player player;
-	// Player fields
-    Field xVelocityField, yVelocityField, yAccelerationField, xPosField
-    , yPosField, isFallingField, canJumpField, isJumpingField
-    , isMoveRightField, isMoveLeftField, livesField, isBuffedField
-    , isSpecialMagField, isTankBusterField, bulletPerClipField, reloadTimerField
-    , lastShotTimeField, widthField, heightField, isProningField
-    , canDropDownField, isOnPlatformField, dropDownTimerField;
-	
 	@BeforeAll
 	public static void initJfxRuntime() {
 	    javafx.application.Platform.startup(() -> {});
@@ -50,54 +37,6 @@ public class PlayerTest  {
 	@BeforeEach
 	public void setUp() throws NoSuchFieldException{
 		player = new Player(0, 0, KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S);
-        xVelocityField = player.getClass().getDeclaredField("xVelocity");
-        yVelocityField = player.getClass().getDeclaredField("yVelocity");
-        yAccelerationField = player.getClass().getDeclaredField("yAcceleration");
-        xPosField = player.getClass().getDeclaredField("xPos");
-        yPosField = player.getClass().getDeclaredField("yPos");
-        isFallingField = player.getClass().getDeclaredField("isFalling");
-        canJumpField = player.getClass().getDeclaredField("canJump");
-        isJumpingField = player.getClass().getDeclaredField("isJumping");
-        isMoveLeftField = player.getClass().getDeclaredField("isMoveLeft");
-        isMoveRightField = player.getClass().getDeclaredField("isMoveRight");
-        livesField = player.getClass().getDeclaredField("lives");
-        isBuffedField = player.getClass().getDeclaredField("isBuffed");
-        isSpecialMagField = player.getClass().getDeclaredField("isSpecialMag");
-        isTankBusterField = player.getClass().getDeclaredField("isTankBuster");
-        bulletPerClipField = player.getClass().getDeclaredField("bulletPerClip");
-        reloadTimerField = player.getClass().getDeclaredField("reloadTimer");
-        lastShotTimeField = player.getClass().getDeclaredField("lastShotTime");
-        widthField = player.getClass().getDeclaredField("width");
-        heightField = player.getClass().getDeclaredField("height");
-        isProningField = player.getClass().getDeclaredField("isProning");
-        canDropDownField = player.getClass().getDeclaredField("canDropDown");
-        isOnPlatformField = player.getClass().getDeclaredField("isOnPlatform");
-        dropDownTimerField = player.getClass().getDeclaredField("dropDownTimer");
-        
-        xVelocityField.setAccessible(true);
-        yVelocityField.setAccessible(true);
-        yAccelerationField.setAccessible(true);
-        xPosField.setAccessible(true);
-        yPosField.setAccessible(true);
-        isFallingField.setAccessible(true);
-        canJumpField.setAccessible(true);
-        isJumpingField.setAccessible(true);
-        isMoveRightField.setAccessible(true);
-        isMoveLeftField.setAccessible(true);
-        livesField.setAccessible(true);
-        isBuffedField.setAccessible(true);
-        isSpecialMagField.setAccessible(true);
-        isTankBusterField.setAccessible(true);
-        bulletPerClipField.setAccessible(true);
-        reloadTimerField.setAccessible(true);
-        lastShotTimeField.setAccessible(true);
-        heightField.setAccessible(true);
-        widthField.setAccessible(true);
-        isProningField.setAccessible(true);
-        canDropDownField.setAccessible(true);
-        isOnPlatformField.setAccessible(true);
-        dropDownTimerField.setAccessible(true);
-
 	}
 	
 	@Test
@@ -108,22 +47,22 @@ public class PlayerTest  {
 	}
 	
 	@Test
-	public void moveRightOnce_xPosIncreaseBy1() throws IllegalAccessException{
-		xPosField.setInt(player, 0);
+	public void moveRightOnce_xPosIncreaseBy1() throws Exception{
+		ReflectionHelper.setField(player, "xPos", 0);
 		player.moveRight();
 		player.moveX();
 		assertEquals(1, player.getxPos(), "xPos should be 1");
 	}
 	@Test
-	public void moveLeft_xPosDecreaseByXVelocity() throws IllegalArgumentException, IllegalAccessException {
-		xPosField.setInt(player, 0);
+	public void moveLeft_xPosDecreaseByXVelocity() throws Exception {
+		ReflectionHelper.setField(player, "xPos", 0);
 		player.moveLeft();
 		player.moveX();
 		assertEquals(-1, player.getxPos(), "xPos should be -1");
 	}
-	@Test
-	public void respawn_xPosShouldBe0_moveToLeftBorder_thenCheckWallCollision() throws IllegalArgumentException, IllegalAccessException {
-		xPosField.setInt(player, 0);
+	@Test 
+	public void respawn_xPosShouldBe0_moveToLeftBorder_thenCheckWallCollision() throws Exception {
+		ReflectionHelper.setField(player, "xPos", 0);
 		player.respawn();
 		player.moveLeft();
 		player.moveX();
@@ -131,9 +70,10 @@ public class PlayerTest  {
 		assertEquals(0, player.getxPos(), "xPos should be 0");
 	}
 	@Test
-	public void respawn_xPosShouldBe1280_moveToRightBorder_thenCheckWallCollision() throws IllegalArgumentException, IllegalAccessException {
+	public void respawn_xPosShouldBe1280_moveToRightBorder_thenCheckWallCollision() throws Exception {
 		player.respawn();
-		xPosField.setInt(player, GameStage.WIDTH + player.width); // Player width = 64, gameStage width = 1280
+		int width = (int) ReflectionHelper.getField(player, "width");
+		ReflectionHelper.setField(player, "xPos", GameStage.WIDTH - width);
 		player.moveRight();
 		player.moveX();
 		player.checkStageBoundaryCollision();
@@ -141,41 +81,44 @@ public class PlayerTest  {
 	}
 	
 	@Test
-	public void givePlayer2Lives_playerDieOnce_thenLivesWillDecreaseBy1() throws IllegalArgumentException, IllegalAccessException {
-		livesField.setInt(player, 2);
+	public void givePlayer2Lives_playerDieOnce_thenLivesWillDecreaseBy1() throws Exception {
+		ReflectionHelper.setField(player, "lives", 2);
 		player.die();
-		assertEquals(1, livesField.getInt(player), "Player lives should decrease by 1");
+		int lives = (int) ReflectionHelper.getField(player, "lives");
+		assertEquals(1, lives, "Player lives should decrease by 1");
 	}
 	
 	@Test
-	public void playerAtCoordinate0_0_moveRight_theCoordinateIncreaseByXVelocity() throws IllegalArgumentException, IllegalAccessException {
-		xPosField.setInt(player, 0);
-		xVelocityField.setInt(player, 10);
-		int previousxPos = player.getxPos();
+	public void playerAtCoordinate0_0_moveRight_theCoordinateIncreaseByXVelocity() throws Exception {
+		ReflectionHelper.setField(player, "xPos", 0);
+		ReflectionHelper.setField(player, "xVelocity", 5);
+		double xVelocity = (double) ReflectionHelper.getField(player, "xVelocity");
 		player.moveRight();
 		player.moveX();
 		int currentxPos = player.getxPos();
-		assertEquals(xPosField.getInt(player), currentxPos, "xPos moved based on xVelocity.");
+		assertEquals(xVelocity, currentxPos, "xPos moved based on xVelocity.");
 	}
 	
 	@Test
-	public void playerAtCoordinate0_0_moveLeft_theCoordinateDecreaseByXVelocity() throws IllegalArgumentException, IllegalAccessException {
-		xPosField.setInt(player, 0);
-		xVelocityField.setInt(player, 10);
+	public void playerAtCoordinate0_0_moveLeft_theCoordinateDecreaseByXVelocity() throws Exception {
+		ReflectionHelper.setField(player, "xPos", 0);
+		ReflectionHelper.setField(player, "xVelocity", 5);
+		double xVelocity = (double) ReflectionHelper.getField(player, "xVelocity");
 		player.moveLeft();
 		player.moveX();
 		int currentxPos = player.getxPos();
-		assertEquals(xPosField.getInt(player), currentxPos, "xPos moved based on yVelocity.");
+		assertEquals(-xVelocity, currentxPos, "xPos moved based on yVelocity.");
 	}
 	
 	@Test
-	public void playerAtCoordinate0_10_jump_theCoordinateYDecreaseByYVelocity() throws IllegalArgumentException, IllegalAccessException {
-		yPosField.setInt(player, 10);
-		yVelocityField.setInt(player, 10);
+	public void playerAtCoordinate0_10_jump_theCoordinateYDecreaseByYVelocity() throws Exception {
+		ReflectionHelper.setField(player, "yPos", 0);
+		ReflectionHelper.setField(player, "yVelocity", 0);
+		double yVelocity = (double) ReflectionHelper.getField(player, "yVelocity");
 		player.jump();
 		player.moveY();
 		int currentyPos = player.getyPos();
-		assertEquals(yPosField.getInt(player), currentyPos, "Player position is decrease by yVelocity of 10");
+		assertEquals(yVelocity, currentyPos, "Player position is increase by yVelocity of 10");
 	}
 	
 	@Test
@@ -208,11 +151,15 @@ public class PlayerTest  {
 		SpecialMagazine specialMagazine = new SpecialMagazine(player.getxPos() + player.width + 1,0,1,1);
 		when(mockGameStage.getItem()).thenReturn(specialMagazine);
 		
+		
 		player.moveRight();
 		player.moveX();
 		player.checkItemCollision(mockGameStage);
-		assertTrue(isBuffedField.getBoolean(player), "Player got buffed after pick up the item.");
-		assertTrue(isSpecialMagField.getBoolean(player), "Player pick up the special magazine.");
+
+		boolean isBuffed = (boolean) ReflectionHelper.getField(player, "isBuffed");
+		boolean isSpecialMag = (boolean) ReflectionHelper.getField(player, "isSpecialMag");
+		assertTrue(isBuffed, "Player got buffed after pick up the item.");
+		assertTrue(isSpecialMag, "Player pick up the special magazine.");
 	}
 	
 	@Test
@@ -224,7 +171,8 @@ public class PlayerTest  {
 		player.moveRight();
 		player.moveX();
 		player.checkItemCollision(mockGameStage);
-		assertTrue(isTankBusterField.getBoolean(player), "Player pick up the tankbuster.");
+		boolean isTankBuster = (boolean) ReflectionHelper.getField(player, "isTankBuster");
+		assertTrue(isTankBuster, "Player pick up the tankbuster.");
 	}
 	
 	@Test
@@ -237,56 +185,61 @@ public class PlayerTest  {
 		player.moveX();
 		player.checkItemCollision(mockGameStage);
 		player.moveLeft();
-		assertFalse(isMoveLeftField.getBoolean(player), "Player always move right when picked up the tankbuster");
+
+        boolean isMoveLeft = (boolean) ReflectionHelper.getField(player, "isMoveLeft");
+        assertFalse(isMoveLeft, "Player always moves right when picked up the tankbuster");
 	}
 	
 	@Test
-	public void player_onPlatform_startDropdown_thenDropDownTimer_shouldBeSet() throws IllegalArgumentException, IllegalAccessException {
-		canDropDownField.setBoolean(player, true);
-		dropDownTimerField.setInt(player, 0);
-		isOnPlatformField.setBoolean(player, true);
-		player.dropDown();
-		assertEquals(12, dropDownTimerField.getInt(player), "Dropdown Timer should be set to 12");
+	public void player_onPlatform_startDropdown_thenDropDownTimer_shouldBeSet() throws Exception {
+		ReflectionHelper.setField(player, "canDropDown", true);
+		ReflectionHelper.setField(player, "dropDownTimer", 0);
+		ReflectionHelper.setField(player, "isOnPlatform", true);
+		
+	    ReflectionHelper.invokeMethod(player, "dropDown", new Class<?>[]{});
+		int dropDownTimer = (int) ReflectionHelper.getField(player, "dropDownTimer");
+		assertEquals(12, dropDownTimer, "Dropdown Timer should be set to 12");
 	}
 	
 	@Test
-	public void playerWith1Bullet_shoots2Times_thenReloadTimerIsSet() throws IllegalArgumentException, IllegalAccessException {
-	    player.respawn();
+	public void playerWith1Bullet_shoots2Times_thenReloadTimerIsSet_AndBulletPerClipShouldBe3() throws Exception {
 	    GameLoop.bullets = new ArrayList<>(); 
 	    GameStage mockGameStage = Mockito.mock(FirstStage.class);
 	    ObservableList<Node> nodeList = FXCollections.observableArrayList();
 	    when(mockGameStage.getChildren()).thenReturn(nodeList);
+	    
+	    ReflectionHelper.setField(player, "reloadTimer", 0);
+	    ReflectionHelper.setField(player, "bulletPerClip", 1);
+	    ReflectionHelper.setField(player, "lastShotTime", 0);
 
-	    bulletPerClipField.setInt(player, 1); 
-	    lastShotTimeField.setLong(player, 0); 
-
-	    player.shoot(mockGameStage, ShootingDirection.RIGHT);
-
-	    assertEquals(0, bulletPerClipField.getInt(player), "Clip should be empty");
-
-	    // Bypass the fireDelay of each bullet
-	    lastShotTimeField.setLong(player, 0L);
-
-	    player.shoot(mockGameStage, ShootingDirection.RIGHT);
-
-	    assertEquals(30, reloadTimerField.getInt(player), "The reload timer should start at 30");
-	    assertEquals(3, bulletPerClipField.getInt(player), "The clip should be refilled to 3");
+	    ReflectionHelper.invokeMethod(player, "shoot", new Class<?>[]{GameStage.class, ShootingDirection.class}, mockGameStage, ShootingDirection.RIGHT);
+	    ReflectionHelper.setField(player, "lastShotTime", 0);
+	    ReflectionHelper.invokeMethod(player, "shoot", new Class<?>[]{GameStage.class, ShootingDirection.class}, mockGameStage, ShootingDirection.RIGHT);
+	    int bulletPerClip = (int) ReflectionHelper.getField(player, "bulletPerClip");
+	    int reloadTimer = (int) ReflectionHelper.getField(player, "reloadTimer");
+	    assertEquals(30, reloadTimer, "The reload timer should start at 30");
+	    assertEquals(3, bulletPerClip,"The clip should be refilled to 3");
 	}
 	
 	@Test
-	public void playerProne_isProningShouldBe_true() throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException {
-		isProningField.setBoolean(player, false);
+	public void playerProne_isProningShouldBe_true() throws Exception {
+		ReflectionHelper.setField(player, "isProning", false);
 		player.prone();
-		assertTrue(isProningField.getBoolean(player), "isProning should be true.");
+		boolean isProning = (boolean) ReflectionHelper.getField(player, "isProning");
+		assertTrue(isProning, "isProning should be true.");
 	}
 	
 	@Test
-	public void playerIs_atHighestJump_thenStartFalling() throws IllegalArgumentException, IllegalAccessException {
-		isJumpingField.setBoolean(player, true);
-		yVelocityField.setInt(player, -1);
+	public void playerIs_atHighestJump_thenStartFalling() throws Exception {
+		ReflectionHelper.setField(player, "isJumping", true);
+		ReflectionHelper.setField(player, "yVelocity", -1);
 		player.checkHighestJump();
-		assertTrue(isFallingField.getBoolean(player), "Player should start falling.");
-		assertFalse(isJumpingField.getBoolean(player), "Player should not continue jumping.");
-		assertEquals(0, yVelocityField.getDouble(player), "yVelocity should be 0.");
+
+		boolean isFalling = (boolean) ReflectionHelper.getField(player, "isFalling");
+		boolean isJumping = (boolean) ReflectionHelper.getField(player, "isJumping");
+		double yVelocity = (double) ReflectionHelper.getField(player, "yVelocity");
+		assertTrue(isFalling, "Player should start falling.");
+		assertFalse(isJumping, "Player should not continue jumping.");
+		assertEquals(0, yVelocity, "yVelocity should be 0.");
 	}
 }

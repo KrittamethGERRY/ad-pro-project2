@@ -14,7 +14,7 @@ public class ReflectionHelper {
 	public static Object getField(Object obj, String fieldName) throws Exception {
 		Field field = obj.getClass().getDeclaredField(fieldName);
 		field.setAccessible(true);
-		return field;
+		return field.get(obj);
 	}
 	
 	public static Object invokeMethod(Object obj, String methodName, Class<?>[] parameterTypes, Object... args) throws Exception {
