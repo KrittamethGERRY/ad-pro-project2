@@ -62,7 +62,7 @@ public class SoundController {
 		enemyDieSound = new AudioClip(Launcher.class.getResource("assets/Sounds/dieSound.mp3").toString());
 		explosionSound = new AudioClip(Launcher.class.getResource("assets/Sounds/explosionSound.mp3").toString());
 		metalSound = new AudioClip(Launcher.class.getResource("assets/Sounds/metalHitSound1.mp3").toString());
-		metalSound2 = new AudioClip(Launcher.class.getResource("assets/sounds/metalHitSound2.mp3").toString());
+		metalSound2 = new AudioClip(Launcher.class.getResource("assets/Sounds/metalHitSound2.mp3").toString());
 		pickUpItemSound = new AudioClip(Launcher.class.getResource("assets/Sounds/pickUpItemSound.mp3").toString());
 		screamingSound = new AudioClip(Launcher.class.getResource("assets/Sounds/manScreamingSound.mp3").toString());
 		cannonSound = new AudioClip(Launcher.class.getResource("assets/Sounds/cannonSound.mp3").toString());
