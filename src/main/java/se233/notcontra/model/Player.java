@@ -29,6 +29,7 @@ import se233.notcontra.model.Enums.PlayerState;
 import se233.notcontra.model.Enums.ShootingDirection;
 import se233.notcontra.model.Items.SpecialMagazine;
 import se233.notcontra.view.Platform;
+import se233.notcontra.view.GameStages.FirstStage;
 import se233.notcontra.view.GameStages.GameStage;
 
 public class Player extends Pane {
@@ -444,7 +445,8 @@ public class Player extends Pane {
 		
 		if (xAxisCollision && yAxisCollision && isTankBuster && respawnTimer <= 0) {
 			die();
-			Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX - 512, -128, 1024, 1024);
+			Effect explosion = gameStage instanceof FirstStage ? new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX - 512, -128, 1024, 1024) :
+			new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX - 512, bossY- 512, 1024, 1024);
 			DrawingLoop.effects.add(explosion);
 			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
 			for (Enemy enemy: GameLoop.enemies) {

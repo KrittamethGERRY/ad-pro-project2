@@ -263,7 +263,7 @@ public class DrawingLoop implements Runnable {
 				isWin = true;
 				SoundController.getInstance().playWinSound();
 				Platform.runLater(() -> {
-					GameLoop.pause();
+					GameLoop.isPaused = true;
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("CONGRATULATION! 🎊🎊🎊");
 					alert.setHeaderText("You Win! 🎊🎊🎊");
@@ -276,10 +276,8 @@ public class DrawingLoop implements Runnable {
 					} else {
 						Launcher.exitToMenu();
 					}
-
-					GameLoop.pause();
 				});
-
+				GameLoop.isPaused = false;
 			}
 
 			gameStage.getPlayer().isCollided(gameStage, 0);
@@ -298,7 +296,7 @@ public class DrawingLoop implements Runnable {
 				SoundController.getInstance().playWinSound();
 				Platform.runLater(() -> {
 					Alert alert = new Alert(AlertType.CONFIRMATION);
-					GameLoop.pause();
+					GameLoop.isPaused = true;
 					alert.setTitle("CONGRATULATION! 🎊🎊🎊");
 					alert.setHeaderText("You Win! 🎊🎊🎊");
 					alert.setContentText("Continue to the next stage? 😎😎");
@@ -310,7 +308,7 @@ public class DrawingLoop implements Runnable {
 					} else {
 						Launcher.exitToMenu();
 					}
-					GameLoop.pause();
+					GameLoop.isPaused = false;
 				});
 			}
 		} else if (gameStage instanceof ThirdStage) {
@@ -325,20 +323,22 @@ public class DrawingLoop implements Runnable {
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
 				SoundController.getInstance().playWinSound();
+				GameLoop.isPaused = false;
 				Platform.runLater(() -> {
-					GameLoop.pause();
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("CONGRATULATION! 🏆🏆🏆🏆");
 					alert.setHeaderText("CONGRATULATIONS! 🏆🏆🏆🏆🎊🎊🎊");
 					alert.setContentText("YOU WIN THE GAME AND GET GRADE 'A' ADPRO 🏆🏆🏆🏆");
 					DialogPane dialogPane = alert.getDialogPane();
 					dialogPane.getStylesheets().add(Launcher.class.getResource("styles/winAlert.css").toString());
+
+					GameLoop.pause();
 					alert.showAndWait();
 					
 					if (alert.getResult() == ButtonType.OK) {
 						Launcher.exitToMenu();
 					}
-					GameLoop.pause();
+					GameLoop.isPaused = false;
 				});
 			}
 		}
