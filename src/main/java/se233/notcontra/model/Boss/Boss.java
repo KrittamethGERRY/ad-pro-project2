@@ -2,7 +2,7 @@ package se233.notcontra.model.Boss;
 
 import javafx.scene.layout.Pane;
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.model.Enemy;
+import se233.notcontra.model.Enemy.Enemy;
 
 import java.util.ArrayList;
 import java.util.List;

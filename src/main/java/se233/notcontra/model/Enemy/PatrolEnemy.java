@@ -1,10 +1,11 @@
-package se233.notcontra.model;
+package se233.notcontra.model.Enemy;
 
 import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import se233.notcontra.model.Player;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.view.Platform;
 import se233.notcontra.view.GameStages.GameStage;

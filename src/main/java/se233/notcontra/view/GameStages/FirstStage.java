@@ -15,13 +15,13 @@ import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.view.Platform;
 import se233.notcontra.model.Bullet;
-import se233.notcontra.model.Enemy;
 import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Keys;
-import se233.notcontra.model.PatrolEnemy;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Boss.WallBoss;
+import se233.notcontra.model.Enemy.Enemy;
+import se233.notcontra.model.Enemy.PatrolEnemy;
 import se233.notcontra.model.Enums.EnemyType;
 
 public class FirstStage extends GameStage {
@@ -56,10 +56,10 @@ public class FirstStage extends GameStage {
 		// spawn minions before boss
 		bossPhase = false;
 		totalMinions = 4;
-		PatrolEnemy patrolEnemy1 = new PatrolEnemy(695, 175, 1, 64, 64, 2, 2, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy2 = new PatrolEnemy(700, 200, 1, 64, 64, 2, 2, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy3 = new PatrolEnemy(645, 215, 1, 64, 64, 2, 2, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy4 = new PatrolEnemy(1000, 210, 1, 64, 64, 2, 2, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy1 = new PatrolEnemy(695, 175, 1, 64, 64, 3, 3, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy2 = new PatrolEnemy(700, 200, 1, 64, 64, 3, 3, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy3 = new PatrolEnemy(645, 215, 1, 64, 64, 3, 3, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy4 = new PatrolEnemy(1000, 210, 1, 64, 64, 3, 3, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
 		
 		GameLoop.enemies.addAll(List.of(patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4));
 		getChildren().addAll(background, boss, scoreBackground, patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4, livesBackground

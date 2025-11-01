@@ -13,9 +13,9 @@ import javafx.application.Platform;
 import javafx.scene.image.Image;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Boss.RDBoss;
+import se233.notcontra.model.Enemy.Enemy;
 import se233.notcontra.model.Bullet;
 import se233.notcontra.model.Effect;
-import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Player;
@@ -164,7 +164,7 @@ public class GameLoop implements Runnable{
 		}
 		
 		if (currentState == PlayerState.SHOOTING) {
-			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_WALK_SHOOT_IMG, 3, 3, 1);
+			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_WALK_SHOOT_IMG, 4, 4, 1);
 		} else if (currentState == PlayerState.PRONE) {
 			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_PRONE_IMG, 1, 1, 1);
 		} else if (currentState == PlayerState.DIE) {
@@ -173,11 +173,11 @@ public class GameLoop implements Runnable{
 		} else if (currentState == PlayerState.FACE_DOWN_SIDE) {
 			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_SHOOT_DOWN_SIDE_IMG, 3, 3, 1);
 		} else if (currentState == PlayerState.FACE_UP_SIDE) {
-			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_SHOOT_UP_SIDE_IMG, 3, 3, 1);
+			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_SHOOT_UP_SIDE_IMG, 4, 4, 1);
 		} else if (currentState == PlayerState.FACE_UP) {
 			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_SHOOT_UP, 1, 3, 1);
 		} else if (currentState == PlayerState.WALKSHOOT) {
-			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_WALK_SHOOT_IMG, 2, 2, 1);
+			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_WALK_SHOOT_IMG, 4, 4, 1);
 		} else {
 			player.getImageView().changeSpriteSheet(ImageAssets.PLAYER_IDLE_IMG, 3, 3, 1);
 		} 

@@ -3,8 +3,9 @@ package se233.notcontra.model.Boss;
 import javafx.scene.image.Image;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
-import se233.notcontra.model.Enemy;
+import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.ImageAssets;
+import se233.notcontra.model.Enemy.Enemy;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.view.GameStages.GameStage;
 
@@ -55,6 +56,7 @@ public class RDBoss extends Boss{
     protected void handleAttackingState() {
         if (Rdlefthand.isAlive() && !Rdrighthand.isAlive()) {
             spawnEnemy(Rdlefthand);
+            SoundController.getInstance().playJavaAttackSound();
             if (spawnAnimationTimer > 0){
                 updateSpawnAnimation();
                 Rdlefthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_leftHand_Spawn.png")),1,1,1);
@@ -64,6 +66,7 @@ public class RDBoss extends Boss{
         }
         else if (!Rdlefthand.isAlive() && Rdrighthand.isAlive()) {
             spawnEnemy(Rdrighthand);
+            SoundController.getInstance().playJavaAttackSound();
             if (spawnAnimationTimer > 0) {
                 updateSpawnAnimation();
                 Rdrighthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_rightHand_Spawn.png")),1,1,1);

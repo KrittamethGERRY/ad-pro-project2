@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.image.Image;
@@ -21,6 +22,7 @@ import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.controller.SpriteAnimation;
 import se233.notcontra.model.Boss.Boss;
+import se233.notcontra.model.Enemy.Enemy;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.PlayerState;
@@ -179,16 +181,20 @@ public class Player extends Pane {
 				GameLoop.pause();
 				ButtonType retry = new ButtonType("Retry", ButtonBar.ButtonData.OK_DONE);
 				ButtonType quit = new ButtonType("Quit", ButtonBar.ButtonData.CANCEL_CLOSE);
-				Alert alert = new Alert(AlertType.CONFIRMATION, "Game Over!");
-				alert.setTitle("Game Over!");
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Game Over! 🥀🥀🥀🥀");
+				alert.setTitle("Game Over! 🥀🥀🥀🥀");
 				alert.setHeaderText("Retry?");
 				alert.getButtonTypes().setAll(retry, quit);
+				DialogPane dialogPane = alert.getDialogPane();
+				dialogPane.getStylesheets().add(Launcher.class.getResource("styles/loseAlert.css").toString());
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == retry) {
 					Launcher.changeStage(Launcher.currentStageIndex);
 				} else {
 					Launcher.exitToMenu();
 				}
+
+				GameLoop.pause();
 			});
 
 			SoundController.getInstance().stopAllSounds();
@@ -241,7 +247,7 @@ public class Player extends Pane {
 		};
 		
 		int yBulletPos = switch(direction) {
-			case RIGHT, LEFT -> yPos + 32;
+			case RIGHT, LEFT -> yPos + 16;
 			case UP, UP_RIGHT, UP_LEFT -> yPos - height;
 			case DOWN_RIGHT, DOWN_LEFT -> yPos + height;
 		};
@@ -438,7 +444,7 @@ public class Player extends Pane {
 		
 		if (xAxisCollision && yAxisCollision && isTankBuster && respawnTimer <= 0) {
 			die();
-			Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX - 250, 100, 512, 512);
+			Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 8, 8, 1, bossX - 512, -128, 1024, 1024);
 			DrawingLoop.effects.add(explosion);
 			javafx.application.Platform.runLater(() -> gameStage.getChildren().add(explosion));
 			for (Enemy enemy: GameLoop.enemies) {

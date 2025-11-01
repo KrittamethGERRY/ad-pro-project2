@@ -36,7 +36,7 @@ public class Bullet extends Pane {
 	}
 
 	public Bullet(Vector2D startPos, Vector2D directionVector, double speed, BulletOwner owner) {
-		this.position = new Vector2D(startPos.x, startPos.y);
+		this.position = new Vector2D(startPos.getX(), startPos.getY());
 		this.owner = owner;
 		this.direction = ShootingDirection.RIGHT;
 		Vector2D normalizedDir = directionVector.normalize();
@@ -46,8 +46,8 @@ public class Bullet extends Pane {
 	}
 
 	private void setupBullet() {
-		setTranslateX((int)position.x);
-		setTranslateY((int)position.y);
+		setTranslateX((int)position.getX());
+		setTranslateY((int)position.getY());
 		sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/Bullet.png")));
 		if (this.owner != BulletOwner.PLAYER) {
 			sprite = new ImageView(new Image(Launcher.class.getResourceAsStream("assets/Item/Entities/Cannonball.png")));
@@ -87,16 +87,16 @@ public class Bullet extends Pane {
 			setTranslateY(getTranslateY() + velocityY);
 		} else {
 			position = position.add(velocity);
-			setTranslateX((int) position.x);
-			setTranslateY((int) position.y);
+			setTranslateX((int) position.getX());
+			setTranslateY((int) position.getY());
 		}
 	}
 
 	public void move(float deltaTime) {
 		Vector2D movement = velocity.multiply(deltaTime);
 		position = position.add(movement);
-		setTranslateX((int)position.x);
-		setTranslateY((int)position.y);
+		setTranslateX((int)position.getX());
+		setTranslateY((int)position.getY());
 	}
 
 
@@ -113,19 +113,19 @@ public class Bullet extends Pane {
 	}
 
 	public int getxPos() {
-		return (int)position.x;
+		return (int)position.getX();
 	}
 
 	public int getyPos() {
-		return (int)position.y;
+		return (int)position.getY();
 	}
 
 	public boolean isAlive() { return Alive; }
 	public void destroy() { Alive = false; }
 
 	public boolean isOutOfBounds(int screenWidth, int screenHeight) {
-		return position.x < -5 || position.x > screenWidth + 5 ||
-				position.y < -5 || position.y > screenHeight + 5;
+		return position.getX() < -5 || position.getX() > screenWidth + 5 ||
+				position.getY() < -5 || position.getY() > screenHeight + 5;
 	}
 
 	public BulletOwner getOwner() { return owner; }

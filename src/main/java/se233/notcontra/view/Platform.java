@@ -20,9 +20,7 @@ public class Platform extends Rectangle {
 		this.width = width;
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.platformImg = new Image(Launcher.class.getResourceAsStream("assets/FD.png"));
 		this.isGround = isGround;
-		setFill(new ImagePattern(platformImg, 0, 0, width, PLATFORM_HEIGHT, false));
 	}
 	
 	public int getPaneWidth() { return this.width; }

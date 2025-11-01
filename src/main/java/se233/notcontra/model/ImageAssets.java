@@ -17,6 +17,7 @@ public class ImageAssets {
 	public static final Image PATROL_ENEMY = new Image(Launcher.class.getResource("assets/Enemy/Patrol_E.png").toExternalForm());
 	public static final Image FLYING_ENEMY = new Image(Launcher.class.getResource("assets/Enemy/FlyingEnemy.png").toExternalForm());
 	public static final Image WALL_ENEMY = new Image( Launcher.class.getResource("assets/Enemy/Wall_shooter.png").toExternalForm());
+	public static final Image WALL_ENEMY_SHOOT = new Image( Launcher.class.getResource("assets/Enemy/Wall_shooter_SHOOT.png").toExternalForm());
 	
 	public static final Image DESTROYED_TURRET = new Image(Launcher.class.getResource("assets/Boss/Boss1/Turret_dead.png").toExternalForm());
 	public static final Image FIRING_TURRET = new Image(Launcher.class.getResource("assets/Boss/Boss1/Turret_fire.png").toExternalForm());

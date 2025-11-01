@@ -15,13 +15,13 @@ import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Bullet;
-import se233.notcontra.model.Enemy;
 import se233.notcontra.model.ImageAssets;
 import se233.notcontra.model.Keys;
-import se233.notcontra.model.PatrolEnemy;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Boss.JavaBoss;
+import se233.notcontra.model.Enemy.Enemy;
+import se233.notcontra.model.Enemy.PatrolEnemy;
 import se233.notcontra.model.Enums.EnemyType;
 
 public class SecondStage extends GameStage {
@@ -52,10 +52,10 @@ public class SecondStage extends GameStage {
 
 		bossPhase = false;
 		totalMinions = 4;
-		PatrolEnemy patrolEnemy1 = new PatrolEnemy(565, 175, 1, 64, 64, 2, 2, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy2 = new PatrolEnemy(700, 200, 1, 64, 64, 2, 2, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy3 = new PatrolEnemy(645, 215, 1, 64, 64, 2, 2, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
-		PatrolEnemy patrolEnemy4 = new PatrolEnemy(1000, 210, 1, 64, 64, 2, 2, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy1 = new PatrolEnemy(565, 175, 1, 64, 64, 3, 3, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy2 = new PatrolEnemy(700, 200, 1, 64, 64, 3, 3, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy3 = new PatrolEnemy(645, 215, 1, 64, 64, 3, 3, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
+		PatrolEnemy patrolEnemy4 = new PatrolEnemy(1000, 210, 1, 64, 64, 3, 3, 1, ImageAssets.PATROL_ENEMY, 500, EnemyType.PATROL);
 		
 		GameLoop.enemies.addAll(List.of(patrolEnemy1, patrolEnemy2, patrolEnemy3, patrolEnemy4));
 

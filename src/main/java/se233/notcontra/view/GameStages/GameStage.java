@@ -14,10 +14,10 @@ import se233.notcontra.view.PauseMenu;
 import se233.notcontra.view.Platform;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.Bullet;
-import se233.notcontra.model.Enemy;
 import se233.notcontra.model.Keys;
 import se233.notcontra.model.Player;
 import se233.notcontra.model.Boss.Boss;
+import se233.notcontra.model.Enemy.Enemy;
 
 public abstract class GameStage extends Pane {
 	protected Logger logger = LogManager.getLogger(GameStage.class);

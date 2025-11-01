@@ -4,6 +4,8 @@ import java.util.List;
 
 import se233.notcontra.model.Boss.RDBoss;
 import se233.notcontra.model.Boss.WallBoss;
+import se233.notcontra.model.Enemy.Enemy;
+import se233.notcontra.model.Enemy.PatrolEnemy;
 import se233.notcontra.model.Enums.BulletOwner;
 import se233.notcontra.model.Enums.EnemyType;
 import se233.notcontra.model.Enums.ShootingDirection;
@@ -20,6 +22,7 @@ import javafx.application.Platform;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Alert.AlertType;
 import se233.notcontra.Launcher;
 import se233.notcontra.model.*;
@@ -93,7 +96,7 @@ public class DrawingLoop implements Runnable {
 						gameStage.getBoss().localToParent(enemy.getBoundsInParent()).intersects(bullet.getBoundsInParent())
 						&& bullet.getOwner() == BulletOwner.PLAYER) {
 					// Add effect after the bullet hit the enemies
-					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 7, 7, 1, bullet.getxPos() - 64, bullet.getyPos() - 128, 256, 256);
+					Effect explosion = new Effect(ImageAssets.EXPLOSION_IMG, 7, 7, 1, bullet.getxPos() - 96, bullet.getyPos() - 128, 256, 256);
 					effects.add(explosion);
 					Platform.runLater(() -> {
 						gameStage.getChildren().add(explosion);
@@ -262,15 +265,19 @@ public class DrawingLoop implements Runnable {
 				Platform.runLater(() -> {
 					GameLoop.pause();
 					Alert alert = new Alert(AlertType.CONFIRMATION);
-					alert.setTitle("CONGRATULATION!");
-					alert.setHeaderText("You Win!");
-					alert.setContentText("Continue to the next stage?");
+					alert.setTitle("CONGRATULATION! 🎊🎊🎊");
+					alert.setHeaderText("You Win! 🎊🎊🎊");
+					alert.setContentText("Continue to the next stage? 😎😎");
+					DialogPane dialogPane = alert.getDialogPane();
+					dialogPane.getStylesheets().add(Launcher.class.getResource("styles/winAlert.css").toString());
 					alert.showAndWait();
 					if (alert.getResult() == ButtonType.OK) {
 						Launcher.changeStage(1);
 					} else {
 						Launcher.exitToMenu();
 					}
+
+					GameLoop.pause();
 				});
 
 			}
@@ -292,15 +299,18 @@ public class DrawingLoop implements Runnable {
 				Platform.runLater(() -> {
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					GameLoop.pause();
-					alert.setTitle("CONGRATULATION!");
-					alert.setHeaderText("You Win!");
-					alert.setContentText("Continue to the next stage?");
+					alert.setTitle("CONGRATULATION! 🎊🎊🎊");
+					alert.setHeaderText("You Win! 🎊🎊🎊");
+					alert.setContentText("Continue to the next stage? 😎😎");
+					DialogPane dialogPane = alert.getDialogPane();
+					dialogPane.getStylesheets().add(Launcher.class.getResource("styles/winAlert.css").toString());
 					alert.showAndWait();
 					if (alert.getResult() == ButtonType.OK) {
 						Launcher.changeStage(2);
 					} else {
 						Launcher.exitToMenu();
 					}
+					GameLoop.pause();
 				});
 			}
 		} else if (gameStage instanceof ThirdStage) {
@@ -318,14 +328,17 @@ public class DrawingLoop implements Runnable {
 				Platform.runLater(() -> {
 					GameLoop.pause();
 					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("CONGRATULATION!");
-					alert.setHeaderText("CONGRATULATIONS!");
-					alert.setContentText("YOU WIN THE GAME AND GET GRAD 'A' ADPRO");
+					alert.setTitle("CONGRATULATION! 🏆🏆🏆🏆");
+					alert.setHeaderText("CONGRATULATIONS! 🏆🏆🏆🏆🎊🎊🎊");
+					alert.setContentText("YOU WIN THE GAME AND GET GRADE 'A' ADPRO 🏆🏆🏆🏆");
+					DialogPane dialogPane = alert.getDialogPane();
+					dialogPane.getStylesheets().add(Launcher.class.getResource("styles/winAlert.css").toString());
 					alert.showAndWait();
 					
 					if (alert.getResult() == ButtonType.OK) {
 						Launcher.exitToMenu();
 					}
+					GameLoop.pause();
 				});
 			}
 		}

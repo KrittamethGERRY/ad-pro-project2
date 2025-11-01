@@ -1,4 +1,4 @@
-package se233.notcontra.model;
+package se233.notcontra.model.Enemy;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

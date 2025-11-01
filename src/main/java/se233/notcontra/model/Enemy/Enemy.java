@@ -1,4 +1,4 @@
-package se233.notcontra.model;
+package se233.notcontra.model.Enemy;
 
 import javafx.application.Platform;
 import javafx.scene.image.Image;
@@ -6,6 +6,10 @@ import javafx.scene.layout.Pane;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.controller.SpriteAnimation;
+import se233.notcontra.model.Bullet;
+import se233.notcontra.model.ImageAssets;
+import se233.notcontra.model.Player;
+import se233.notcontra.model.Vector2D;
 import se233.notcontra.model.Boss.Boss;
 import se233.notcontra.model.Boss.RDBoss;
 import se233.notcontra.model.Boss.WallBoss;
@@ -53,8 +57,13 @@ public class Enemy extends Pane {
             setState(EnemyState.ATTACKING);
 
         } else if (type == EnemyType.WALL_SHOOTER) {
+        	if (enemyState == EnemyState.ATTACKING && shootTimer < 75) {
+            	this.sprite.changeSpriteSheet(ImageAssets.WALL_ENEMY, 2, 2, 1);
+            	setState(EnemyState.IDLE);
+        	}
             Bullet bullet = shootAtPlayer(player);
             if (bullet != null && !GameLoop.isPaused) {
+            	this.sprite.changeSpriteSheet(ImageAssets.WALL_ENEMY_SHOOT, 1, 1, 1);
                 GameLoop.bullets.add(bullet);
                 Platform.runLater(() -> {
                     gameStage.getChildren().add(bullet);
@@ -99,15 +108,15 @@ public class Enemy extends Pane {
         // Normalize and move
         direction = direction.normalize();
 
-        if (Double.isNaN(direction.x) || Double.isNaN(direction.y)) {
+        if (Double.isNaN(direction.getX()) || Double.isNaN(direction.getY())) {
             return;
         }
 
         double actualSpeed = (this.speed > 0 && this.speed < 100) ? this.speed : 3.0;
 
         // Apply movement in that direction
-        double moveX = direction.x * actualSpeed;
-        double moveY = direction.y * actualSpeed;
+        double moveX = direction.getX() * actualSpeed;
+        double moveY = direction.getY() * actualSpeed;
 
         if (Double.isNaN(moveX) || Double.isNaN(moveY)) return;
 
@@ -166,7 +175,7 @@ public class Enemy extends Pane {
 
     private ShootingDirection determineDirection(Vector2D direction) {
         // Calculate angle in degrees
-        double angle = Math.toDegrees(Math.atan2(direction.y, direction.x));
+        double angle = Math.toDegrees(Math.atan2(direction.getY(), direction.getX()));
         double degrees = Math.toDegrees(angle);
         if (degrees < 0) degrees += 360;
 
