@@ -258,8 +258,9 @@ public class DrawingLoop implements Runnable {
 			}
 			if (!((WallBoss) gameStage.getBoss()).getCore().isAlive() && !isWin) {
 				isWin = true;
+				SoundController.getInstance().playWinSound();
 				Platform.runLater(() -> {
-					SoundController.getInstance().playWinSound();
+					GameLoop.pause();
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("CONGRATULATION!");
 					alert.setHeaderText("You Win!");
@@ -287,9 +288,10 @@ public class DrawingLoop implements Runnable {
 			}
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin && !gameStage.getPlayer().isDying()) {
 				isWin = true;
+				SoundController.getInstance().playWinSound();
 				Platform.runLater(() -> {
-					SoundController.getInstance().playWinSound();
 					Alert alert = new Alert(AlertType.CONFIRMATION);
+					GameLoop.pause();
 					alert.setTitle("CONGRATULATION!");
 					alert.setHeaderText("You Win!");
 					alert.setContentText("Continue to the next stage?");
@@ -312,8 +314,9 @@ public class DrawingLoop implements Runnable {
 			}
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
+				SoundController.getInstance().playWinSound();
 				Platform.runLater(() -> {
-					SoundController.getInstance().playWinSound();
+					GameLoop.pause();
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("CONGRATULATION!");
 					alert.setHeaderText("CONGRATULATIONS!");

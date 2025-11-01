@@ -3,6 +3,13 @@ package se233.notcontra.view;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
 import se233.notcontra.Launcher;
 import se233.notcontra.controller.GameLoop;
@@ -10,6 +17,8 @@ import se233.notcontra.view.GameStages.GameStage;
 
 public class PauseMenu extends VBox {
 	private String buttonStyle = "";	
+	private Image backgroundImg = new Image(Launcher.class.getResource("assets/Paper.png").toString());
+	private Background background;
 	private Label text;
 	private Button continueButton;
 	private Button restartButton;
@@ -17,8 +26,10 @@ public class PauseMenu extends VBox {
 	
 	public PauseMenu() {
 		super(10);
+		BackgroundImage bgImg = new BackgroundImage(backgroundImg, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
 		this.setPrefWidth(200);
 		this.setPrefHeight(250);
+		this.setBackground(new Background(bgImg));
 		text = new Label("Paused");
 		continueButton = new Button("Continue");
 		continueButton.setOnAction(e -> {
