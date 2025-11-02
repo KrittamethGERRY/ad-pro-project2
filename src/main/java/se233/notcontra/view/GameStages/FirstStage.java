@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import se233.notcontra.Launcher;
+import se233.notcontra.controller.CheatManager;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Items.SpecialMagazine;
@@ -27,6 +28,12 @@ import se233.notcontra.model.Enums.EnemyType;
 public class FirstStage extends GameStage {
 	
 	public FirstStage() {
+		if (CheatManager.getInstance().isInvincible()) {
+			CheatManager.getInstance().toggleInvincibility();
+		}
+		if (CheatManager.getInstance().isOneShot()) {
+			CheatManager.getInstance().toggleOneShot();
+		}
 		GameLoop.enemies.clear();
 		SoundController.getInstance().stopAllSounds();
 		SoundController.getInstance().playFirstStageMusic();

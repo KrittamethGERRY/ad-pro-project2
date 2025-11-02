@@ -87,7 +87,11 @@ public class DrawingLoop implements Runnable {
 			// Enemies collision with bullet
 			for (Enemy enemy : gameStage.getEnemies()) {
 				if (enemy.isAlive() && enemy.getBoundsInParent().intersects(bullet.getBoundsInParent()) && bullet.getOwner() == BulletOwner.PLAYER) {
-					enemy.takeDamage(500, gameStage.getBoss());
+					if (CheatManager.getInstance().isOneShot()) {
+						enemy.takeDamage(999999, gameStage.getBoss());
+					} else {
+						enemy.takeDamage(500, gameStage.getBoss());
+					}
 					shouldRemove = true;
 				}
 				
@@ -101,9 +105,11 @@ public class DrawingLoop implements Runnable {
 					Platform.runLater(() -> {
 						gameStage.getChildren().add(explosion);
 					});
-					enemy.takeDamage(500, gameStage.getBoss());
-
-
+					if (CheatManager.getInstance().isOneShot()) {
+						enemy.takeDamage(999999, gameStage.getBoss());
+					} else {
+						enemy.takeDamage(500, gameStage.getBoss());
+					}
 					if (enemy.getType() == EnemyType.RDEYES) {
 						if (RDBoss.totalEYES <= 0 && !gameStage.getBoss().getWeakPoints().isEmpty()) {
 							Enemy rdhead = gameStage.getBoss().getWeakPoints().getFirst();
@@ -125,13 +131,13 @@ public class DrawingLoop implements Runnable {
 					&& bullet.getOwner() != BulletOwner.PLAYER
 					&& !gameStage.getPlayer().getTankBuster()
 					&& !gameStage.getPlayer().isDying()) {
-                if (!CheatManager.getInstance().areCheatsActive()) {
+                if (!CheatManager.getInstance().isInvincible()) {
                     if (Player.spawnProtectionTimer <= 0) {
                         gameStage.getPlayer().die();
                         shouldRemove = true;
                     }
                 }
-			}
+			}// CHEAT ONE SHOT
 			
 			// Remove bullet
 			try {
@@ -163,7 +169,7 @@ public class DrawingLoop implements Runnable {
 				Bounds enemyBounds = gameStage.getBoss().localToParent(enemy.getBoundsInParent());
 
 				if (enemyBounds.intersects(playerBounds)) {
-					if (!CheatManager.getInstance().areCheatsActive()) {
+					if (!CheatManager.getInstance().isInvincible()) {
 						gameStage.getPlayer().die();
 					}
 
@@ -177,7 +183,7 @@ public class DrawingLoop implements Runnable {
 			if (enemy.isAlive() && (enemy.getType() == EnemyType.PATROL)) {
 				Bounds enemyBounds = enemy.localToParent(((PatrolEnemy) enemy).getBoundsInLocal());
 				if (enemyBounds.intersects(playerBounds) && Player.spawnProtectionTimer <= 0) {
-					if (!CheatManager.getInstance().areCheatsActive()) {
+					if (!CheatManager.getInstance().isInvincible()) {
 						gameStage.getPlayer().die();
 						
 						Platform.runLater(this::updateLives);
@@ -263,7 +269,6 @@ public class DrawingLoop implements Runnable {
 				isWin = true;
 				SoundController.getInstance().playWinSound();
 				Platform.runLater(() -> {
-					GameLoop.isPaused = true;
 					Alert alert = new Alert(AlertType.CONFIRMATION);
 					alert.setTitle("CONGRATULATION! 🎊🎊🎊");
 					alert.setHeaderText("You Win! 🎊🎊🎊");
@@ -277,7 +282,6 @@ public class DrawingLoop implements Runnable {
 						Launcher.exitToMenu();
 					}
 				});
-				GameLoop.isPaused = false;
 			}
 
 			gameStage.getPlayer().isCollided(gameStage, 0);
@@ -296,7 +300,6 @@ public class DrawingLoop implements Runnable {
 				SoundController.getInstance().playWinSound();
 				Platform.runLater(() -> {
 					Alert alert = new Alert(AlertType.CONFIRMATION);
-					GameLoop.isPaused = true;
 					alert.setTitle("CONGRATULATION! 🎊🎊🎊");
 					alert.setHeaderText("You Win! 🎊🎊🎊");
 					alert.setContentText("Continue to the next stage? 😎😎");
@@ -308,7 +311,6 @@ public class DrawingLoop implements Runnable {
 					} else {
 						Launcher.exitToMenu();
 					}
-					GameLoop.isPaused = false;
 				});
 			}
 		} else if (gameStage instanceof ThirdStage) {
@@ -323,7 +325,6 @@ public class DrawingLoop implements Runnable {
 			if (gameStage.getBoss().getWeakPoints().isEmpty() && !isWin) {
 				isWin = true;
 				SoundController.getInstance().playWinSound();
-				GameLoop.isPaused = false;
 				Platform.runLater(() -> {
 					Alert alert = new Alert(AlertType.INFORMATION);
 					alert.setTitle("CONGRATULATION! 🏆🏆🏆🏆");
@@ -338,7 +339,6 @@ public class DrawingLoop implements Runnable {
 					if (alert.getResult() == ButtonType.OK) {
 						Launcher.exitToMenu();
 					}
-					GameLoop.isPaused = false;
 				});
 			}
 		}

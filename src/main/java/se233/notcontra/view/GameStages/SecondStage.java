@@ -12,6 +12,7 @@ import se233.notcontra.model.Items.Item;
 import se233.notcontra.model.Items.TankBuster;
 import se233.notcontra.view.Platform;
 import se233.notcontra.Launcher;
+import se233.notcontra.controller.CheatManager;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
 import se233.notcontra.model.Bullet;
@@ -27,6 +28,12 @@ import se233.notcontra.model.Enums.EnemyType;
 public class SecondStage extends GameStage {
 
 	public SecondStage() {
+		if (CheatManager.getInstance().isInvincible()) {
+			CheatManager.getInstance().toggleInvincibility();
+		}
+		if (CheatManager.getInstance().isOneShot()) {
+			CheatManager.getInstance().toggleOneShot();
+		}
 		GameLoop.enemies.clear();
 		SoundController.getInstance().stopAllSounds();
 		SoundController.getInstance().playSecondStageMusic();

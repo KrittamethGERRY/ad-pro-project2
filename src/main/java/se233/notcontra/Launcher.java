@@ -91,8 +91,11 @@ public class Launcher extends Application {
         					gameStage.getKeys().addPressed(e.getCode());
         				}
         			}
-    				if (e.getCode() == gameStage.getPlayer().getCheatKey()) {
-    					CheatManager.getInstance().toggleCheats();
+    				if (e.getCode() == gameStage.getPlayer().getInvincibleKey()) {
+    					CheatManager.getInstance().toggleInvincibility();
+    				}
+    				if (e.getCode() == gameStage.getPlayer().getOneShotKey()) {
+    					CheatManager.getInstance().toggleOneShot();
     				}
         		});
         		currentScene.setOnKeyReleased(e -> {

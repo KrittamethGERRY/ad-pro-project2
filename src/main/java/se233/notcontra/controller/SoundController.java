@@ -30,6 +30,7 @@ public class SoundController {
 	private AudioClip rdArmDestroyedSound;
 	private AudioClip rdEyeDestroyedSound;
 	private AudioClip turretDestroyedSound;
+	private AudioClip cheatOnSound;
 	
     public void stopAllSounds() {
         if (shootSound != null) shootSound.stop();
@@ -57,6 +58,7 @@ public class SoundController {
         if (rdArmDestroyedSound != null) rdArmDestroyedSound.stop();
         if (rdEyeDestroyedSound != null) rdEyeDestroyedSound.stop();
         if (turretDestroyedSound != null) turretDestroyedSound.stop();
+        if (cheatOnSound != null) cheatOnSound.stop();
     }
 	private SoundController() {
 		shootSound = new AudioClip(Launcher.class.getResource("assets/Sounds/gunshot.mp3").toString());
@@ -84,6 +86,7 @@ public class SoundController {
 		rdEyeDestroyedSound = new AudioClip(Launcher.class.getResource("assets/Sounds/rdEyeDestroyedSound.mp3").toString());
 		rdArmDestroyedSound = new AudioClip(Launcher.class.getResource("assets/Sounds/rdArmDestroyedSound.mp3").toString());
 		turretDestroyedSound = new AudioClip(Launcher.class.getResource("assets/Sounds/turretDestroyedSound.mp3").toString());
+		cheatOnSound = new AudioClip(Launcher.class.getResource("assets/Sounds/cheatOnSound.mp3").toString());
 
 		metalSound.setVolume(0.1);
 		metalSound2.setVolume(0.1);
@@ -99,6 +102,8 @@ public class SoundController {
 		respawnSound.setVolume(0.15);
 		jumpSound.setVolume(0.1);
 		playerDieSound.setVolume(0.35);
+		
+		cheatOnSound.setVolume(0.25);
 	}
 	
 	public void playShootSound() {
@@ -189,6 +194,9 @@ public class SoundController {
 	}
 	public void playTurretDestroyedSound() {
 		turretDestroyedSound.play();
+	}
+	public void playCheatOnSound() {
+		cheatOnSound.play();
 	}
 	public static SoundController getInstance() {
 		if (instance == null) return new SoundController(); 

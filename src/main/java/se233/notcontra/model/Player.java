@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import se233.notcontra.Launcher;
+import se233.notcontra.controller.CheatManager;
 import se233.notcontra.controller.DrawingLoop;
 import se233.notcontra.controller.GameLoop;
 import se233.notcontra.controller.SoundController;
@@ -41,7 +42,10 @@ public class Player extends Pane {
 	private KeyCode downKey;
 	private KeyCode shootKey;
 	private KeyCode jumpKey;
-	private KeyCode CheatKey;
+	
+	// Cheat keys
+	private KeyCode invincibleKey;
+	private KeyCode oneShotKey;
 	
 	private int xPos;
 	private int yPos;
@@ -72,7 +76,6 @@ public class Player extends Pane {
 	private boolean isSpecialMag = false;
 	private boolean isTankBuster = false;
 	private boolean isDying = false;
-	private boolean CheatActive = true;
 	
 	public static int height;
 	public static int width;
@@ -104,7 +107,8 @@ public class Player extends Pane {
 		this.downKey = downKey;
 		this.shootKey = KeyCode.L;
 		this.jumpKey = KeyCode.K;
-		this.CheatKey = KeyCode.F1;
+		this.invincibleKey = KeyCode.F1;
+		this.oneShotKey = KeyCode.F2;
 		this.xPos = xPos;
 		this.yPos = yPos;
 		Player.height = 64;
@@ -168,7 +172,6 @@ public class Player extends Pane {
 		this.setState(PlayerState.IDLE);
 		SoundController.getInstance().playRespawnSound();
 	}
-	
 	
 	public void die() {
 		respawnTimer = 100;
@@ -482,7 +485,7 @@ public class Player extends Pane {
 	}
 	
 	
-	// 				End of Movement Behaviors
+	//	End of Movement Behaviors
 	
 	// GETTERS SETTERS
 	public int getLives() {
@@ -513,8 +516,11 @@ public class Player extends Pane {
 		return jumpKey;
 	}
 
-	public KeyCode getCheatKey(){
-		return CheatKey;
+	public KeyCode getInvincibleKey(){
+		return invincibleKey;
+	}
+	public KeyCode getOneShotKey() {
+		return oneShotKey;
 	}
 
 	public int getxPos() {
@@ -543,8 +549,6 @@ public class Player extends Pane {
 
 	public boolean isJumping() { return this.isJumping; }
 
-	public boolean CheatOnandOff(KeyCode cheatKey) {
-		return CheatActive = !CheatActive;}
 
 	public void logPos() {
 		logger.info("Player - X: {}, Y: {}", xPos, yPos);
