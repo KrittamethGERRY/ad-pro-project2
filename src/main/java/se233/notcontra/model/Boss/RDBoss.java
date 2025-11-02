@@ -54,9 +54,10 @@ public class RDBoss extends Boss{
 
     @Override
     protected void handleAttackingState() {
+        boolean shouldPlaySound = false;
+
         if (Rdlefthand.isAlive() && !Rdrighthand.isAlive()) {
-            spawnEnemy(Rdlefthand);
-            SoundController.getInstance().playJavaAttackSound();
+            shouldPlaySound = spawnEnemy(Rdlefthand);
             if (spawnAnimationTimer > 0){
                 updateSpawnAnimation();
                 Rdlefthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_leftHand_Spawn.png")),1,1,1);
@@ -65,8 +66,7 @@ public class RDBoss extends Boss{
             }
         }
         else if (!Rdlefthand.isAlive() && Rdrighthand.isAlive()) {
-            spawnEnemy(Rdrighthand);
-            SoundController.getInstance().playJavaAttackSound();
+            shouldPlaySound = spawnEnemy(Rdrighthand);
             if (spawnAnimationTimer > 0) {
                 updateSpawnAnimation();
                 Rdrighthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_rightHand_Spawn.png")),1,1,1);
@@ -76,7 +76,7 @@ public class RDBoss extends Boss{
         }
         else if (Rdlefthand.isAlive() && Rdrighthand.isAlive()) {
             if (lastHandspawn == null || lastHandspawn == Rdrighthand) {
-                spawnEnemy(Rdlefthand);
+                shouldPlaySound = spawnEnemy(Rdlefthand);
                 lastHandspawn = Rdlefthand;
                 if (spawnAnimationTimer > 0) {
                     updateSpawnAnimation();
@@ -85,7 +85,7 @@ public class RDBoss extends Boss{
                     Rdlefthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_leftHand_IDEL.png")),1,1,1);
                 }
             } else {
-                spawnEnemy(Rdrighthand);
+                shouldPlaySound = spawnEnemy(Rdrighthand);
                 lastHandspawn = Rdrighthand;
                 if (spawnAnimationTimer > 0) {
                     updateSpawnAnimation();
@@ -94,6 +94,11 @@ public class RDBoss extends Boss{
                     Rdrighthand.getSprite().changeSpriteSheet(new Image(Launcher.class.getResourceAsStream("assets/Boss/Boss3/RD_rightHand_IDEL.png")),1,1,1);
                 }
             }
+        }
+
+
+        if (shouldPlaySound) {
+            SoundController.getInstance().playJavaAttackSound();
         }
 
         if (RdleftEye.isAlive() && !RdrightEye.isAlive()) {
@@ -121,13 +126,13 @@ public class RDBoss extends Boss{
         }
     }
 
-    private void spawnEnemy(Enemy Hand) {
+    private boolean spawnEnemy(Enemy Hand) {
         int spawnX;
         int spawnY;
 
         if (enemyTimer > 0) {
             enemyTimer--;
-            return;
+            return false; // No enemy spawned
         }
         int aliveCount = 0;
         for (Enemy enemy : GameLoop.enemies) {
@@ -147,8 +152,6 @@ public class RDBoss extends Boss{
 
             Enemy enemy = new Enemy(spawnX, spawnY, 2, 64, 82, 64, 82, 4, 4, 1, ImageAssets.FLYING_ENEMY, 50, EnemyType.FLYING);
 
-            // NOTE: Get children's global position do not touch!!!!
-            //System.out.print("Enemy Bound: " + getLocalToParentTransform());
             GameLoop.enemies.add(enemy);
             javafx.application.Platform.runLater(() -> {
                 this.getChildren().add(enemy);
@@ -160,7 +163,11 @@ public class RDBoss extends Boss{
             if (aliveCount == maxEnemies) {
                 enemyTimer = 500;
             }
+
+            return true; // Enemy was spawned
         }
+
+        return false; // No enemy spawned
     }
 
     public Enemy getRdrightEye() {
